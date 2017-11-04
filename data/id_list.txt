@@ -1,0 +1,4 @@
+0 - default weapon
+1 - some other weapon
+100 - medkit
+200 - better ammo
