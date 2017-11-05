@@ -1,4 +1,5 @@
-#pragma once
+#ifndef THE_STATION_H
+#define THE_STATION_H
 
 #include <vector>
 #include <queue>
@@ -8,28 +9,31 @@
 #include <string>
 #include <cmath>
 #include <string>
+#include <sstream>
+#include <unordered_map>
+#include <stdexcept>
 #include <SFML/Graphics.hpp>
 #include <SFML/System.hpp>
 #include <SFML/Window.hpp>
 #include <SFML/Audio.hpp>
 #include <SFML/OpenGL.hpp>
-#include <sstream>
-#include <Windows.h>
 
-#define PI 3.14159265
+const double PI = 3.14159265;
 
-
-#include "explosion.h"
+#include "ResourceNotFoundError.h"
+#include "ResourcePool.h"
+#include "ImagePool.h"
+#include "Explosion.h"
 #include "item.h"
-#include "tile.h"
-#include "tiledrop.h"
+#include "FloorTile.h"
+#include "TileDrop.h"
 
 
 #include "Room.h"
 
-#include "projectile.h"
+#include "Projectile.h"
 
-#include "CMob.h"
+#include "Character.h"
 
 #include "Station.h"
 
@@ -41,14 +45,4 @@
 #define n 16
 #define m 6
 
-
-
-
-
-/**
-class item
-{
-    //obrazek pic
-    string name;
-};
-*/
+#endif //THE_STATION_H

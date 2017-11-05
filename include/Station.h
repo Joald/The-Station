@@ -1,34 +1,48 @@
 
 #pragma once
-#include "The Station.h"
-class explosion;
-class Station
-{
+
+#include "The_Station.h"
+
+class Explosion;
+
+class Station {
 public:
-    int h,w, cx, cy;
+    int h, w, cx, cy;
+
     Station();
+
     sf::RenderWindow App;
     sf::Image guii;
-    sf::Image dli,dri,dti,dbi;
-    sf::Texture player, bgt, dleftt, drightt,dtopt,dbottomt,  guit, fltilt,invt,t0,selectinvt,explot,bossrt,bosst,lodin,timin,mainmen,start,optionz,exit,paus,optionp,menup,exitp,endscr,optionsmain;
-    sf::Texture progt;
+    sf::Image dli, dri, dti, dbi;
+    sf::Texture playerTexture, backgroundTexture, doorLeftTexture, doorRightTexture, doorTopTexture, doorBottomTexture, guiTexture, floorTileTexture, inventoryTexture, t0, selectionTexture, explosionTexture, bossRoomTexture, bossTexture, loadingTexture, timingGamesLogoTexture, mainMenuTexture, newGameTexture, optionsButtonMainMenuTexture, exitTexture, pauseMenuBackgroundTexture, optionsButtonPauseMenuTexture, pauseMenuTexture, pauseExitTexture, endScreenTexture, optionsMenuBackgroundTexture;
+    sf::Texture subliminalImageTexture;
     bool isUnsized, unLoaded;
-    sf::SoundBuffer shots,explos;
+    sf::SoundBuffer shots, explos;
     sf::Font arial;
-    std::vector<sf::Sound> blasts;
-    std::vector<explosion> exp;
+    std::vector <sf::Sound> blasts;
+    std::vector <Explosion> exp;
     //Room sect[10][10];
-    bool cheatsEnabled,soundEnabled;
-    void inventory(CMob& target);
+    bool cheatsEnabled, soundEnabled;
+
+    void inventory(Character &target);
+
     ///void changeRoom(Room& currentroom, int dir);
     void explode(int x, int y);
+
     void toggleCheatsEnabled();
+
     void toggleSoundEnabled();
+
     bool mainmenu();
+
     sf::Music menusic;
+
     int pause();
+
     void options(int source);
+
     void intro();
+
     void endapp();
 };
 
