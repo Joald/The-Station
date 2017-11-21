@@ -1,6 +1,6 @@
 #include "../include/item.h"
 
-item::item(int idx, int typex, int effectx) {
+item::item(unsigned int idx, int typex, int effectx) {
     this->id = idx;
     this->type = typex;
     this->effect = effectx;
@@ -15,7 +15,7 @@ int item::getEffectNum() {
     return this->effect;
 }
 
-int item::getId() {
+unsigned int item::getId() {
     return this->id;
 }
 

@@ -1,42 +1,43 @@
 #include "../include/Station.h"
 
 namespace {
-    bool inRect(int px, int py, int top, int left, int width, int height) {
+    bool inRect(float px, float py, float top, float left, float width, float height) {
         return (px > left && px < left + width && py > top && py < top + height);
     }
 } //namespace
     
 Station::Station() {
+    ImagePool::initialize();
     this->soundEnabled = true;
-    this->backgroundTexture.loadFromImage(ImagePool::getImageById(BACKGROUND));
-    this->bossRoomTexture.loadFromImage(ImagePool::getImageById(BOSSROOM));
-    this->bossTexture.loadFromImage(ImagePool::getImageById(BOSS));
-    this->doorBottomTexture.loadFromImage(ImagePool::getImageById(DOORBOT));
-    this->doorLeftTexture.loadFromImage(ImagePool::getImageById(DOORLEFT));
-    this->timingGamesLogoTexture.loadFromImage(ImagePool::getImageById(TIMING));
-    this->doorRightTexture.loadFromImage(ImagePool::getImageById(DOORRIGHT));
-    this->doorTopTexture.loadFromImage(ImagePool::getImageById(DOORUP));
-    this->endScreenTexture.loadFromImage(ImagePool::getImageById(ENDSCREEN));
-    this->exitTexture.loadFromImage(ImagePool::getImageById(EXIT));
-    this->pauseExitTexture.loadFromImage(ImagePool::getImageById(EXITP));
-    this->explosionTexture.loadFromImage(ImagePool::getImageById(EXPLOSION));
-    this->floorTileTexture.loadFromImage(ImagePool::getImageById(FLOOR_TILE_TEXTURE));
-    this->guiTexture.loadFromImage(ImagePool::getImageById(GUI));
-    this->inventoryTexture.loadFromImage(ImagePool::getImageById(INVENT));
-    this->loadingTexture.loadFromImage(ImagePool::getImageById(LOADING));
-    this->mainMenuTexture.loadFromImage(ImagePool::getImageById(TITLE));
-    this->pauseMenuTexture.loadFromImage(ImagePool::getImageById(MENUP));
-    this->optionsButtonPauseMenuTexture.loadFromImage(ImagePool::getImageById(OPTIONP));
-    this->optionsMenuBackgroundTexture.loadFromImage(ImagePool::getImageById(OPTIONSMAIN));
-    this->optionsButtonMainMenuTexture.loadFromImage(ImagePool::getImageById(OPTIONS));
-    this->pauseMenuBackgroundTexture.loadFromImage(ImagePool::getImageById(PAUSE));
-    this->playerTexture.loadFromImage(ImagePool::getImageById(PLAYER));
-    this->subliminalImageTexture.loadFromImage(ImagePool::getImageById(SUBLIMINAL));
-    this->newGameTexture.loadFromImage(ImagePool::getImageById(NEWGAME));
-    this->selectionTexture.loadFromImage(ImagePool::getImageById(SELECT));
-    this->w = 1920;
-    this->h = 1080;
-    App.create(sf::VideoMode(w, h), "The Station", sf::Style::Fullscreen);
+    this->backgroundTexture.loadFromImage(ImagePool::getImageById(ImageID::BACKGROUND));
+    this->bossRoomTexture.loadFromImage(ImagePool::getImageById(ImageID::BOSSROOM));
+    this->bossTexture.loadFromImage(ImagePool::getImageById(ImageID::BOSS));
+    this->doorBottomTexture.loadFromImage(ImagePool::getImageById(ImageID::DOORBOT));
+    this->doorLeftTexture.loadFromImage(ImagePool::getImageById(ImageID::DOORLEFT));
+    this->timingGamesLogoTexture.loadFromImage(ImagePool::getImageById(ImageID::TIMING));
+    this->doorRightTexture.loadFromImage(ImagePool::getImageById(ImageID::DOORRIGHT));
+    this->doorTopTexture.loadFromImage(ImagePool::getImageById(ImageID::DOORUP));
+    this->endScreenTexture.loadFromImage(ImagePool::getImageById(ImageID::ENDSCREEN));
+    this->exitTexture.loadFromImage(ImagePool::getImageById(ImageID::EXIT));
+    this->pauseExitTexture.loadFromImage(ImagePool::getImageById(ImageID::EXITP));
+    this->explosionTexture.loadFromImage(ImagePool::getImageById(ImageID::EXPLOSION));
+    this->floorTileTexture.loadFromImage(ImagePool::getImageById(ImageID::FLOOR_TILE_TEXTURE));
+    this->guiTexture.loadFromImage(ImagePool::getImageById(ImageID::GUI));
+    this->inventoryTexture.loadFromImage(ImagePool::getImageById(ImageID::INVENT));
+    this->loadingTexture.loadFromImage(ImagePool::getImageById(ImageID::LOADING));
+    this->mainMenuTexture.loadFromImage(ImagePool::getImageById(ImageID::TITLE));
+    this->pauseMenuTexture.loadFromImage(ImagePool::getImageById(ImageID::MENUP));
+    this->optionsButtonPauseMenuTexture.loadFromImage(ImagePool::getImageById(ImageID::OPTIONP));
+    this->optionsMenuBackgroundTexture.loadFromImage(ImagePool::getImageById(ImageID::OPTIONSMAIN));
+    this->optionsButtonMainMenuTexture.loadFromImage(ImagePool::getImageById(ImageID::OPTIONS));
+    this->pauseMenuBackgroundTexture.loadFromImage(ImagePool::getImageById(ImageID::PAUSE));
+    this->playerTexture.loadFromImage(ImagePool::getImageById(ImageID::PLAYER));
+    this->subliminalImageTexture.loadFromImage(ImagePool::getImageById(ImageID::SUBLIMINAL));
+    this->newGameTexture.loadFromImage(ImagePool::getImageById(ImageID::NEWGAME));
+    this->selectionTexture.loadFromImage(ImagePool::getImageById(ImageID::SELECT));
+    this->width = 1920;
+    this->height = 1080;
+    App.create(sf::VideoMode(width, height), "The Station", sf::Style::Fullscreen);
     this->isUnsized = false;
 
     this->guiTexture.loadFromImage(this->guii);
@@ -67,20 +68,20 @@ void Station::inventory(Character &target) {
 
     weapon.setTexture(wt);
 
-    weapon.setPosition(w / 100, h / 32);
+    weapon.setPosition(width / 100, height / 32);
     invbg.setTexture(inventoryTexture);
     invbg.setPosition(0, 0);
     sf::Sprite a[5][3];
     sf::Text infotext;
     sf::Sprite select;
     select.setTexture(selectionTexture);
-    int q = w * 5 / 100;
+    int q = width * 5 / 100;
     q = 86;
-    int z = h * 295 / 1000;
+    int z = height * 295 / 1000;
     z = 302;
-    int p = w * 192 / 1000;
+    int p = width * 192 / 1000;
     p = 371;
-    int o = h * 234 / 1000;
+    int o = height * 234 / 1000;
     o = 259;
     a[0][0].setPosition(q, z);
     for (int i = 0; i < 5; i++) {
@@ -127,15 +128,15 @@ void Station::inventory(Character &target) {
     title.setCharacterSize(20);
     desc.setCharacterSize(15);
     flavor.setCharacterSize(10);
-    title.setColor(sf::Color::White);
-    desc.setColor(sf::Color::White);
-    flavor.setColor(sf::Color::White);
+    title.setFillColor(sf::Color::White);
+    desc.setFillColor(sf::Color::White);
+    flavor.setFillColor(sf::Color::White);
 
 
     sf::Text hpbar;
 
-    hpbar.setColor(sf::Color::White);
-    hpbar.setPosition(w * 255 / 1000, h * 25 / 1000);
+    hpbar.setFillColor(sf::Color::White);
+    hpbar.setPosition(width * 255 / 1000, height * 25 / 1000);
     hpbar.setFont(arial);
 
     while (true) {
@@ -228,7 +229,7 @@ void Station::inventory(Character &target) {
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
                                     quanttext.setCharacterSize(40);
-                                    quanttext.setColor(sf::Color::White);
+                                    quanttext.setFillColor(sf::Color::White);
                                     quanttext.setFont(arial);
                                     quanttext.setPosition(q + j * p + 230, z + k * o + 170);
                                     std::ostringstream strem;
@@ -268,7 +269,7 @@ void Station::inventory(Character &target) {
                                     App.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
-                                    std::string option = "";
+                                    std::string option;
                                     if (target.weaponiter == i) {
                                         option = " (Currently equipped)";
                                     }
@@ -290,7 +291,7 @@ void Station::inventory(Character &target) {
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
                                     quanttext.setCharacterSize(40);
-                                    quanttext.setColor(sf::Color::White);
+                                    quanttext.setFillColor(sf::Color::White);
                                     quanttext.setFont(arial);
                                     quanttext.setPosition(q + j * p + 230, z + k * o + 170);
                                     std::ostringstream strem;
@@ -331,7 +332,7 @@ void Station::inventory(Character &target) {
                                     App.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
-                                    std::string option = "";
+                                    std::string option;
                                     if (target.weaponiter == i) {
                                         option = " (Currently equipped)";
                                     }
@@ -353,7 +354,7 @@ void Station::inventory(Character &target) {
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
                                     quanttext.setCharacterSize(40);
-                                    quanttext.setColor(sf::Color::White);
+                                    quanttext.setFillColor(sf::Color::White);
                                     quanttext.setFont(arial);
                                     quanttext.setPosition(q + j * p + 230, z + k * o + 170);
                                     std::ostringstream strem;
@@ -415,7 +416,7 @@ void Station::inventory(Character &target) {
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
                                     quanttext.setCharacterSize(40);
-                                    quanttext.setColor(sf::Color::White);
+                                    quanttext.setFillColor(sf::Color::White);
                                     quanttext.setFont(arial);
                                     quanttext.setPosition(q + j * p + 230, z + k * o + 170);
                                     std::ostringstream strem;
@@ -477,7 +478,7 @@ void Station::inventory(Character &target) {
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
                                     quanttext.setCharacterSize(40);
-                                    quanttext.setColor(sf::Color::White);
+                                    quanttext.setFillColor(sf::Color::White);
                                     quanttext.setFont(arial);
                                     quanttext.setPosition(q + j * p + 230, z + k * o + 170);
                                     std::ostringstream strem;
@@ -534,7 +535,7 @@ void Station::inventory(Character &target) {
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
                                     quanttext.setCharacterSize(40);
-                                    quanttext.setColor(sf::Color::White);
+                                    quanttext.setFillColor(sf::Color::White);
                                     quanttext.setFont(arial);
                                     quanttext.setPosition(q + j * p + 230, z + k * o + 170);
                                     std::ostringstream strem;
@@ -553,8 +554,6 @@ void Station::inventory(Character &target) {
                 default:
                     break;
             }
-
-            continue;
         }
         ///Code here ends
         /*for(int i=0; i<5; i++)
@@ -575,7 +574,7 @@ void Station::inventory(Character &target) {
 }
 
 
-void Station::explode(int x, int y) {
+void Station::explode(float x, float y) {
     Explosion a(x, y);
     a.s.setTexture(this->explosionTexture);
     this->exp.push_back(a);
@@ -606,12 +605,12 @@ void Station::intro() {
     sf::Sprite tim;
     tim.setTexture(intrt);
     sf::Text tet;
-    tet.setPosition(this->w * 74 / 100, this->h * 44 / 100);
+    tet.setPosition(this->width * 74 / 100, this->height * 44 / 100);
     sf::Font games;
     games.loadFromFile("../fonts/games.ttf");
     tet.setFont(games);
     tet.setCharacterSize(100);
-    tet.setColor(sf::Color::White);
+    tet.setFillColor(sf::Color::White);
     //int b=700;
     int state = 0;
     int ox = 50;
@@ -680,14 +679,14 @@ int Station::pause() {
         opt.setScale(8 / 15.f, 8 / 15.f);
         ext.setScale(8 / 15.f, 8 / 15.f);
     }
-    int lef = w * 2980 / 10000;
-    int righ = w * 655 / 1000;
-    int top1 = h * 3650 / 10000;
-    int top2 = h * 5050 / 10000;
-    int top3 = h * 6465 / 10000;
-    int bot1 = h * 500 / 1000;
-    int bot2 = h * 600 / 1000;
-    int bot3 = h * 750 / 1000;
+    int lef = width * 2980 / 10000;
+    int righ = width * 655 / 1000;
+    int top1 = height * 3650 / 10000;
+    int top2 = height * 5050 / 10000;
+    int top3 = height * 6465 / 10000;
+    int bot1 = height * 500 / 1000;
+    int bot2 = height * 600 / 1000;
+    int bot3 = height * 750 / 1000;
     ext.setPosition(lef + 2, top1);
     opt.setPosition(lef + 1, top2);
     men.setPosition(lef, top3);
@@ -780,14 +779,14 @@ void Station::options(int source) {
     strt.setTexture(this->newGameTexture);
     optns.setTexture(this->optionsButtonMainMenuTexture);
     ext.setTexture(this->exitTexture);
-    int lef = w * 2705 / 10000;
-    int righ = w * 655 / 1000;
-    int top1 = h * 3851 / 10000;
-    int top2 = h * 5904 / 10000;
-    int top3 = h * 7811 / 10000;
-    int bot1 = h * 500 / 1000;
-    int bot2 = h * 700 / 1000;
-    int bot3 = h * 950 / 1000;
+    int lef = width * 2705 / 10000;
+    int righ = width * 655 / 1000;
+    int top1 = height * 3851 / 10000;
+    int top2 = height * 5904 / 10000;
+    int top3 = height * 7811 / 10000;
+    int bot1 = height * 500 / 1000;
+    int bot2 = height * 700 / 1000;
+    int bot3 = height * 950 / 1000;
     strt.setPosition(lef, top1);
     optns.setPosition(lef, top2);
     ext.setPosition(lef, top3);
@@ -890,14 +889,14 @@ bool Station::mainmenu() {
         optns.setScale(8 / 15.f, 8 / 15.f);
         ext.setScale(8 / 15.f, 8 / 15.f);
     }
-    int lef = w * 2705 / 10000;
-    int righ = w * 655 / 1000;
-    int top1 = h * 2851 / 10000;
-    int top2 = h * 4704 / 10000;
-    int top3 = h * 6511 / 10000;
-    int bot1 = h * 400 / 1000;
-    int bot2 = h * 600 / 1000;
-    int bot3 = h * 800 / 1000;
+    int lef = width * 2705 / 10000;
+    int righ = width * 655 / 1000;
+    int top1 = height * 2851 / 10000;
+    int top2 = height * 4704 / 10000;
+    int top3 = height * 6511 / 10000;
+    int bot1 = height * 400 / 1000;
+    int bot2 = height * 600 / 1000;
+    int bot3 = height * 800 / 1000;
     strt.setPosition(lef, top1);
     optns.setPosition(lef, top2);
     ext.setPosition(lef, top3);

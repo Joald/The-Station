@@ -3,9 +3,6 @@
 #define n 16
 #define m 6
 
-
-using namespace std;
-
 void Character::DealDamage(int modifier) {
     this->health -= modifier;
     //int a=this->health;
@@ -31,7 +28,6 @@ void Character::ModifyArmor(int modifier) {
 
 Character::Character() {
     this->red = false;
-    this->isplayer = true;
     this->speed = 5;
     this->armor = 0;
     this->health = 100;
@@ -55,31 +51,30 @@ Character::Character() {
 
     //this->damage=100;
     addItem(o);
-    this->isboss = false;
 
 
 }
 
-void Character::rotatexy(int mx, int my)///taking mouse coords for arguments
-{
-    double deltax, deltay, angle;///double variables for calculation
-    deltax = this->x - mx;///delta n = objects position n - mouse pos n
-    deltay = this->y - my;
-    angle = (atan2(deltay, deltax)) * 180 / PI - 90;/// trigonometry with arc tangent taking 2
-    this->orient = angle;/// orient is a class angle variable
-    this->C.setRotation(angle);///set rotation to object's sf::Sprite
+void Character::rotatexy_internal(float mouseX, float mouseY) {
+    ///taking mouse coords for arguments
+    float deltax, deltay, angle;///double variables for calculation
+    deltax = getPosition().x - mouseX;///delta n = objects position n - mouse pos n
+    deltay = getPosition().y - mouseY;
+    angle = (std::atan2(deltay, deltax)) * 180 / PI - 90;/// trigonometry with arc tangent taking 2
+    orient = angle;/// orient is a class angle variable
+    setRotation(angle);///set rotation to object's sf::Sprite
     //return this->orient;
 }
 
 void Character::rotate2mouse(Station &game) {
-    double a, b;
-    a = this->x - sf::Mouse::getPosition(game.App).x;
-    b = this->y - sf::Mouse::getPosition(game.App).y;
-    this->orient = atan2(b, a) * 180 / PI;
-    this->C.setRotation(this->orient - 90);
+    float a, b;
+    a = getPosition().x - sf::Mouse::getPosition(game.App).x;
+    b = getPosition().y - sf::Mouse::getPosition(game.App).y;
+    orient = std::atan2(b, a) * 180 / PI;
+    setRotation(orient - 90);
 }
 
-bool Character::shoot(vector <Projectile> &proj, int mx, int my) {
+bool Character::shoot(std::vector<Projectile> &proj, float mx, float my) {
     if (this->health <= 0)
         return false;
 
@@ -107,22 +102,16 @@ bool Character::shoot(vector <Projectile> &proj, int mx, int my) {
     a->delay.restart();
     a->setorig(this);
 
-    a->rotatexy(mx,my);
+    a->rotatexy_internal(mx,my);
     a->delay.restart();
     proj.push_back(*a);
 
     delete a;*/
 }
 
-bool Character::shoot(vector <Projectile> &proj, int mx, int my, bool ignore) {
-
-
+bool Character::shoot(std::vector<Projectile> &proj, int mx, int my, bool ignore) {
     Projectile a;
-
-
     //a.delay.restart();
-
-
     a.type = inv[weaponiter].getId();
     a.setorig(this);
 
@@ -136,22 +125,25 @@ bool Character::shoot(vector <Projectile> &proj, int mx, int my, bool ignore) {
     a->delay.restart();
     a->setorig(this);
 
-    a->rotatexy(mx,my);
+    a->rotatexy_internal(mx,my);
     a->delay.restart();
     proj.push_back(*a);
 
     delete a;*/
 }
 
-void enemy::rotatexy(int mx, int my) {
-    double deltax, deltay, angle;                     ///double variables for calculation
-    deltax = this->x - mx;                              ///delta n = objects position n - mouse pos n
-    deltay = this->y - my;
-    angle = (atan2(deltay, deltax)) * 180 / PI - 90;         /// trigonometry with arc tangent taking 2
+void Character::rotatexy(sf::Vector2f vector2f) {
+    rotatexy_internal(vector2f.x, vector2f.y);
+}
+
+
+void enemy::rotatexy_internal(float mouseX, float mouseY) {
+    float deltax, deltay, angle;                     ///double variables for calculation
+    deltax = this->getPosition().x - mouseX;                              ///delta n = objects position n - mouse pos n
+    deltay = this->getPosition().y - mouseY;
+    angle = (std::atan2(deltay, deltax)) * 180 / PI - 90;         /// trigonometry with arc tangent taking 2
     this->orient = angle + 90;                          /// orient is a class angle variable
-    this->C.setRotation(angle);                     ///set rotation to object's sf::Sprite
-
-
+    this->setRotation(angle);                     ///set rotation to object's sf::Sprite
 }
 
 enemy::enemy() {
@@ -160,26 +152,21 @@ enemy::enemy() {
     this->ay = 0;
     this->shtdelay = 500;
     this->destroystate = 0;
-    this->C.setOrigin(25, 25);
-    this->isplayer = false;
+    this->setOrigin(25, 25);
     inv.erase(inv.begin(), inv.end());
     addItem(0, 0, 5, 1);
 }
 
 void Character::toggleInvincible() {
-    if (this->invincible)
-        this->invincible = false;
-    else
-        this->invincible = true;
+    invincible = !invincible;
 }
 
 bool Character::canWalkDown(FloorTile floortile[n][m], Station &game) {
-    int ox = this->x;
-    int oy = this->y;
+    auto ox = static_cast<int>(getPosition().x);
+    auto oy = static_cast<int>(getPosition().y);
 
     int fixh = 291;
     if (game.isUnsized) {
-
         fixh = 155;
     }
     for (int i = 0; i < n; i++) {
@@ -189,16 +176,13 @@ bool Character::canWalkDown(FloorTile floortile[n][m], Station &game) {
                 return false;
         }
     }
-    if (this->y > game.h - fixh + fixh * 2 / 6)
-        return false;
-    else
-        return true;
+    return getPosition().y > game.height - fixh + fixh * 2 / 6 == 0;
 
 }
 
 bool Character::canWalkUp(FloorTile floortile[16][6], Station &game) {
-    int ox = this->x;
-    int oy = this->y;
+    auto ox = static_cast<int>(getPosition().x);
+    auto oy = static_cast<int>(getPosition().y);
     int fixw = 170;
     int fixh = 291;
     if (game.isUnsized) {
@@ -212,16 +196,12 @@ bool Character::canWalkUp(FloorTile floortile[16][6], Station &game) {
                 return false;
         }
     }
-    if (this->y - 15 < fixh)
-        return false;
-    else
-        return true;
-
+    return getPosition().y - 15 >= fixh;
 }
 
 bool Character::canWalkRight(FloorTile floortile[n][m], Station &game) {
-    int ox = this->x;
-    int oy = this->y;
+    auto ox = static_cast<int>(getPosition().x);
+    auto oy = static_cast<int>(getPosition().y);
     int fixw = 170;
     int fixh = 291;
     if (game.isUnsized) {
@@ -235,16 +215,13 @@ bool Character::canWalkRight(FloorTile floortile[n][m], Station &game) {
                 return false;
         }
     }
-    if (this->x > game.w - fixw - fixw / 10)
-        return false;
-    else
-        return true;
+    return getPosition().x <= game.width - fixw - fixw / 10;
 
 }
 
 bool Character::canWalkLeft(FloorTile floortile[n][m], Station &game) {
-    int ox = this->x;
-    int oy = this->y;
+    auto ox = static_cast<int>(getPosition().x);
+    auto oy = static_cast<int>(getPosition().y);
     int fixw = 170;
     int fixh = 291;
     if (game.isUnsized) {
@@ -259,10 +236,7 @@ bool Character::canWalkLeft(FloorTile floortile[n][m], Station &game) {
         }
     }
 
-    if (this->x < fixw)
-        return false;
-    else
-        return true;
+    return getPosition().x >= fixw;
 }
 
 
@@ -277,15 +251,9 @@ bool enemy::canWalkDown(FloorTile floortile[n][m], Station &game) {
         fixw = 91;
         fixh = 155;
     }
-    a = (this->x - fixw) / 100;
-    b = (this->y - fixh) / 104;
-    if (!floortile[a][b].walkable && this->y + 25 >= floortile[a][b].y - 104)
-        return false;
-    else if (this->y > game.h - fixh + fixh * 2 / 5)
-        return false;
-    else
-        return true;
-
+    a = (x_int() - fixw) / 100;
+    b = (y_int() - fixh) / 104;
+    return floortile[a][b].walkable && getPosition().y + 25 < floortile[a][b].y - 104 && getPosition().x <= game.height - fixh + fixh * 2 / 5;
 }
 
 bool enemy::canWalkUp(FloorTile floortile[n][m], Station &game) {
@@ -296,14 +264,9 @@ bool enemy::canWalkUp(FloorTile floortile[n][m], Station &game) {
         fixw = 91;
         fixh = 155;
     }
-    a = (this->x - fixw) / 100;
-    b = (this->y - fixh) / 104;
-    if (!floortile[a][b - 1].walkable && this->y - 25 <= floortile[a][b - 1].y + 104)
-        return false;
-    else if (this->y < fixh)
-        return false;
-    else
-        return true;
+    a = (y_int() - fixw) / 100;
+    b = (y_int() - fixh) / 104;
+    return floortile[a][b - 1].walkable && y_int() - 25 > floortile[a][b - 1].y + 104 && y_int() >= fixh;
 
 }
 
@@ -315,15 +278,9 @@ bool enemy::canWalkRight(FloorTile floortile[n][m], Station &game) {
         fixw = 91;
         fixh = 155;
     }
-    a = (this->x - fixw) / 100;
-    b = (this->y - fixh) / 104;
-    if (!floortile[a + 1][b].walkable && this->x + 25 >= floortile[a + 1][b].x)
-        return false;
-    else if (this->x > game.w - fixw - fixw / 20)
-        return false;
-    else
-        return true;
-
+    a = (x_int() - fixw) / 100;
+    b = (y_int() - fixh) / 104;
+    return floortile[a + 1][b].walkable && x_int() + 25 < floortile[a + 1][b].x && x_int() <= game.width - fixw - fixw / 20;
 }
 
 bool enemy::canWalkLeft(FloorTile floortile[n][m], Station &game) {
@@ -334,14 +291,10 @@ bool enemy::canWalkLeft(FloorTile floortile[n][m], Station &game) {
         fixw = 91;
         fixh = 155;
     }
-    a = (this->x - fixw) / 100;
-    b = (this->y - fixh) / 104;
-    if (!floortile[a - 1][b].walkable && this->x - 25 <= floortile[a - 1][b].x + 100)
-        return false;
-    else if (this->x - 25 < fixw)
-        return false;
-    else
-        return true;
+    a = (x_int() - fixw) / 100;
+    b = (y_int() - fixh) / 104;
+    return floortile[a - 1][b].walkable && x_int() - 25 > floortile[a - 1][b].x + 100 && x_int() - 25 >= fixw;
+
 }
 
 int check(int x, int y, int x1, int y1, int x2, int y2) {
@@ -364,13 +317,16 @@ int squarey(FloorTile floortile[n][m], int y) {
     return 0;
 }
 
-bool enemy::canSee(FloorTile floortile[n][m], int x2, int y2) {
+bool enemy::canSee(FloorTile floortile[n][m], float x2_f, float y2_f) {
     if (this->destroystate)
         return false;
 
 
-    int x1 = floor(this->x);
-    int y1 = floor(this->y);
+    auto x1 = static_cast<int>(getPosition().x);
+    auto y1 = static_cast<int>(getPosition().y);
+
+    auto x2 = static_cast<int>(x2_f);
+    auto y2 = static_cast<int>(y2_f);
     //int x1p=x1,x2p=x2,y1p=y1,y2p=y2;//faktyczne koordynaty
     //int playx=x2,playy=y2,enex=x1,eney=y1;
     x1 = squarex(floortile, x1);
@@ -689,70 +645,65 @@ bool enemy::canSee(FloorTile floortile[n][m], int x2, int y2) {
     return true;*/
 }
 
-int enemy::returnpath(FloorTile floortile[n][m], int ox, int oy) {
+int enemy::returnpath(FloorTile floortile[n][m], float ox, float oy) {
     ///ox,oy - player coords
     ///ex,ey - mob coords
     ///zamienic floortilea na graf/// teraz nie - dzialam na ft
     //vector <int> v[n*m+5];
-    int ex = squarex(floortile, floor(this->x)) + 1, ey = squarey(floortile, floor(this->y)) + 1;
-    oy = squarey(floortile, floor(double(oy))) + 1;
-    ox = squarex(floortile, floor(double(ox))) + 1;
+    int ex = squarex(floortile, static_cast<int>(getPosition().x)) + 1;
+    int ey = squarey(floortile, static_cast<int>(getPosition().y)) + 1;
+    oy = squarey(floortile, static_cast<int>(oy)) + 1;
+    ox = squarex(floortile, static_cast<int>(ox)) + 1;
 
     bool vis[n + 2][m + 2];
-    pair<int, int> start(ex, ey);
-    pair<int, int> fin(ox, oy);
+    std::pair<int, int> start(ex, ey);
+    std::pair<int, int> fin(static_cast<const int &>(ox), static_cast<const int &>(oy));
     char uppers[n + 2][m + 2];
     bool tab[n + 2][m + 2];
     for (int i = 0; i < n + 2; i++) {
         for (int j = 0; j < m + 2; j++) {
             vis[i][j] = false;
-            if (i == 0 || j == 0 || i == n + 1 || j == m + 1 || !floortile[i - 1][j - 1].walkable)
-                tab[i][j] = false;
-            else
-                tab[i][j] = true;
+            tab[i][j] = !(i == 0 || j == 0 || i == n + 1 || j == m + 1 || !floortile[i - 1][j - 1].walkable);
 
         }
     }
-    queue <pair<int, int>> a;
+    std::queue <std::pair<int, int>> queue;
 
     vis[start.first][start.second] = true;
     //floortile[newGameTexture.first][newGameTexture.second].sprite.setColor(sf::Color::Yellow);
     uppers[start.first][start.second] = 'n';
-    a.push(start);
-    while (!a.empty()) {
-        pair<int, int> c = a.front();
-        pair<int, int> q = c;
+    queue.push(start);
+    while (!queue.empty()) {
+        auto &c = queue.front();
+        auto& q = c;
 
-        a.pop();
-        pair<int, int> lef(q.first - 1, q.second);
-        c = lef;
-        /*if(tab[c.first][c.second])
-            floortile[c.first][c.second].sprite.setColor(sf::Color::Yellow);*/
-        if (!vis[c.first][c.second] && tab[c.first][c.second]) {
-            vis[c.first][c.second] = true;
-            uppers[c.first][c.second] = 'l';
-            a.push(c);
+        queue.pop();
+        auto left = std::pair<int, int>(q.first - 1, q.second);
+
+        if (!vis[left.first][left.second] && tab[left.first][left.second]) {
+            vis[left.first][left.second] = true;
+            uppers[left.first][left.second] = 'l';
+            queue.push(left);
         }
-        pair<int, int> righ(q.first + 1, q.second);
-        c = righ;
-        if (!vis[c.first][c.second] && tab[c.first][c.second]) {
-            vis[c.first][c.second] = true;
-            uppers[c.first][c.second] = 'r';
-            a.push(c);
+        std::pair<int, int> right(q.first + 1, q.second);
+
+        if (!vis[right.first][right.second] && tab[right.first][right.second]) {
+            vis[right.first][right.second] = true;
+            uppers[right.first][right.second] = 'r';
+            queue.push(right);
         }
-        pair<int, int> up(q.first, q.second - 1);
-        c = up;
-        if (!vis[c.first][c.second] && tab[c.first][c.second]) {
-            vis[c.first][c.second] = true;
-            uppers[c.first][c.second] = 'u';
-            a.push(c);
+        std::pair<int, int> up(q.first, q.second - 1);
+
+        if (!vis[up.first][up.second] && tab[up.first][up.second]) {
+            vis[up.first][up.second] = true;
+            uppers[up.first][up.second] = 'u';
+            queue.push(up);
         }
-        pair<int, int> dow(q.first, q.second + 1);
-        c = dow;
-        if (!vis[c.first][c.second] && tab[c.first][c.second]) {
-            vis[c.first][c.second] = true;
-            uppers[c.first][c.second] = 'd';
-            a.push(c);
+        std::pair<int, int> down(q.first, q.second + 1);
+        if (!vis[down.first][down.second] && tab[down.first][down.second]) {
+            vis[down.first][down.second] = true;
+            uppers[down.first][down.second] = 'd';
+            queue.push(down);
         }
     }
     if (!vis[fin.first][fin.second])
@@ -783,19 +734,25 @@ int enemy::returnpath(FloorTile floortile[n][m], int ox, int oy) {
             fin.first++;
             continue;
         }
-        //return 4;
-
 
     }
 
     return 4;
 }
 
+bool enemy::canSee(FloorTile floortile[n][m], sf::Vector2f vector2f) {
+    return canSee(floortile, vector2f.x, vector2f.y);
+}
+
+int enemy::returnpath(FloorTile floortile[n][m], sf::Vector2f vector2f) {
+    return returnpath(floortile, vector2f.x, vector2f.y);
+}
+
 void Character::addItem(item a) {
-    for (int unsigned i = 0; i < inv.size(); i++) {
-        if (inv[i].getId() == a.getId() && inv[i].getEffectNum() == a.getEffectNum() &&
-            inv[i].getType() == a.getType()) {
-            inv[i].quant += a.quant;
+    for (auto &i : inv) {
+        if (i.getId() == a.getId() && i.getEffectNum() == a.getEffectNum() &&
+                i.getType() == a.getType()) {
+            i.quant += a.quant;
             return;
         }
     }
@@ -803,9 +760,9 @@ void Character::addItem(item a) {
 }
 
 void Character::addItem(int id, int type, int effect, int quantity) {
-    for (int unsigned i = 0; i < inv.size(); i++) {
-        if (inv[i].getId() == id && inv[i].getEffectNum() == effect && inv[i].getType() == type) {
-            inv[i].quant += quantity;
+    for (auto &i : inv) {
+        if (i.getId() == id && i.getEffectNum() == effect && i.getType() == type) {
+            i.quant += quantity;
             return;
         }
     }
@@ -815,8 +772,9 @@ void Character::addItem(int id, int type, int effect, int quantity) {
 }
 
 void Character::useItem(int iter) {
-    if (iter + 1 > inv.size())
+    if (iter + 1 > inv.size()) {
         return;
+    }
     if (inv[iter].getType() == 0) {
         ///code for weapon here
         weaponiter = iter;
@@ -863,9 +821,16 @@ void Character::deleteItem(int iter, int quant) {
         inv.erase(inv.begin() + iter);
 }
 
+bool Character::shoot(std::vector<Projectile> &proj, sf::Vector2f vector2f) {
+    return shoot(proj, vector2f.x, vector2f.y);
+}
+
+void Character::rotatexy(sf::Vector2i vector2i) {
+    rotatexy_internal(vector2i.x, vector2i.y);
+}
+
 boss::boss() {
-    this->C.setOrigin(284, 260);
-    isboss = true;
+    setOrigin(284, 260);
     this->shtdelay = 150;
     this->health = 2000;
     inv.erase(inv.begin(), inv.end());

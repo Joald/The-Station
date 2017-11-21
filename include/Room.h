@@ -34,7 +34,7 @@ public:
     std::vector<enemy> enem;
     std::vector<Projectile> proj;
 
-    void spawn_enemy(int x, int y, int typ);
+    void spawn_enemy(float x, float y, int type);
 
     void spawnTiledrop(enemy &source);
 };

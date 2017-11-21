@@ -8,9 +8,7 @@
 
 #include "The_Station.h"
 
-const std::string DEFAULT_IMAGE_FOLDER_PATH = "../img/";
-
-enum ImageID {
+enum class ImageID {
     PLAYER,
     BACKGROUND,
     SUBLIMINAL,
@@ -44,9 +42,11 @@ enum ImageID {
 }; // modify together with the string vector images in ImagePool.cpp
 
 class ImagePool : public ResourcePool{
-    static std::unordered_map<ImageID, sf::Image> idStorage;
-    static sf::Image&& loadImage(const std::string& name);
+    static std::unordered_map<ImageID, sf::Image> imageStorage;
+    static std::vector<ImageID> idStorage;
 public:
+    static const std::string DEFAULT_IMAGE_FOLDER_PATH;
+
     static void initialize();
     static sf::Image& getImageById(ImageID id);
 };

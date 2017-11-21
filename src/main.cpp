@@ -5,7 +5,6 @@
 #define m 6
 
 
-
 /**
 00 01 02 03 04
 05 06 07 08 09
@@ -17,138 +16,138 @@
 int currentpos;
 bool vis[25];
 int viscount;
+namespace {
 
-double dist(int x1, int y1, int x2, int y2) {
-    return sqrt(abs(x1 - x2) * abs(x1 - x2) + abs(y1 - y2) * abs(y1 - y2)) / 100;
-}
-
-int square2x(FloorTile floortile[n][m], int x) {
-    for (int i = 0; i < n; i++) {
-        if ((floortile[i][0].x < x and floortile[i][0].x + 100 > x) or floortile[i][0].x == x)
-            return i;
+    sf::Vector3f to3D(sf::Vector2f toConvert) {
+        return {toConvert.x, toConvert.y, 0};
     }
-    return 0;
-}
 
-int square2y(FloorTile floortile[n][m], int y) {
-    for (int i = 0; i < m; i++) {
-        if ((floortile[0][i].y < y and floortile[0][i].y + 104 > y) or floortile[i][0].y == y)
-            return i;
+    double dist(int x1, int y1, int x2, int y2) {
+        return sqrt(abs(x1 - x2) * abs(x1 - x2) + abs(y1 - y2) * abs(y1 - y2)) / 100;
     }
-    return 0;
-}
 
-void changeRoom(Room &currentroom, int dir, std::vector<Room> section)///0 - up, 1 - right, 2 - down, 3 - left
-{
-    if (currentpos == 2 and dir == 0) {
-        ///BOSSROOM SPAWN
+    int square2x(FloorTile floortile[n][m], double x_f) {
+        int x = static_cast<int>(x_f);
+        for (int i = 0; i < n; i++) {
+            if ((floortile[i][0].x < x and floortile[i][0].x + 100 > x) or floortile[i][0].x == x)
+                return i;
+        }
+        return 0;
+    }
+
+    int square2y(FloorTile floortile[n][m], double y_f) {
+        int y = static_cast<int>(y_f);
+        for (int i = 0; i < m; i++) {
+            if ((floortile[0][i].y < y and floortile[0][i].y + 104 > y) or floortile[i][0].y == y)
+                return i;
+        }
+        return 0;
+    }
+
+
+    void changeRoom(Room &currentroom, int dir, std::vector<Room> section)///0 - up, 1 - right, 2 - down, 3 - left
+    {
+        if (currentpos == 2 and dir == 0) {
+            ///BOSSROOM SPAWN
+            for (int i = 0; i < n; i++) {
+                for (int j = 0; j < m; j++) {
+                    currentroom.floortile[i][j].walkable = true;
+
+                }
+            }
+            currentroom.type = 1;
+            currentpos = -1;
+            return;
+        }
+        currentroom.type = 0;
+        int a = 0;
+        switch (dir) {
+            case 0:
+                if (currentpos < 5)
+                    return;
+                a = -5;
+                break;
+            case 1:
+                if (currentpos == 24)
+                    return;
+                a = 1;
+                break;
+            case 2:
+                if (currentpos > 19)
+                    return;
+                a = 5;
+                break;
+            case 3:
+                if (!currentpos or currentpos == 5 or currentpos == 10 or currentpos == 15 or currentpos == 20)
+                    return;
+                a = -1;
+                break;
+            default:
+                break;
+        }
+        currentroom.dbottom = section[currentpos + a].dbottom;
+        currentroom.dtop = section[currentpos + a].dtop;
+        currentroom.dleft = section[currentpos + a].dleft;
+        currentroom.dright = section[currentpos + a].dright;
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < m; j++) {
-                currentroom.floortile[i][j].walkable = true;
 
+                currentroom.floortile[i][j].x = section[currentpos + a].floortile[i][j].x;
+                currentroom.floortile[i][j].y = section[currentpos + a].floortile[i][j].y;
+                currentroom.floortile[i][j].type = section[currentpos + a].floortile[i][j].type;
+                currentroom.floortile[i][j].walkable = section[currentpos + a].floortile[i][j].walkable;
+                if (currentroom.floortile[i][j].type == 0)
+                    currentroom.floortile[i][j].sprite.setTexture(currentroom.floort);
+                if (currentroom.floortile[i][j].type == 1)
+                    currentroom.floortile[i][j].sprite.setTexture(currentroom.chestt);
             }
         }
-        currentroom.type = 1;
-        currentpos = -1;
-        return;
-    }
-    currentroom.type = 0;
-    int a;
-    switch (dir) {
-        case 0:
-            if (currentpos < 5)
-                return;
-            a = -5;
-            break;
-        case 1:
-            if (currentpos == 24)
-                return;
-            a = 1;
-            break;
-        case 2:
-            if (currentpos > 19)
-                return;
-            a = 5;
-            break;
-        case 3:
-            if (!currentpos or currentpos == 5 or currentpos == 10 or currentpos == 15 or currentpos == 20)
-                return;
-            a = -1;
-            break;
-        default:
-            break;
-    }
-    currentroom.dbottom = section[currentpos + a].dbottom;
-    currentroom.dtop = section[currentpos + a].dtop;
-    currentroom.dleft = section[currentpos + a].dleft;
-    currentroom.dright = section[currentpos + a].dright;
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < m; j++) {
 
-            currentroom.floortile[i][j].x = section[currentpos + a].floortile[i][j].x;
-            currentroom.floortile[i][j].y = section[currentpos + a].floortile[i][j].y;
-            currentroom.floortile[i][j].type = section[currentpos + a].floortile[i][j].type;
-            if (section[currentpos + a].floortile[i][j].walkable)
-                currentroom.floortile[i][j].walkable = true;
-            else
-                currentroom.floortile[i][j].walkable = false;
-            if (currentroom.floortile[i][j].type == 0)
-                currentroom.floortile[i][j].sprite.setTexture(currentroom.floort);
-            if (currentroom.floortile[i][j].type == 1)
-                currentroom.floortile[i][j].sprite.setTexture(currentroom.chestt);
+        section[currentpos].enem.erase(section[currentpos].enem.begin(), section[currentpos].enem.end());
+
+        while (!currentroom.enem.empty()) {
+            section[currentpos].enem.push_back(currentroom.enem[currentroom.enem.size() - 1]);
+            currentroom.enem.erase(currentroom.enem.end());
         }
-    }
-
-    section[currentpos].enem.erase(section[currentpos].enem.begin(), section[currentpos].enem.end());
-
-    while (currentroom.enem.size()) {
-        section[currentpos].enem.push_back(currentroom.enem[currentroom.enem.size() - 1]);
-        currentroom.enem.erase(currentroom.enem.end());
-    }
-    for (int unsigned i = 0; i < section[currentpos + a].enem.size(); i++) {
-        currentroom.enem.push_back(section[currentpos + a].enem[i]);
-    }
-    while (currentroom.drops.size()) {
-        section[currentpos].drops.push_back(currentroom.drops[currentroom.drops.size() - 1]);
-        currentroom.drops.erase(currentroom.drops.end());
-    }
-    for (int unsigned i = 0; i < section[currentpos + a].drops.size(); i++) {
-        currentroom.drops.push_back(section[currentpos + a].drops[i]);
-    }
-    currentroom.proj.erase(currentroom.proj.begin(), currentroom.proj.end());
-    currentpos += a;
-    if (!vis[currentpos]) ///MOB SPAWNING
-    {
-        vis[currentpos] = true;
-        int t = viscount / 5;
-        ///int b=viscount;
-        int u = rand() % 5 + 5;
-        int c = 0;
-        for (int j = 0; j < n; j++) {
-            for (int k = 0; k < m; k++) {
-                int d = rand() % 10;
-                if (currentroom.floortile[j][k].walkable and !d) {
-                    c++;
-                    currentroom.spawn_enemy(currentroom.floortile[j][k].x + 50, currentroom.floortile[j][k].y + 52, t);
+        for (const auto &i : section[currentpos + a].enem) {
+            currentroom.enem.push_back(i);
+        }
+        while (!currentroom.drops.empty()) {
+            section[currentpos].drops.push_back(currentroom.drops[currentroom.drops.size() - 1]);
+            currentroom.drops.erase(currentroom.drops.end());
+        }
+        for (const auto &drop : section[currentpos + a].drops) {
+            currentroom.drops.push_back(drop);
+        }
+        currentroom.proj.erase(currentroom.proj.begin(), currentroom.proj.end());
+        currentpos += a;
+        if (!vis[currentpos]) ///MOB SPAWNING
+        {
+            vis[currentpos] = true;
+            int t = viscount / 5;
+            ///int b=viscount;
+            int u = rand() % 5 + 5;
+            int c = 0;
+            for (int j = 0; j < n; j++) {
+                for (int k = 0; k < m; k++) {
+                    int d = rand() % 10;
+                    if (currentroom.floortile[j][k].walkable and !d) {
+                        c++;
+                        currentroom.spawn_enemy(currentroom.floortile[j][k].x + 50, currentroom.floortile[j][k].y + 52,
+                                                t);
+                    }
+                    if (c == u)
+                        goto lolz;
                 }
-                if (c == u)
-                    goto lolz;
             }
+            lolz:
+
+            viscount++;
         }
-        lolz:
-
-        viscount++;
     }
-}
-
+} //namespace
 int main() {
     Station game;
-
-    ImagePool::initialize();
-
-
-
-
     /*if(2==game.pause())
     {
         game.App.close();
@@ -178,8 +177,8 @@ int main() {
     respawn:
     viscount = 0;
     currentpos = 0;
-    for (int i = 0; i < 25; i++) {
-        vis[i] = 0;
+    for (bool &vi : vis) {
+        vi = false;
     }
     //bool bossopen=false;
     sf::Sprite prog, bossroom;
@@ -242,16 +241,12 @@ int main() {
     /*playa.addItem(0,0,41);*/
 
 
-    playa.C.setOrigin(game.playerTexture.getSize().y / 2, game.playerTexture.getSize().y * 35 / 50);
-    playa.x = game.w / 2;
-    playa.y = game.h / 2;
-    mainboss.x = game.w / 2;
-    mainboss.y = game.h / 2;
-    playa.C.setPosition(playa.x, playa.y);
-    mainboss.C.setPosition(playa.x, playa.y);
-    mainboss.C.setTexture(game.bossTexture);
+    playa.setOrigin(game.playerTexture.getSize().y / 2, game.playerTexture.getSize().y * 35 / 50);
+    playa.setPosition(game.width / 2, game.height / 2);
+    mainboss.setPosition(game.width / 2, game.height / 2);
+    mainboss.setTexture(game.bossTexture);
 
-    std::vector<Room> section;
+    std::vector <Room> section;
     for (int i = 0; i < 25; i++) {
         section.emplace_back(game);
     }
@@ -265,51 +260,53 @@ int main() {
     for (int i = 4; i < 25; i += 5)
         section[i].dright = false;
 
-    sf::Sprite weapon, endscreen;
-    endscreen.setTexture(game.endScreenTexture);
-    endscreen.setPosition(0, 0);
-    sf::Text endtext;
-    endtext.setFont(game.arial);
-    endtext.setCharacterSize(100);
-    endtext.setColor(sf::Color::Cyan);
+    sf::Sprite weapon, endScreen;
+    endScreen.setTexture(game.endScreenTexture);
+    endScreen.setPosition(0, 0);
+    sf::Text endText;
+    endText.setFont(game.arial);
+    endText.setCharacterSize(100);
+    endText.setFillColor(sf::Color::Cyan);
+
 
     sf::Texture wt;
     wt.loadFromFile("../img/weapon.png");
-    if (game.isUnsized)
+    if (game.isUnsized) {
         weapon.scale(wt.getSize().x * 1024 / 1920, wt.getSize().x * 576 / 1080);
-    sf::IntRect weaprects[6];
+    }
+    sf::IntRect weaponRects[6];
     for (int i = 0; i < 6; i++) {
-        weaprects[i].height = 79;
-        weaprects[i].width = 224;
-        weaprects[i].left = 0;
-        weaprects[i].top = i * 79;
+        weaponRects[i].height = 79;
+        weaponRects[i].width = 224;
+        weaponRects[i].left = 0;
+        weaponRects[i].top = i * 79;
     }
 
     weapon.setTexture(wt);
 
-    weapon.setPosition(game.w / 100, game.h / 32);
+    weapon.setPosition(game.width / 100, game.height / 32);
     sf::Sprite bg, gui;
     sf::IntRect r1(0, 0, 50, 50);
     sf::IntRect r2(0, 50, 50, 50);
     sf::IntRect r3(50, 0, 50, 50);
     sf::IntRect r4(50, 50, 50, 50);
 
-    sf::Clock bossclock;
+    sf::Clock bossClock;
     sf::Color frame;
     sf::Text debug;
     sf::Text hpbar;
-    debug.setColor(sf::Color::White);
-    debug.setPosition(0, game.h * 97 / 100);
-    hpbar.setColor(sf::Color::White);
-    hpbar.setPosition(game.w * 255 / 1000, game.h * 25 / 1000);
+    debug.setFillColor(sf::Color::White);
+    debug.setPosition(0, game.height * 97 / 100);
+    hpbar.setFillColor(sf::Color::White);
+    hpbar.setPosition(game.width * 255 / 1000, game.height * 25 / 1000);
     int mx, my;
-    sf::String debugs;
-    sf::String hptext;
+    sf::String debugString;
+    sf::String hpText;
     std::string mxs, mys, angs;
     Room currentroom(game);
 
     //currentroom.changeTo( section[5][5], section[5][5].floortile);
-    //currentroom.loadroom(game.w,game.h);
+    //currentroom.loadroom(game.width,game.height);
 
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < m; j++) {
@@ -317,10 +314,7 @@ int main() {
             currentroom.floortile[i][j].x = section[12].floortile[i][j].x;
             currentroom.floortile[i][j].y = section[12].floortile[i][j].y;
             currentroom.floortile[i][j].type = section[12].floortile[i][j].type;
-            if (section[12].floortile[i][j].walkable)
-                currentroom.floortile[i][j].walkable = true;
-            else
-                currentroom.floortile[i][j].walkable = false;
+            currentroom.floortile[i][j].walkable = section[12].floortile[i][j].walkable;
             if (currentroom.floortile[i][j].type == 0)
                 currentroom.floortile[i][j].sprite.setTexture(currentroom.floort);
             if (currentroom.floortile[i][j].type == 1)
@@ -332,10 +326,10 @@ int main() {
     sf::Sprite dr(game.doorRightTexture);
     sf::Sprite dl(game.doorLeftTexture);
     sf::Sound sound;
-    sf::Clock manualspawntimer;
+    sf::Clock manualSpawnTimer;
     bg.setTexture(game.backgroundTexture);
     gui.setTexture(game.guiTexture);
-    playa.C.setTexture(game.playerTexture);
+    playa.setTexture(game.playerTexture);
     debug.setFont(game.arial);
     hpbar.setFont(game.arial);
     game.App.setFramerateLimit(70);
@@ -348,8 +342,9 @@ int main() {
     sf::Music battle;
     battle.openFromFile("../sounds/battle.wav");
     battle.setLoop(true);
-    if (game.soundEnabled)
+    if (game.soundEnabled) {
         battle.play();
+    }
     while (game.App.isOpen())///**************************************************************************************************************************GAME LOOP OPEN
     {
         co++;
@@ -373,15 +368,15 @@ int main() {
                     if (event.key.code == sf::Keyboard::Escape and !gameended) {
                         if (!game.soundEnabled)
                             battle.pause();
-                        int asda = game.pause();
-                        if (!asda) {
+                        int pauseReturnCode = game.pause();
+                        if (!pauseReturnCode) {
                             if (!game.mainmenu()) {
                                 game.endapp();
                                 return 0;
                             } else {
                                 goto respawn;
                             }
-                        } else if (asda == 2) {
+                        } else if (pauseReturnCode == 2) {
                             game.endapp();
                             continue;
                         } else if (game.soundEnabled)
@@ -420,14 +415,14 @@ int main() {
                     break;
             }
         }
-        if (!gameended and viscount == 25 and currentroom.type != 1 and bossopen == false) {
-            int anum = 0;
+        if (!gameended and viscount == 25 and currentroom.type != 1 and !bossopen) {
+            int numberOfVisitedRooms = 0;
             for (int i = 0; i < 25; i++) {
                 if (!section[i].enem.empty())
                     break;
-                anum++;
+                numberOfVisitedRooms++;
             }
-            if (anum == 25) {
+            if (numberOfVisitedRooms == 25) {
                 bossopen = true;
                 section[2].dtop = true;
             }
@@ -435,43 +430,49 @@ int main() {
 
 
         if (!gameended)
-            weapon.setTextureRect(weaprects[playa.inv[playa.weaponiter].getId()]);
+            weapon.setTextureRect(weaponRects[playa.inv[playa.weaponiter].getId()]);
 
         ///WALKING PLAYER
         if (!gameended) {
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and (playa.canWalkUp(currentroom.floortile, game)))
-                playa.y -= playa.speed;
+                playa.move(0, -playa.speed);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::W) and currentroom.dtop and
-                game.dti.getPixel(playa.x, playa.y - 15) == dor and currentroom.type != 1) {
+                game.dti.getPixel(static_cast<unsigned int>(playa.getPosition().x),
+                                  static_cast<unsigned int>(playa.getPosition().y - 15)) == dor and
+                currentroom.type != 1) {
                 changeRoom(currentroom, 0, section);
-                playa.y += 580;
+                playa.move(0, 580);
             }
 
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and playa.canWalkDown(currentroom.floortile, game))
-                playa.y += playa.speed;
+                playa.move(0, playa.speed);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::S) and currentroom.dbottom and
-                (game.dbi.getPixel(playa.x, playa.y + 20) == dor) and currentroom.type != 1) {
+                (game.dbi.getPixel(static_cast<unsigned int>(playa.getPosition().x),
+                                   static_cast<unsigned int>(playa.getPosition().y + 20)) == dor) and
+                currentroom.type != 1) {
                 changeRoom(currentroom, 2, section);
-                playa.y -= 580;
+                playa.move(0, -580);
             }
 
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and (playa.canWalkLeft(currentroom.floortile, game)))
-                playa.x -= playa.speed;
+                playa.move(-playa.speed, 0);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::A) and currentroom.dleft and
-                game.dli.getPixel(playa.x - 15, playa.y) == dor and currentroom.type != 1) {
+                game.dli.getPixel(static_cast<unsigned int>(playa.getPosition().x - 15),
+                                  static_cast<unsigned int>(playa.getPosition().y)) == dor and currentroom.type != 1) {
                 changeRoom(currentroom, 3, section);
-                playa.x += 1500;
+                playa.move(0, 1500);
             }
 
 
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and (playa.canWalkRight(currentroom.floortile, game)))
-                playa.x += playa.speed;
+                playa.move(playa.speed, 0);
             if (sf::Keyboard::isKeyPressed(sf::Keyboard::D) and currentroom.dright and
-                game.dri.getPixel(playa.x + 20, playa.y) == dor and currentroom.type != 1) {
+                game.dri.getPixel(static_cast<unsigned int>(playa.getPosition().x + 20),
+                                  static_cast<unsigned int>(playa.getPosition().y)) == dor and currentroom.type != 1) {
                 changeRoom(currentroom, 1, section);
-                playa.x -= 1500;
+                playa.move(0, 1500);
             }
 
 
@@ -480,9 +481,7 @@ int main() {
             }
 
             ///MOUSE ROTAtION
-            mx = sf::Mouse::getPosition(game.App).x;
-            my = sf::Mouse::getPosition(game.App).y;
-            playa.rotatexy(mx, my);
+            playa.rotatexy(sf::Mouse::getPosition(game.App));
 
             ///Debug Mouse Text
             /*ostringstream convert;
@@ -495,17 +494,17 @@ int main() {
             convert<<playa.orient;
             angs=convert.str();
             convert.str(std::string());
-            debugs+=mxs+", "+mys+", angle: "+angs;
-            debug.setString(debugs);*/
+            debugString+=mxs+", "+mys+", angle: "+angs;
+            debug.setString(debugString);*/
             ///debugs.clear();
             /*if(currentroom.dbottom)
-                debugs+="bot, ";
+                debugString+="bot, ";
             if(currentroom.dtop)
-                debugs+="top, ";
+                debugString+="top, ";
             if(currentroom.dleft)
-                debugs+="left, ";
+                debugString+="left, ";
             if(currentroom.dright)
-                debugs+="right, ";*/
+                debugString+="right, ";*/
             std::ostringstream convert;
             /**convert<<square2x(currentroom.floortile,playa.x);
             debugs+=convert.str();
@@ -521,20 +520,18 @@ int main() {
             ///HP TEXT
             //ostringstream convert;
             convert << playa.health;
-            hptext = convert.str();
+            hpText = convert.str();
             convert.str(std::string());
-            hpbar.setString(hptext);
+            hpbar.setString(hpText);
 
             ///MANUAL SPAWNING
             if (sf::Mouse::isButtonPressed(sf::Mouse::Right) and currentroom.type != 1 and game.cheatsEnabled) {
-                if (manualspawntimer.getElapsedTime().asSeconds() > 1) {
+                if (manualSpawnTimer.getElapsedTime().asSeconds() > 1) {
                     currentroom.spawn_enemy(mx, my, 0);
-                    currentroom.enem[currentroom.enem.size() - 1].rotatexy(playa.x, playa.y);
-                    manualspawntimer.restart();
+                    currentroom.enem[currentroom.enem.size() - 1].rotatexy(playa.getPosition());
+                    manualSpawnTimer.restart();
                 }
             }
-
-            playa.C.setPosition(playa.x, playa.y);///zmiana pozycji gracza
 
             ///SHOOTING
             if (sf::Mouse::isButtonPressed(sf::Mouse::Left)) {
@@ -545,7 +542,7 @@ int main() {
 
                     if (game.soundEnabled) {
                         sound.setBuffer(game.shots);
-                        sound.setPosition(playa.x, playa.y, 0);
+                        sound.setPosition(playa.getPosition().x, playa.getPosition().y, 0);
                         sound.play();
                     }
                 }
@@ -560,11 +557,12 @@ int main() {
 
                 if (mainboss.health <= 0) {
                     if (mainboss.destroystate == 0)
-                        bossclock.restart();
+                        bossClock.restart();
                     mainboss.destroystate++;
                     if (co == 2 or co == 4)
-                        game.explode(mainboss.x - 50 + rand() % 100 - 50, mainboss.y + rand() % 100 - 50);
-                    if (bossclock.getElapsedTime().asSeconds() > 4) {
+                        game.explode(mainboss.getPosition().x - 50 + rand() % 100 - 50,
+                                     mainboss.getPosition().y + rand() % 100 - 50);
+                    if (bossClock.getElapsedTime().asSeconds() > 4) {
                         gameended = 2;
                         ///game.endscreen();
                     }
@@ -576,20 +574,20 @@ int main() {
                             shotcolors[currentroom.proj[currentroom.proj.size() - 1].type]);
                     if (game.soundEnabled) {
                         sound.setBuffer(game.shots);
-                        sound.setPosition(mainboss.x, mainboss.y, 0);
+                        sound.setPosition(to3D(mainboss.getPosition()));
                         sound.play();
                     }
-                    mainboss.shoot(currentroom.proj, 0, game.h, true);
+                    mainboss.shoot(currentroom.proj, 0, game.height, true);
 
                     currentroom.proj[currentroom.proj.size() - 1].C.setTexture(currentroom.sht);
                     currentroom.proj[currentroom.proj.size() - 1].C.setTextureRect(
                             shotcolors[currentroom.proj[currentroom.proj.size() - 1].type]);
                     if (game.soundEnabled) {
                         sound.setBuffer(game.shots);
-                        sound.setPosition(mainboss.x, mainboss.y, 0);
+                        sound.setPosition(to3D(mainboss.getPosition()));
                         sound.play();
                     }
-                    mainboss.shoot(currentroom.proj, game.w, game.h, true);
+                    mainboss.shoot(currentroom.proj, game.width, game.height, true);
 
 
                     currentroom.proj[currentroom.proj.size() - 1].C.setTexture(currentroom.sht);
@@ -597,25 +595,26 @@ int main() {
                             shotcolors[currentroom.proj[currentroom.proj.size() - 1].type]);
                     if (game.soundEnabled) {
                         sound.setBuffer(game.shots);
-                        sound.setPosition(mainboss.x, mainboss.y, 0);
+                        sound.setPosition(to3D(mainboss.getPosition()));
                         sound.play();
 
                     }
-                    mainboss.shoot(currentroom.proj, game.w, 0, true);
+                    mainboss.shoot(currentroom.proj, game.width, 0, true);
                     currentroom.proj[currentroom.proj.size() - 1].C.setTexture(currentroom.sht);
                     currentroom.proj[currentroom.proj.size() - 1].C.setTextureRect(
                             shotcolors[currentroom.proj[currentroom.proj.size() - 1].type]);
                     if (game.soundEnabled) {
                         sound.setBuffer(game.shots);
-                        sound.setPosition(mainboss.x, mainboss.y, 0);
+                        sound.setPosition(to3D(mainboss.getPosition()));
                         sound.play();
                     }
                     if (rand() % 10 > 8) {
-                        currentroom.spawn_enemy(mainboss.x + rand() % 500 - 250, mainboss.y + rand() % 500 - 250, 4);
+                        currentroom.spawn_enemy(mainboss.getPosition().x + rand() % 500 - 250,
+                                                mainboss.getPosition().y + rand() % 500 - 250, 4);
                     }
                 }
                 game.App.draw(bossroom);
-                game.App.draw(mainboss.C);
+                game.App.draw(mainboss);
             }
         }
 
@@ -646,14 +645,16 @@ int main() {
 
                 currentroom.proj[i].C.setPosition(currentroom.proj[i].x, currentroom.proj[i].y);
                 game.App.draw(currentroom.proj[i].C);
-                if (sqrt(((currentroom.proj[i].x - playa.x) * (currentroom.proj[i].x - playa.x)) +
-                         ((currentroom.proj[i].y - playa.y) * (currentroom.proj[i].y - playa.y))) < 15 &&
+                if (std::sqrt(((currentroom.proj[i].x - playa.getPosition().x) *
+                               (currentroom.proj[i].x - playa.getPosition().x)) +
+                              ((currentroom.proj[i].y - playa.getPosition().y) *
+                               (currentroom.proj[i].y - playa.getPosition().y))) < 15 &&
                     currentroom.proj[i].orig != &playa && !playa.invincible and !playa.red) {
-                    playa.C.setColor(sf::Color(255, 0, 0));
-                    hpbar.setColor(sf::Color(255, 0, 0));
+                    playa.setColor(sf::Color(255, 0, 0));
+                    hpbar.setFillColor(sf::Color(255, 0, 0));
                     playa.red = true;
 
-                    playa.C.move(3, 3);
+                    playa.move(3, 3);
                     playa.ifshot.restart();
                     playa.DealDamage(currentroom.proj[i].damage);
 
@@ -663,15 +664,17 @@ int main() {
                     currentroom.proj.erase(currentroom.proj.begin() + i);
                 }
                 if (currentroom.type == 1) {
-                    mainboss.y -= 50;
-                    if (sqrt(((currentroom.proj[i].x - mainboss.x) * (currentroom.proj[i].x - mainboss.x)) +
-                             ((currentroom.proj[i].y - mainboss.y) * (currentroom.proj[i].y - mainboss.y))) < 150 &&
+                    mainboss.move(0, -50);
+                    if (sqrt(((currentroom.proj[i].x - mainboss.getPosition().x) *
+                              (currentroom.proj[i].x - mainboss.getPosition().x)) +
+                             ((currentroom.proj[i].y - mainboss.getPosition().y) *
+                              (currentroom.proj[i].y - mainboss.getPosition().y))) < 150 &&
                         currentroom.proj[i].orig == &playa && !mainboss.invincible and !mainboss.red) {
-                        mainboss.C.setColor(sf::Color(255, 0, 0));
+                        mainboss.setColor(sf::Color(255, 0, 0));
 
                         mainboss.red = true;
 
-                        mainboss.C.move(3, 3);
+                        mainboss.move(3, 3);
                         mainboss.ifshot.restart();
                         mainboss.DealDamage(currentroom.proj[i].damage);
 
@@ -680,9 +683,10 @@ int main() {
                         }
                         currentroom.proj.erase(currentroom.proj.begin() + i);
                     }
-                    mainboss.y += 50;
+                    mainboss.move(0, 50);
                 }
-                if (currentroom.proj[i].x > game.w || !currentroom.proj[i].x || currentroom.proj[i].y > game.h ||
+                if (currentroom.proj[i].x > game.width || !currentroom.proj[i].x ||
+                    currentroom.proj[i].y > game.height ||
                     !currentroom.proj[i].y) {
 
                     if (currentroom.proj[i].type > 2) {
@@ -695,7 +699,7 @@ int main() {
             ///ENEMIES HANDLING
             for (int unsigned i = 0; i < currentroom.enem.size(); ++i) {
 
-                if (currentroom.enem[i].canSee(currentroom.floortile, playa.x, playa.y)) {
+                if (currentroom.enem[i].canSee(currentroom.floortile, playa.getPosition())) {
                     /*int mox=0,moy=0;
                     if(sf::Keyboard::isKeyPressed(sf::Keyboard::W))
                         moy=-25*dist(playa.x,playa.y,currentroom.enem[i].x,currentroom.enem[i].y);
@@ -705,19 +709,20 @@ int main() {
                         mox=-25*dist(playa.x,playa.y,currentroom.enem[i].x,currentroom.enem[i].y);
                     else if(sf::Keyboard::isKeyPressed(sf::Keyboard::D))
                         mox=25*dist(playa.x,playa.y,currentroom.enem[i].x,currentroom.enem[i].y);*/
-                    currentroom.enem[i].rotatexy(playa.x/*+mox*/, playa.y/*+moy*/);///ROTATING ENEMIES
-                    if (currentroom.enem[i].shoot(currentroom.proj, playa.x/*+mox*/, playa.y/*+moy*/)) {
+                    currentroom.enem[i].rotatexy(playa.getPosition());///ROTATING ENEMIES
+                    if (currentroom.enem[i].shoot(currentroom.proj, playa.getPosition())) {
                         currentroom.proj[currentroom.proj.size() - 1].C.setTexture(currentroom.sht);
                         currentroom.proj[currentroom.proj.size() - 1].C.setTextureRect(
                                 shotcolors[currentroom.proj[currentroom.proj.size() - 1].type]);
                         if (game.soundEnabled) {
                             sound.setBuffer(game.shots);
-                            sound.setPosition(currentroom.enem[i].x, currentroom.enem[i].y, 0);
+                            sound.setPosition(to3D(currentroom.enem[i].getPosition()));
                             sound.play();
                         }
                     }
                     currentroom.enem[i].ay =
-                            sin(currentroom.enem[i].orient * PI / 180) * currentroom.enem[i].speed;///GIVING 'EM DELTA Y
+                            std::sin(currentroom.enem[i].orient * PI / 180) *
+                            currentroom.enem[i].speed;///GIVING 'EM DELTA Y
                     if (!currentroom.enem[i].canWalkDown(currentroom.floortile, game) and currentroom.enem[i].ay < 0)
                         currentroom.enem[i].ay = 0;
                     ///CHECKING  IF THEY CAN WALK THIS WAY
@@ -725,21 +730,23 @@ int main() {
                         currentroom.enem[i].ay = 0;
 
                     currentroom.enem[i].ax =
-                            cos(currentroom.enem[i].orient * PI / 180) * currentroom.enem[i].speed;///GIVING 'EM DELTA X
+                            std::cos(currentroom.enem[i].orient * PI / 180) *
+                            currentroom.enem[i].speed;///GIVING 'EM DELTA X
                     if (!currentroom.enem[i].canWalkRight(currentroom.floortile, game) and currentroom.enem[i].ax < 0)
                         currentroom.enem[i].ax = 0;
                     ///CHECKING  IF THEY CAN WALK THIS WAY
                     if (!currentroom.enem[i].canWalkLeft(currentroom.floortile, game) and currentroom.enem[i].ax > 0)
                         currentroom.enem[i].ax = 0;
 
-                    if (currentroom.enem[i].ay or currentroom.enem[i].ax) {
+                    if (currentroom.enem[i].ay != 0 or currentroom.enem[i].ax != 0) {
                         for (int unsigned j = 0; j < currentroom.enem.size(); ++j) {
                             if (j == i)
                                 continue;
-                            if (sqrt(((currentroom.enem[j].x - (currentroom.enem[i].x)) *
-                                      (currentroom.enem[j].x - (currentroom.enem[i].x))) +
-                                     ((currentroom.enem[j].y - (currentroom.enem[i].y)) *
-                                      (currentroom.enem[j].y - (currentroom.enem[i].y)))) < 30) {
+                            if (sqrt(((currentroom.enem[j].getPosition().x - (currentroom.enem[i].getPosition().x)) *
+                                      (currentroom.enem[j].getPosition().x - (currentroom.enem[i].getPosition().x))) +
+                                     ((currentroom.enem[j].getPosition().y - (currentroom.enem[i].getPosition().y)) *
+                                      (currentroom.enem[j].getPosition().y - (currentroom.enem[i].getPosition().y)))) <
+                                30) {
                                 currentroom.enem[i].ax = 0;
                                 currentroom.enem[i].ay = 0;
                             }
@@ -748,19 +755,19 @@ int main() {
                     }
 
 
-                    if (currentroom.enem[i].x - playa.x > 100 || playa.x - currentroom.enem[i].x > 100 ||
-                        currentroom.enem[i].y - playa.y > 100 ||
-                        playa.y - currentroom.enem[i].y > 100)///MOVING ENEMIES - IMPLEMENT AI HERE
-                    {
-                        currentroom.enem[i].x -= currentroom.enem[i].ax;
+                    if (currentroom.enem[i].getPosition().x - playa.getPosition().x > 100 ||
+                        playa.getPosition().x - currentroom.enem[i].getPosition().x > 100 ||
+                        currentroom.enem[i].getPosition().y - playa.getPosition().y > 100 ||
+                        playa.getPosition().y - currentroom.enem[i].getPosition().y > 100) {
+                        currentroom.enem[i].move(-currentroom.enem[i].ax, 0);
 
-                        currentroom.enem[i].y -= currentroom.enem[i].ay;
+                        currentroom.enem[i].move(0, -currentroom.enem[i].ay);
                     }
                 } else {
-                    int dir = currentroom.enem[i].returnpath(currentroom.floortile, playa.x, playa.y);
+                    int dir = currentroom.enem[i].returnpath(currentroom.floortile, playa.getPosition());
                     if (dir != 4) {
-                        int a = square2x(currentroom.floortile, currentroom.enem[i].x);
-                        int b = square2y(currentroom.floortile, currentroom.enem[i].y);
+                        int a = square2x(currentroom.floortile, currentroom.enem[i].getPosition().x);
+                        int b = square2y(currentroom.floortile, currentroom.enem[i].getPosition().y);
                         if (!dir)
                             b--;
                         else if (dir == 1)
@@ -770,32 +777,33 @@ int main() {
                         else if (dir == 3)
                             a--;
 
-                        currentroom.enem[i].rotatexy(currentroom.floortile[a][b].x + 50,
-                                                     currentroom.floortile[a][b].y + 52);
-                        currentroom.enem[i].ay = sin(currentroom.enem[i].orient * PI / 180) * currentroom.enem[i].speed;
-                        currentroom.enem[i].ax = cos(currentroom.enem[i].orient * PI / 180) * currentroom.enem[i].speed;
-                        currentroom.enem[i].x -= currentroom.enem[i].ax;
-                        currentroom.enem[i].y -= currentroom.enem[i].ay;
+                        currentroom.enem[i].rotatexy(sf::Vector2f(currentroom.floortile[a][b].x + 50,
+                                                                  currentroom.floortile[a][b].y + 52));
+                        currentroom.enem[i].ay =
+                                std::sin(currentroom.enem[i].orient * PI / 180) * currentroom.enem[i].speed;
+                        currentroom.enem[i].ax =
+                                std::cos(currentroom.enem[i].orient * PI / 180) * currentroom.enem[i].speed;
+                        currentroom.enem[i].move(-currentroom.enem[i].ax, -currentroom.enem[i].ay);
                     }
                 }
 
 
                 game.App.draw(
-                        currentroom.enem[i].C);///DRAWING EM (HAS TO B HERE SINCE FURTHER IT WOULD GET SHUTDOWN WHEN DEAD AND NO ANIMATION WOULD PLAY
+                        currentroom.enem[i]);///DRAWING EM (HAS TO BE HERE SINCE FURTHER IT WOULD GET SHUTDOWN WHEN DEAD AND NO ANIMATION WOULD PLAY
                 if (currentroom.enem[i].health < 0) {
-                    currentroom.enem[i].C.setColor(sf::Color(255, 255, 255));///DEATH ANIMATION START
+                    currentroom.enem[i].setColor(sf::Color(255, 255, 255));///DEATH ANIMATION START
                     if (!currentroom.enem[i].destroystate) {
-                        currentroom.enem[i].destroyclock.restart();
+                        currentroom.enem[i].destroyClock.restart();
                     }
                     currentroom.enem[i].destroystate++;
                     if (currentroom.enem[i].destroystate > 10 && currentroom.enem[i].destroystate < 20)
-                        currentroom.enem[i].C.setTextureRect(r2);
+                        currentroom.enem[i].setTextureRect(r2);
                     if (currentroom.enem[i].destroystate > 20 && currentroom.enem[i].destroystate < 30)
-                        currentroom.enem[i].C.setTextureRect(r3);
+                        currentroom.enem[i].setTextureRect(r3);
                     if (currentroom.enem[i].destroystate > 30 && currentroom.enem[i].destroystate < 40)
-                        currentroom.enem[i].C.setTextureRect(r4);///DEATH ANIMATION END
+                        currentroom.enem[i].setTextureRect(r4);///DEATH ANIMATION END
 
-                    if (currentroom.enem[i].destroystate > 40 && currentroom.enem[i].C.getTextureRect() == r4)  ///DYING
+                    if (currentroom.enem[i].destroystate > 40 && currentroom.enem[i].getTextureRect() == r4)  ///DYING
                     {
                         currentroom.spawnTiledrop(currentroom.enem[i]);
                         currentroom.enem.erase(currentroom.enem.begin() + i);
@@ -805,20 +813,20 @@ int main() {
 
                 /*if(currentroom.enem[i].x<currentroom.enemyt.getSize().x)
                     currentroom.enem[i].x=currentroom.enemyt.getSize().x;
-                if(currentroom.enem[i].x+currentroom.enemyt.getSize().x>game.w)
-                    currentroom.enem[i].x=game.w-currentroom.enemyt.getSize().x;
+                if(currentroom.enem[i].x+currentroom.enemyt.getSize().x>game.width)
+                    currentroom.enem[i].x=game.width-currentroom.enemyt.getSize().x;
                 if(currentroom.enem[i].y<currentroom.enemyt.getSize().y)
                     currentroom.enem[i].y=currentroom.enemyt.getSize().y;
-                if(currentroom.enem[i].y+currentroom.enemyt.getSize().y>game.h)
-                    currentroom.enem[i].y=game.h-currentroom.enemyt.getSize().y;*////COLISSIONS WITH FRAMES - USELESS
+                if(currentroom.enem[i].y+currentroom.enemyt.getSize().y>game.height)
+                    currentroom.enem[i].y=game.height-currentroom.enemyt.getSize().y;*////COLISSIONS WITH FRAMES - USELESS
                 for (int unsigned j = 0; j < currentroom.proj.size(); ++j) {
-                    if (!currentroom.enem[i].destroystate and sqrt(((currentroom.proj[j].x - (currentroom.enem[i].x)) *
-                                                                    (currentroom.proj[j].x - (currentroom.enem[i].x))) +
-                                                                   ((currentroom.proj[j].y - (currentroom.enem[i].y)) *
-                                                                    (currentroom.proj[j].y -
-                                                                     (currentroom.enem[i].y)))) < 15 &&
+                    if (!currentroom.enem[i].destroystate and
+                        sqrt(((currentroom.proj[j].x - (currentroom.enem[i].getPosition().x)) *
+                              (currentroom.proj[j].x - (currentroom.enem[i].getPosition().x))) +
+                             ((currentroom.proj[j].y - (currentroom.enem[i].getPosition().y)) *
+                              (currentroom.proj[j].y - (currentroom.enem[i].getPosition().y)))) < 15 &&
                         currentroom.proj[j].orig == &playa) {
-                        currentroom.enem[i].C.setColor(sf::Color(255, 0, 0));
+                        currentroom.enem[i].setColor(sf::Color(255, 0, 0));
                         currentroom.enem[i].red = true;
                         currentroom.enem[i].ifshot.restart();
                         currentroom.enem[i].DealDamage(currentroom.proj[j].damage);
@@ -832,29 +840,24 @@ int main() {
                 }
                 if (currentroom.enem[i].ifshot.getElapsedTime().asMilliseconds() > 70 && currentroom.enem[i].red) {
                     currentroom.enem[i].red = false;
-                    currentroom.enem[i].C.setColor(sf::Color(255, 255, 255));
+                    currentroom.enem[i].setColor(sf::Color(255, 255, 255));
                 }
-
-
-                currentroom.enem[i].C.setPosition(currentroom.enem[i].x, currentroom.enem[i].y);
-
-
+                currentroom.enem[i].setPosition(currentroom.enem[i].getPosition());
             }
             ///ENEMIES HANDLING END
 
             ///PLAYER TURNING RED
             if (playa.ifshot.getElapsedTime().asMilliseconds() > 70 && playa.red) {
                 playa.red = false;
-                playa.C.setColor(sf::Color(255, 255, 255));
-                playa.C.move(-3, -3);
-                hpbar.setColor(sf::Color(255, 255, 255));
+                playa.setColor(sf::Color(255, 255, 255));
+                playa.move(-3, -3);
+                hpbar.setFillColor(sf::Color(255, 255, 255));
             }
             ///boss turning red
             if (mainboss.ifshot.getElapsedTime().asMilliseconds() > 70 && mainboss.red) {
                 mainboss.red = false;
-                mainboss.C.setColor(sf::Color(255, 255, 255));
-                mainboss.C.move(-3, -3);
-
+                mainboss.setColor(sf::Color(255, 255, 255));
+                mainboss.move(-3, -3);
             }
         }
         ///DRAWING
@@ -875,14 +878,14 @@ int main() {
                 game.App.draw(dr);
         }
 
-        game.App.draw(playa.C);
+        game.App.draw(playa);
 
         for (int unsigned i = 0; i < currentroom.drops.size(); i++) ///TILEDROP HANDLING
         {
-            if (sqrt(((currentroom.drops[i].s.getPosition().x + 30 - playa.x) *
-                      (currentroom.drops[i].s.getPosition().x + 30 - playa.x)) +
-                     ((currentroom.drops[i].s.getPosition().y + 23 - playa.y) *
-                      (currentroom.drops[i].s.getPosition().y + 23 - playa.y))) < 50) {
+            if (sqrt(((currentroom.drops[i].s.getPosition().x + 30 - playa.getPosition().x) *
+                      (currentroom.drops[i].s.getPosition().x + 30 - playa.getPosition().x)) +
+                     ((currentroom.drops[i].s.getPosition().y + 23 - playa.getPosition().y) *
+                      (currentroom.drops[i].s.getPosition().y + 23 - playa.getPosition().y))) < 50) {
                 playa.addItem(currentroom.drops[i].collect());
                 currentroom.drops.erase(currentroom.drops.begin() + i);
                 continue;
@@ -920,7 +923,7 @@ int main() {
         {
             co = 0;
             for (int unsigned i = 0; i < game.exp.size(); i++) {
-                game.exp[i].handle();
+                game.exp[i].advance();
                 if (!game.exp[i].alive)
                     game.exp.erase(game.exp.begin() + i);
                 else {
@@ -943,19 +946,19 @@ int main() {
                 break;
             case 1:
                 ///u died
-                game.App.draw(endscreen);
-                endtext.setString("You died.");
-                endtext.setPosition(game.w * 400 / 1000, game.h * 400 / 1000);
-                game.App.draw(endtext);
+                game.App.draw(endScreen);
+                endText.setString("You died.");
+                endText.setPosition(game.width * 400 / 1000, game.height * 400 / 1000);
+                game.App.draw(endText);
                 sound.stop();
                 game.blasts.clear();
                 break;
             case 2:
                 ///u won
-                game.App.draw(endscreen);
-                endtext.setString("You won.");
-                endtext.setPosition(game.w * 400 / 1000, game.h * 400 / 1000);
-                game.App.draw(endtext);
+                game.App.draw(endScreen);
+                endText.setString("You won.");
+                endText.setPosition(game.width * 400 / 1000, game.height * 400 / 1000);
+                game.App.draw(endText);
                 sound.stop();
                 game.blasts.clear();
                 break;

@@ -88,17 +88,15 @@ Room::Room(Station &game) {
     sf::sleep(t1);
 }
 
-void Room::spawn_enemy(int x, int y, int typ) {
+void Room::spawn_enemy(float x, float y, int type) {
     sf::IntRect r1(0, 0, 50, 50);
     enemy a;
-    a.x = x;
-    a.y = y;
-    a.C.setTexture(this->enemyt);
-    a.C.setTextureRect(r1);
-    a.T = this->enemyt;
-    a.type = typ;
+    a.setPosition(x, y);
+    a.setTexture(this->enemyt);
+    a.setTextureRect(r1);
+    a.type = type;
     a.inv.erase(a.inv.begin(), a.inv.end());
-    a.addItem(typ, 0, 5 * typ + 5, 1);
+    a.addItem(type, 0, 5 * type + 5, 1);
     for (int i = 0; i < a.inv.size(); i++)
         a.useItem(i);
     /*a.damage=5*type+5;
@@ -120,7 +118,7 @@ void Room::spawnTiledrop(enemy &source) {
         d = 100;
     }
     item p(d, c, 20 + (source.type + 1) * 10);
-    TileDrop a(source.x, source.y, p);
+    TileDrop a(static_cast<int>(source.getPosition().x), static_cast<int>(source.getPosition().y), p);
     a.s.setTexture(this->dropst);
     drops.push_back(a);
 }

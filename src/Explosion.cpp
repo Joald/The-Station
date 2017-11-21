@@ -1,23 +1,13 @@
 #include "../include/Explosion.h"
 
-Explosion::Explosion(int x, int y, int lif) {
-    //ctor
+Explosion::Explosion(float x, float y, float life) {
     this->s.setPosition(x, y);
-    this->life = lif;
+    this->life = life;
     this->state = 0;
     this->alive = true;
 }
 
-Explosion::Explosion(int x, int y) {
-    //ctor
-    this->s.setPosition(x, y);
-    this->life = 9;
-    this->state = 0;
-    this->alive = true;
-}
-
-void Explosion::handle() {
-
+void Explosion::advance() {
     this->state++;
     if (this->state == this->life) {
         this->alive = false;

@@ -6,11 +6,10 @@
 class Explosion
 {
     public:
-        Explosion(int x, int y, int lif);
-        Explosion(int x, int y);
+        Explosion(float x, float y, float life = 9);
         bool alive;
-        void handle();
-        int life;
+        void advance();
+        float life;
         int state;
         sf::Sprite s;
 };

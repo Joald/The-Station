@@ -18,7 +18,7 @@
 #include <SFML/Audio.hpp>
 #include <SFML/OpenGL.hpp>
 
-const double PI = 3.14159265;
+const float PI = 3.14159265;
 
 #include "ResourceNotFoundError.h"
 #include "ResourcePool.h"

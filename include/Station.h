@@ -7,7 +7,7 @@ class Explosion;
 
 class Station {
 public:
-    int h, w, cx, cy;
+    unsigned int height, width, cx, cy;
 
     Station();
 
@@ -27,7 +27,7 @@ public:
     void inventory(Character &target);
 
     ///void changeRoom(Room& currentroom, int dir);
-    void explode(int x, int y);
+    void explode(float x, float y);
 
     void toggleCheatsEnabled();
 
