@@ -6,7 +6,7 @@
 
 std::unordered_map<ImageID, sf::Image> ImagePool::imageStorage;
 std::vector<ImageID> ImagePool::idStorage;
-const std::string ImagePool::DEFAULT_IMAGE_FOLDER_PATH = "/home/joald/The-Station/img/"; //
+const std::string ImagePool::DEFAULT_IMAGE_FOLDER_PATH = "/home/joald/gamedev/The-Station/img/"; //
 
 
 namespace {

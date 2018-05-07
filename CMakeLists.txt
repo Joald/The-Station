@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.8)
 project(The_Station)
 
-set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD 17)
 
 set(SOURCE_FILES
         include/Character.h
