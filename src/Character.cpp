@@ -1,4 +1,4 @@
-#include "../include/Character.h"
+#include "Character.h"
 
 #define n 16
 #define m 6

@@ -4,16 +4,16 @@ project(The_Station)
 set(CMAKE_CXX_STANDARD 17)
 
 set(SOURCE_FILES
-        include/Character.h
-        include/Explosion.h
-        include/item.h
-        include/Projectile.h
-        include/Section.h
-        include/Station.h
-        include/The_Station.h
-        include/FloorTile.h
-        include/TileDrop.h
-        include/Room.h
+        src/Character.h
+        src/Explosion.h
+        src/item.h
+        src/Projectile.h
+        src/Section.h
+        src/Station.h
+        src/The_Station.h
+        src/FloorTile.h
+        src/TileDrop.h
+        src/Room.h
         src/Character.cpp
         src/Explosion.cpp
         src/item.cpp
@@ -24,7 +24,7 @@ set(SOURCE_FILES
         src/Station.cpp
         src/The_Station.cpp
         src/FloorTile.cpp
-        src/TileDrop.cpp src/ResourcePool.cpp include/ResourcePool.h include/ImagePool.cpp include/ImagePool.h src/ResourceNotFoundError.cpp include/ResourceNotFoundError.h)
+        src/TileDrop.cpp src/ResourcePool.cpp src/ResourcePool.h src/ImagePool.cpp src/ImagePool.h src/ResourceNotFoundError.cpp src/ResourceNotFoundError.h src/Menu.cpp src/Menu.h src/MenuAction.cpp src/MenuAction.h src/GameOption.cpp src/GameOption.h)
 
 add_executable(The_Station ${SOURCE_FILES})
 

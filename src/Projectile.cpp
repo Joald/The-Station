@@ -1,4 +1,4 @@
-#include "../include/Projectile.h"
+#include "Projectile.h"
 
 double Projectile::rotatexy(float mx, float my)          ///taking mouse coords for arguments
 {

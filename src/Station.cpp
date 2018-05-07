@@ -1,4 +1,4 @@
-#include "../include/Station.h"
+#include "Station.h"
 
 namespace {
     bool inRect(float px, float py, float top, float left, float width, float height) {

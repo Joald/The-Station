@@ -1,4 +1,4 @@
-#include "../include/item.h"
+#include "item.h"
 
 item::item(unsigned int idx, int typex, int effectx) {
     this->id = idx;

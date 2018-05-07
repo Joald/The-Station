@@ -1,4 +1,4 @@
-#include "../include/Explosion.h"
+#include "Explosion.h"
 
 Explosion::Explosion(float x, float y, float life) {
     this->s.setPosition(x, y);
