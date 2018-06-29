@@ -1,9 +1,16 @@
-#include "The_Station.h"
-
+#include <SFML/Audio.hpp>
+#include <cmath>
+#include <sstream>
+#include "Models/Menu.h"
+#include "FloorTile.h"
+#include "Room.h"
+#include "GameState.h"
+#include "TileDrop.h"
+#include "Explosion.h"
 
 #define n 16
 #define m 6
-
+#define PI 3.1415926
 
 /**
 00 01 02 03 04
@@ -23,7 +30,7 @@ namespace {
     }
 
     double dist(int x1, int y1, int x2, int y2) {
-        return sqrt(abs(x1 - x2) * abs(x1 - x2) + abs(y1 - y2) * abs(y1 - y2)) / 100;
+        return std::sqrt(abs(x1 - x2) * abs(x1 - x2) + abs(y1 - y2) * abs(y1 - y2)) / 100;
     }
 
     int square2x(FloorTile floortile[n][m], double x_f) {
@@ -146,11 +153,19 @@ namespace {
         }
     }
 } //namespace
-int main() {
-    Station game;
+int main_old() {
+    GameState game;
+
+
+    Menu menu(GameOption("Cheats", OptionState::OFF));
+
+
+
+
+
     /*if(2==game.pause())
     {
-        game.App.close();
+        game.window.close();
         return 0;
     }*/
     srand(time(0));
@@ -167,8 +182,8 @@ int main() {
 
     ///game.intro();//<<<<<<<<<<<<<<<<<<<<<<<
 
-    if (game.unLoaded or !game.mainmenu()) {
-        game.App.close();
+    if (game.unLoaded or !game.mainMenu()) {
+        game.window.close();
         return 0;
     }
 
@@ -224,13 +239,13 @@ int main() {
     vis[currentpos] = true;
     viscount = 1;
 
-    // game.App.setMouseCursorVisible(false);
+    // game.window.setMouseCursorVisible(false);
     sf::Music lodin;
     lodin.openFromFile("../sounds/loop.wav");
     if (game.soundEnabled)
         lodin.play();
-    game.App.draw(loadin);
-    game.App.display();
+    game.window.draw(loadin);
+    game.window.display();
 
 
     //uniform_int_distribution<int> a(0,1);
@@ -272,7 +287,7 @@ int main() {
     sf::Texture wt;
     wt.loadFromFile("../img/weapon.png");
     if (game.isUnsized) {
-        weapon.scale(wt.getSize().x * 1024 / 1920, wt.getSize().x * 576 / 1080);
+        weapon.scale(wt.getSize().x * 1024.f / 1920.f, wt.getSize().x * 576.f / 1080.f);
     }
     sf::IntRect weaponRects[6];
     for (int i = 0; i < 6; i++) {
@@ -284,7 +299,7 @@ int main() {
 
     weapon.setTexture(wt);
 
-    weapon.setPosition(game.width / 100, game.height / 32);
+    weapon.setPosition(game.width / 100.f, game.height / 32.f);
     sf::Sprite bg, gui;
     sf::IntRect r1(0, 0, 50, 50);
     sf::IntRect r2(0, 50, 50, 50);
@@ -332,7 +347,7 @@ int main() {
     playa.setTexture(game.playerTexture);
     debug.setFont(game.arial);
     hpbar.setFont(game.arial);
-    game.App.setFramerateLimit(70);
+    game.window.setFramerateLimit(70);
     sf::Color dor(111, 111, 111);
     int co = 0;
     lodin.pause();
@@ -345,20 +360,20 @@ int main() {
     if (game.soundEnabled) {
         battle.play();
     }
-    while (game.App.isOpen())///**************************************************************************************************************************GAME LOOP OPEN
-    {
+    while (game.window.isOpen()) {
+    ///**************************************************************************************************************************GAME LOOP OPEN
         co++;
         sf::Event event;
-        while (game.App.pollEvent(event)) {
+        while (game.window.pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed:
-                    game.App.close();
+                    game.window.close();
                     break;
                 case sf::Event::KeyPressed:
                     if (gameended) {
                         if (!game.soundEnabled)
                             battle.pause();
-                        if (!game.mainmenu()) {
+                        if (!game.mainMenu()) {
                             game.endapp();
                             return 0;
                         } else {
@@ -370,7 +385,7 @@ int main() {
                             battle.pause();
                         int pauseReturnCode = game.pause();
                         if (!pauseReturnCode) {
-                            if (!game.mainmenu()) {
+                            if (!game.mainMenu()) {
                                 game.endapp();
                                 return 0;
                             } else {
@@ -401,7 +416,7 @@ int main() {
                         if (event.key.code == sf::Keyboard::I) {
                             playa.toggleInvincible();
                         }
-                        if (event.key.code == sf::Keyboard::Q and currentroom.type != 1 and currentroom.enem.size()) {
+                        if (event.key.code == sf::Keyboard::Q and currentroom.type != 1 and !currentroom.enem.empty()) {
                             game.inventory(currentroom.enem[0]);
                         }
                         if (event.key.code == sf::Keyboard::P and currentroom.type != 1) {
@@ -481,7 +496,7 @@ int main() {
             }
 
             ///MOUSE ROTAtION
-            playa.rotatexy(sf::Mouse::getPosition(game.App));
+            playa.rotatexy(sf::Mouse::getPosition(game.window));
 
             ///Debug Mouse Text
             /*ostringstream convert;
@@ -551,7 +566,7 @@ int main() {
 
             ///DRAW BACKGROUND AND BOSS HANDLING
             if (currentroom.type != 1)
-                game.App.draw(bg);
+                game.window.draw(bg);
             else {
 
 
@@ -613,8 +628,8 @@ int main() {
                                                 mainboss.getPosition().y + rand() % 500 - 250, 4);
                     }
                 }
-                game.App.draw(bossroom);
-                game.App.draw(mainboss);
+                game.window.draw(bossroom);
+                game.window.draw(mainboss);
             }
         }
 
@@ -622,7 +637,7 @@ int main() {
         if (currentroom.type != 1) {
             for (int i = 0; i < n; i++) {
                 for (int j = 0; j < m; j++) {
-                    game.App.draw(currentroom.floortile[i][j].sprite);
+                    game.window.draw(currentroom.floortile[i][j].sprite);
                 }
             }
         }
@@ -644,7 +659,7 @@ int main() {
 
 
                 currentroom.proj[i].C.setPosition(currentroom.proj[i].x, currentroom.proj[i].y);
-                game.App.draw(currentroom.proj[i].C);
+                game.window.draw(currentroom.proj[i].C);
                 if (std::sqrt(((currentroom.proj[i].x - playa.getPosition().x) *
                                (currentroom.proj[i].x - playa.getPosition().x)) +
                               ((currentroom.proj[i].y - playa.getPosition().y) *
@@ -788,7 +803,7 @@ int main() {
                 }
 
 
-                game.App.draw(
+                game.window.draw(
                         currentroom.enem[i]);///DRAWING EM (HAS TO BE HERE SINCE FURTHER IT WOULD GET SHUTDOWN WHEN DEAD AND NO ANIMATION WOULD PLAY
                 if (currentroom.enem[i].health < 0) {
                     currentroom.enem[i].setColor(sf::Color(255, 255, 255));///DEATH ANIMATION START
@@ -862,23 +877,23 @@ int main() {
         }
         ///DRAWING
         if (currentroom.type != 1)
-            game.App.draw(gui);
+            game.window.draw(gui);
 
-        game.App.draw(hpbar);
-        game.App.draw(weapon);
+        game.window.draw(hpbar);
+        game.window.draw(weapon);
 
         if (currentroom.type != 1) {
             if (currentroom.dbottom)
-                game.App.draw(db);
+                game.window.draw(db);
             if (currentroom.dtop)
-                game.App.draw(dt);
+                game.window.draw(dt);
             if (currentroom.dleft)
-                game.App.draw(dl);
+                game.window.draw(dl);
             if (currentroom.dright)
-                game.App.draw(dr);
+                game.window.draw(dr);
         }
 
-        game.App.draw(playa);
+        game.window.draw(playa);
 
         for (int unsigned i = 0; i < currentroom.drops.size(); i++) ///TILEDROP HANDLING
         {
@@ -915,7 +930,7 @@ int main() {
                     break;
             }
             currentroom.drops[i].s.setTextureRect(smals[id]);
-            game.App.draw(currentroom.drops[i].s);
+            game.window.draw(currentroom.drops[i].s);
         }
 
 
@@ -928,13 +943,13 @@ int main() {
                     game.exp.erase(game.exp.begin() + i);
                 else {
                     game.exp[i].s.setTextureRect(exprecto[game.exp[i].state]);
-                    game.App.draw(game.exp[i].s);
+                    game.window.draw(game.exp[i].s);
                 }
             }
         } else {
             for (int unsigned i = 0; i < game.exp.size(); i++) {
                 game.exp[i].s.setTextureRect(exprecto[game.exp[i].state]);
-                game.App.draw(game.exp[i].s);
+                game.window.draw(game.exp[i].s);
             }
         }
 
@@ -946,19 +961,19 @@ int main() {
                 break;
             case 1:
                 ///u died
-                game.App.draw(endScreen);
+                game.window.draw(endScreen);
                 endText.setString("You died.");
                 endText.setPosition(game.width * 400 / 1000, game.height * 400 / 1000);
-                game.App.draw(endText);
+                game.window.draw(endText);
                 sound.stop();
                 game.blasts.clear();
                 break;
             case 2:
                 ///u won
-                game.App.draw(endScreen);
+                game.window.draw(endScreen);
                 endText.setString("You won.");
                 endText.setPosition(game.width * 400 / 1000, game.height * 400 / 1000);
-                game.App.draw(endText);
+                game.window.draw(endText);
                 sound.stop();
                 game.blasts.clear();
                 break;
@@ -970,9 +985,9 @@ int main() {
                 break;
         }
         if (!rand() % 2000) {
-            game.App.draw(prog);
+            game.window.draw(prog);
         }
-        game.App.display();///UPDATE SCREEN
+        game.window.display();///UPDATE SCREEN
 
 
     }

@@ -1,0 +1,35 @@
+cmake_minimum_required(VERSION 3.8)
+project(The_Station)
+
+set(CMAKE_CXX_STANDARD 17)
+
+set(SOURCE_FILES
+        src/Character.h
+        src/Explosion.h
+        src/item.h
+        src/Projectile.h
+        src/Section.h
+        src/GameState.h
+        src/FloorTile.h
+        src/TileDrop.h
+        src/Room.h
+        src/Character.cpp
+        src/Explosion.cpp
+        src/item.cpp
+        src/main.cpp
+        src/Projectile.cpp
+        src/Room.cpp
+        src/Section.cpp
+        src/GameState.cpp
+        src/FloorTile.cpp
+        src/TileDrop.cpp src/ResourceManagers/ResourcePool.cpp src/ResourceManagers/ResourcePool.h src/ResourceManagers/ImagePool.cpp src/ResourceManagers/ImagePool.h src/Exceptions/ResourceNotFoundError.cpp src/Exceptions/ResourceNotFoundError.h src/Models/Menu.cpp src/Models/Menu.h src/Models/MenuAction.cpp src/Models/MenuAction.h src/GameOption.cpp src/GameOption.h src/ResourceManagers/EventManager.cpp src/ResourceManagers/EventManager.h src/GameObject.cpp src/GameObject.h src/ResourceManagers/EventContainer.cpp src/ResourceManagers/EventContainer.h new_main.cpp src/ResourceManagers/TexturePool.cpp src/ResourceManagers/TexturePool.h src/Rendering/Renderer.cpp src/Rendering/Renderer.h)
+
+add_executable(The_Station ${SOURCE_FILES})
+
+
+set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
+find_package(SFML REQUIRED system window graphics network audio)
+if (SFML_FOUND)
+    include_directories(${SFML_INCLUDE_DIR})
+    target_link_libraries(The_Station ${SFML_LIBRARIES})
+endif()

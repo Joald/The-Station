@@ -3,35 +3,84 @@ project(The_Station)
 
 set(CMAKE_CXX_STANDARD 17)
 
-set(SOURCE_FILES
-        src/Character.h
-        src/Explosion.h
-        src/item.h
-        src/Projectile.h
-        src/Section.h
-        src/Station.h
-        src/The_Station.h
-        src/FloorTile.h
-        src/TileDrop.h
-        src/Room.h
-        src/Character.cpp
-        src/Explosion.cpp
-        src/item.cpp
-        src/main.cpp
-        src/Projectile.cpp
-        src/Room.cpp
-        src/Section.cpp
-        src/Station.cpp
-        src/The_Station.cpp
-        src/FloorTile.cpp
-        src/TileDrop.cpp src/ResourcePool.cpp src/ResourcePool.h src/ImagePool.cpp src/ImagePool.h src/ResourceNotFoundError.cpp src/ResourceNotFoundError.h src/Menu.cpp src/Menu.h src/MenuAction.cpp src/MenuAction.h src/GameOption.cpp src/GameOption.h)
+set(RESOURCE_MANAGERS # helper engine classes
+    src/ResourceManagers/ResourcePool.cpp
+    src/ResourceManagers/ResourcePool.h
+    src/ResourceManagers/ImagePool.cpp
+    src/ResourceManagers/ImagePool.h
+    src/ResourceManagers/EventManager.cpp
+    src/ResourceManagers/EventManager.h
+    src/ResourceManagers/EventContainer.cpp
+    src/ResourceManagers/EventContainer.h
+    src/ResourceManagers/TexturePool.cpp
+    src/ResourceManagers/TexturePool.h)
 
-add_executable(The_Station ${SOURCE_FILES})
+set(RENDERING # classes that do actual graphics displaying
+    src/Rendering/Renderer.cpp
+    src/Rendering/Renderer.h)
 
+set(EXCEPTIONS # custom exceptions
+    src/Exceptions/ResourceNotFoundError.cpp
+    src/Exceptions/ResourceNotFoundError.h)
+
+set(MODELS # classes that represent objects in the game logic
+    src/Models/Menu.cpp
+    src/Models/Menu.h
+    src/Models/MenuAction.cpp
+    src/Models/MenuAction.h
+    src/Models/GameOption.cpp
+    src/Models/GameOption.h
+    src/Models/GameObject.cpp
+    src/Models/GameObject.h)
+
+set(SOURCE_FILES # all classes
+    # old classes
+    src/Character.h
+    src/Explosion.h
+    src/item.h
+    src/Projectile.h
+    src/Section.h
+    src/GameState.h
+    src/FloorTile.h
+    src/TileDrop.h
+    src/Room.h
+    src/Character.cpp
+    src/Explosion.cpp
+    src/item.cpp
+    src/Projectile.cpp
+    src/Room.cpp
+    src/Section.cpp
+    src/GameState.cpp
+    src/FloorTile.cpp
+    src/TileDrop.cpp
+    src/main.cpp
+
+    # rework classes
+    ${RESOURCE_MANAGERS}
+    ${RENDERING}
+    ${EXCEPTIONS}
+    ${MODELS}
+    src/Globals.cpp
+    src/Globals.h)
+
+
+set(MAIN_EXEC src/new_main.cpp) # files used only in game executable
+
+add_executable(The_Station ${SOURCE_FILES} ${MAIN_EXEC})
+
+set(TEST_FILES
+    tests/test.cpp tests/DummyWindow.cpp tests/DummyWindow.h)
+
+add_executable(Tester ${SOURCE_FILES} ${TEST_FILES})
 
 set(CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/")
-find_package(SFML REQUIRED system window graphics network audio)
+set(SFML_INCLUDE_DIR SFML/include)
+set(SFML_DIR SFML/cmake-build-debug)
+set(SFML_LIBRARIES sfml-graphics sfml-network sfml-audio)
+find_package(SFML 2.5 REQUIRED system window graphics network audio)
 if (SFML_FOUND)
+    message("SFML was found!")
     include_directories(${SFML_INCLUDE_DIR})
     target_link_libraries(The_Station ${SFML_LIBRARIES})
-endif()
+    target_link_libraries(Tester ${SFML_LIBRARIES})
+endif ()

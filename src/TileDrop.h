@@ -1,7 +1,10 @@
 #ifndef TILE_DROP_H
 #define TILE_DROP_H
 
-#include "The_Station.h"
+
+#include <SFML/Graphics.hpp>
+#include <vector>
+#include "item.h"
 
 class item;
 

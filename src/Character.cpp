@@ -1,5 +1,9 @@
+#include <cmath>
+#include <queue>
+#include "GameState.h"
 #include "Character.h"
 
+#define PI 3.141592653
 #define n 16
 #define m 6
 
@@ -66,10 +70,10 @@ void Character::rotatexy_internal(float mouseX, float mouseY) {
     //return this->orient;
 }
 
-void Character::rotate2mouse(Station &game) {
+void Character::rotate2mouse(GameState &game) {
     float a, b;
-    a = getPosition().x - sf::Mouse::getPosition(game.App).x;
-    b = getPosition().y - sf::Mouse::getPosition(game.App).y;
+    a = getPosition().x - sf::Mouse::getPosition(game.window).x;
+    b = getPosition().y - sf::Mouse::getPosition(game.window).y;
     orient = std::atan2(b, a) * 180 / PI;
     setRotation(orient - 90);
 }
@@ -161,7 +165,7 @@ void Character::toggleInvincible() {
     invincible = !invincible;
 }
 
-bool Character::canWalkDown(FloorTile floortile[n][m], Station &game) {
+bool Character::canWalkDown(FloorTile floortile[n][m], GameState &game) {
     auto ox = static_cast<int>(getPosition().x);
     auto oy = static_cast<int>(getPosition().y);
 
@@ -180,7 +184,7 @@ bool Character::canWalkDown(FloorTile floortile[n][m], Station &game) {
 
 }
 
-bool Character::canWalkUp(FloorTile floortile[16][6], Station &game) {
+bool Character::canWalkUp(FloorTile floortile[16][6], GameState &game) {
     auto ox = static_cast<int>(getPosition().x);
     auto oy = static_cast<int>(getPosition().y);
     int fixw = 170;
@@ -199,7 +203,7 @@ bool Character::canWalkUp(FloorTile floortile[16][6], Station &game) {
     return getPosition().y - 15 >= fixh;
 }
 
-bool Character::canWalkRight(FloorTile floortile[n][m], Station &game) {
+bool Character::canWalkRight(FloorTile floortile[n][m], GameState &game) {
     auto ox = static_cast<int>(getPosition().x);
     auto oy = static_cast<int>(getPosition().y);
     int fixw = 170;
@@ -219,7 +223,7 @@ bool Character::canWalkRight(FloorTile floortile[n][m], Station &game) {
 
 }
 
-bool Character::canWalkLeft(FloorTile floortile[n][m], Station &game) {
+bool Character::canWalkLeft(FloorTile floortile[n][m], GameState &game) {
     auto ox = static_cast<int>(getPosition().x);
     auto oy = static_cast<int>(getPosition().y);
     int fixw = 170;
@@ -243,7 +247,7 @@ bool Character::canWalkLeft(FloorTile floortile[n][m], Station &game) {
 ///sprawdzanie wrogow
 
 
-bool enemy::canWalkDown(FloorTile floortile[n][m], Station &game) {
+bool enemy::canWalkDown(FloorTile floortile[n][m], GameState &game) {
     int a, b;
     int fixw = 170;
     int fixh = 291;
@@ -256,7 +260,7 @@ bool enemy::canWalkDown(FloorTile floortile[n][m], Station &game) {
     return floortile[a][b].walkable && getPosition().y + 25 < floortile[a][b].y - 104 && getPosition().x <= game.height - fixh + fixh * 2 / 5;
 }
 
-bool enemy::canWalkUp(FloorTile floortile[n][m], Station &game) {
+bool enemy::canWalkUp(FloorTile floortile[n][m], GameState &game) {
     int a, b;
     int fixw = 170;
     int fixh = 291;
@@ -270,7 +274,7 @@ bool enemy::canWalkUp(FloorTile floortile[n][m], Station &game) {
 
 }
 
-bool enemy::canWalkRight(FloorTile floortile[n][m], Station &game) {
+bool enemy::canWalkRight(FloorTile floortile[n][m], GameState &game) {
     int a, b;
     int fixw = 170;
     int fixh = 291;
@@ -283,7 +287,7 @@ bool enemy::canWalkRight(FloorTile floortile[n][m], Station &game) {
     return floortile[a + 1][b].walkable && x_int() + 25 < floortile[a + 1][b].x && x_int() <= game.width - fixw - fixw / 20;
 }
 
-bool enemy::canWalkLeft(FloorTile floortile[n][m], Station &game) {
+bool enemy::canWalkLeft(FloorTile floortile[n][m], GameState &game) {
     int a, b;
     int fixw = 170;
     int fixh = 291;

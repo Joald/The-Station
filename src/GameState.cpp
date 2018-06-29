@@ -1,15 +1,26 @@
-#include "Station.h"
+#include <sstream>
+#include "GameState.h"
+#include "ResourceManagers/ImagePool.h"
+#include "Explosion.h"
 
 namespace {
     bool inRect(float px, float py, float top, float left, float width, float height) {
         return (px > left && px < left + width && py > top && py < top + height);
     }
+
+    void closeGame(std::shared_ptr<GameObject>& goptr, sf::Event event) {
+        auto game = std::dynamic_pointer_cast<GameState>(goptr);
+        if (event.type == sf::Event::Closed) {
+            game->window.close();
+        }
+    }
 } //namespace
-    
-Station::Station() {
-    ImagePool::initialize();
+
+GameState::GameState() {
+    //ImagePool::initialize();
+    EventManager::registerSFMLEvent(std::shared_ptr<GameState>(this), closeGame);
     this->soundEnabled = true;
-    this->backgroundTexture.loadFromImage(ImagePool::getImageById(ImageID::BACKGROUND));
+    /*this->backgroundTexture.loadFromImage(ImagePool::getImageById(ImageID::BACKGROUND));
     this->bossRoomTexture.loadFromImage(ImagePool::getImageById(ImageID::BOSSROOM));
     this->bossTexture.loadFromImage(ImagePool::getImageById(ImageID::BOSS));
     this->doorBottomTexture.loadFromImage(ImagePool::getImageById(ImageID::DOORBOT));
@@ -23,7 +34,7 @@ Station::Station() {
     this->explosionTexture.loadFromImage(ImagePool::getImageById(ImageID::EXPLOSION));
     this->floorTileTexture.loadFromImage(ImagePool::getImageById(ImageID::FLOOR_TILE_TEXTURE));
     this->guiTexture.loadFromImage(ImagePool::getImageById(ImageID::GUI));
-    this->inventoryTexture.loadFromImage(ImagePool::getImageById(ImageID::INVENT));
+    this->inventoryTexture.loadFromImage(ImagePool::getResourceById(ImageID::INVENT));
     this->loadingTexture.loadFromImage(ImagePool::getImageById(ImageID::LOADING));
     this->mainMenuTexture.loadFromImage(ImagePool::getImageById(ImageID::TITLE));
     this->pauseMenuTexture.loadFromImage(ImagePool::getImageById(ImageID::MENUP));
@@ -34,10 +45,10 @@ Station::Station() {
     this->playerTexture.loadFromImage(ImagePool::getImageById(ImageID::PLAYER));
     this->subliminalImageTexture.loadFromImage(ImagePool::getImageById(ImageID::SUBLIMINAL));
     this->newGameTexture.loadFromImage(ImagePool::getImageById(ImageID::NEWGAME));
-    this->selectionTexture.loadFromImage(ImagePool::getImageById(ImageID::SELECT));
+    this->selectionTexture.loadFromImage(ImagePool::getImageById(ImageID::SELECT));*/
     this->width = 1920;
     this->height = 1080;
-    App.create(sf::VideoMode(width, height), "The Station", sf::Style::Fullscreen);
+    window.create(sf::VideoMode(width, height), "The Station", sf::Style::Fullscreen);
     this->isUnsized = false;
 
     this->guiTexture.loadFromImage(this->guii);
@@ -52,7 +63,7 @@ Station::Station() {
 
 
 
-void Station::inventory(Character &target) {
+void GameState::inventory(Character &target) {
     sf::Sprite invbg;
     sf::Sprite weapon, gui;
     gui.setTexture(guiTexture);
@@ -143,10 +154,10 @@ void Station::inventory(Character &target) {
         bool throwed = false;
         bool click = false;
         sf::Event event;
-        while (App.pollEvent(event)) {
+        while (window.pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed:
-                    App.close();
+                    window.close();
                     break;
                 case sf::Event::MouseButtonPressed:
                     click = true;
@@ -162,18 +173,18 @@ void Station::inventory(Character &target) {
             }
         }
 
-        App.draw(gui);
+        window.draw(gui);
         weapon.setTextureRect(weaprects[target.inv[target.weaponiter].getId()]);
-        App.draw(weapon);
+        window.draw(weapon);
         sf::String hptext;
         std::ostringstream convert;
         convert << target.health;
         hptext = convert.str();
         convert.str(std::string());
         hpbar.setString(hptext);
-        App.draw(hpbar);
+        window.draw(hpbar);
         bool mouseOver = false;
-        App.draw(invbg);
+        window.draw(invbg);
         for (int j = 0; j < 5; j++) {
             for (int k = 0; k < 3; k++) {
                 isset[j][k] = false;
@@ -199,12 +210,12 @@ void Station::inventory(Character &target) {
                                     int l = q + j * p;
                                     int t = z + k * o;
                                     select.setPosition(l, t);
-                                    App.draw(select);
+                                    window.draw(select);
 
                                     mouseOver = true;
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[0][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
                                     std::string option;
@@ -224,7 +235,7 @@ void Station::inventory(Character &target) {
                                 } else {
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[0][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
                                 }
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
@@ -235,7 +246,7 @@ void Station::inventory(Character &target) {
                                     std::ostringstream strem;
                                     strem << target.inv[i].quant;
                                     quanttext.setString(strem.str());
-                                    App.draw(quanttext);
+                                    window.draw(quanttext);
                                 }
                                 goto contWeapon;
                             }
@@ -261,12 +272,12 @@ void Station::inventory(Character &target) {
                                     int l = q + j * p;
                                     int t = z + k * o;
                                     select.setPosition(l, t);
-                                    App.draw(select);
+                                    window.draw(select);
 
                                     mouseOver = true;
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[2][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
                                     std::string option;
@@ -286,7 +297,7 @@ void Station::inventory(Character &target) {
                                 } else {
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[2][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
                                 }
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
@@ -297,7 +308,7 @@ void Station::inventory(Character &target) {
                                     std::ostringstream strem;
                                     strem << target.inv[i].quant;
                                     quanttext.setString(strem.str());
-                                    App.draw(quanttext);
+                                    window.draw(quanttext);
                                 }
 
                                 goto contWeapon2;
@@ -324,12 +335,12 @@ void Station::inventory(Character &target) {
                                     int l = q + j * p;
                                     int t = z + k * o;
                                     select.setPosition(l, t);
-                                    App.draw(select);
+                                    window.draw(select);
 
                                     mouseOver = true;
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[3][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
                                     std::string option;
@@ -349,7 +360,7 @@ void Station::inventory(Character &target) {
                                 } else {
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[3][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
                                 }
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
@@ -360,7 +371,7 @@ void Station::inventory(Character &target) {
                                     std::ostringstream strem;
                                     strem << target.inv[i].quant;
                                     quanttext.setString(strem.str());
-                                    App.draw(quanttext);
+                                    window.draw(quanttext);
                                 }
 
                                 goto contWeapon3;
@@ -387,12 +398,12 @@ void Station::inventory(Character &target) {
                                     int l = q + j * p;
                                     int t = z + k * o;
                                     select.setPosition(l, t);
-                                    App.draw(select);
+                                    window.draw(select);
 
                                     mouseOver = true;
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[4][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
                                     std::string option;
@@ -411,7 +422,7 @@ void Station::inventory(Character &target) {
                                 } else {
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[4][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
                                 }
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
@@ -422,7 +433,7 @@ void Station::inventory(Character &target) {
                                     std::ostringstream strem;
                                     strem << target.inv[i].quant;
                                     quanttext.setString(strem.str());
-                                    App.draw(quanttext);
+                                    window.draw(quanttext);
                                 }
 
                                 goto contWeapon4;
@@ -448,12 +459,12 @@ void Station::inventory(Character &target) {
                                     int l = q + j * p;
                                     int t = z + k * o;
                                     select.setPosition(l, t);
-                                    App.draw(select);
+                                    window.draw(select);
 
                                     mouseOver = true;
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[0][1]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
                                     std::string option;
@@ -473,7 +484,7 @@ void Station::inventory(Character &target) {
                                 } else {
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[0][1]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
                                 }
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
@@ -484,7 +495,7 @@ void Station::inventory(Character &target) {
                                     std::ostringstream strem;
                                     strem << target.inv[i].quant;
                                     quanttext.setString(strem.str());
-                                    App.draw(quanttext);
+                                    window.draw(quanttext);
                                 }
 
                                 goto contWeapon5;
@@ -509,12 +520,12 @@ void Station::inventory(Character &target) {
                                     int l = q + j * p;
                                     int t = z + k * o;
                                     select.setPosition(l, t);
-                                    App.draw(select);
+                                    window.draw(select);
 
                                     mouseOver = true;
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[1][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
 
                                     tooltip.setPosition(sf::Mouse::getPosition().x, sf::Mouse::getPosition().y);
                                     title.setString("Standard Medkit");
@@ -530,7 +541,7 @@ void Station::inventory(Character &target) {
                                 } else {
                                     isset[j][k] = true;
                                     a[j][k].setTextureRect(rects[1][0]);
-                                    App.draw(a[j][k]);
+                                    window.draw(a[j][k]);
                                 }
                                 if (target.inv[i].quant > 1) {
                                     sf::Text quanttext;
@@ -541,7 +552,7 @@ void Station::inventory(Character &target) {
                                     std::ostringstream strem;
                                     strem << target.inv[i].quant;
                                     quanttext.setString(strem.str());
-                                    App.draw(quanttext);
+                                    window.draw(quanttext);
                                 }
 
                                 goto contMedkit;
@@ -560,21 +571,21 @@ void Station::inventory(Character &target) {
         {
             for(int j=0; j<3; j++)
             {
-                App.draw(a[i][j]);
+                window.draw(a[i][j]);
             }
         }*/
         if (mouseOver) {
-            App.draw(tooltip);
-            App.draw(title);
-            App.draw(desc);
-            App.draw(flavor);
+            window.draw(tooltip);
+            window.draw(title);
+            window.draw(desc);
+            window.draw(flavor);
         }
-        App.display();
+        window.display();
     }
 }
 
 
-void Station::explode(float x, float y) {
+void GameState::explode(float x, float y) {
     Explosion a(x, y);
     a.s.setTexture(this->explosionTexture);
     this->exp.push_back(a);
@@ -586,12 +597,12 @@ void Station::explode(float x, float y) {
     this->blasts[this->blasts.size() - 1].play();
 }
 
-void Station::endapp() {
+void GameState::endapp() {
     ///maybe some outro
-    App.close();
+    window.close();
 }
 
-void Station::intro() {
+void GameState::intro() {
     ///something
     sf::SoundBuffer buffer;
     if (!buffer.loadFromFile("../sounds/intro.wav"))
@@ -618,10 +629,10 @@ void Station::intro() {
     as = sf::milliseconds(14);
     while (true) {
         sf::Event event;
-        while (App.pollEvent(event)) {
+        while (window.pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed:
-                    App.close();
+                    window.close();
                     return;
                     break;
                 default:
@@ -655,20 +666,20 @@ void Station::intro() {
         }
         ox++;
 
-        App.draw(tim);
-        App.draw(tet);
-        App.display();
+        window.draw(tim);
+        window.draw(tet);
+        window.display();
         sf::sleep(as);
     }
 
 
 }
 
-int Station::pause() {
+int GameState::pause() {
 
-    menusic.openFromFile("../sounds/mainmenu.wav");
-    menusic.setLoop(true);
-    menusic.play();
+    menuMusic.openFromFile("../sounds/main_menu.wav");
+    menuMusic.setLoop(true);
+    menuMusic.play();
     sf::Sprite pau, opt, ext, men;
     men.setTexture(this->pauseMenuTexture);
     opt.setTexture(this->optionsButtonPauseMenuTexture);
@@ -693,21 +704,21 @@ int Station::pause() {
     while (true) {
         sf::Event event;
         bool click = false;
-        while (App.pollEvent(event)) {
+        while (window.pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed:
-                    App.close();
+                    window.close();
                     break;
                 case sf::Event::MouseButtonPressed:
                     click = true;
                     break;
                 case sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::BackSpace || event.key.code == sf::Keyboard::Tab) {
-                        menusic.stop();
+                        menuMusic.stop();
                         return 1;
                     }
                     if (event.key.code == sf::Keyboard::Escape) {
-                        menusic.stop();
+                        menuMusic.stop();
                         return 1;
                     }
                     break;
@@ -715,59 +726,59 @@ int Station::pause() {
                     break;
             }
         }
-        App.clear();
-        App.draw(pau);
+        window.clear();
+        window.draw(pau);
         if (sf::Mouse::getPosition().x > lef && sf::Mouse::getPosition().x < righ &&
             sf::Mouse::getPosition().y > top1 && sf::Mouse::getPosition().y < bot1) {
             if (click) {
-                menusic.stop();
+                menuMusic.stop();
                 return 2;
             }
-            App.draw(ext);
+            window.draw(ext);
         }
         if (sf::Mouse::getPosition().x > lef && sf::Mouse::getPosition().x < righ &&
             sf::Mouse::getPosition().y > top2 && sf::Mouse::getPosition().y < bot2) {
             if (click) {
                 options(1);
             }
-            App.draw(opt);
+            window.draw(opt);
         }
         if (sf::Mouse::getPosition().x > lef && sf::Mouse::getPosition().x < righ &&
             sf::Mouse::getPosition().y > top3 && sf::Mouse::getPosition().y < bot3) {
             if (click) {
 
-                menusic.stop();
+                menuMusic.stop();
                 return 0;
             }
-            App.draw(men);
+            window.draw(men);
 
         }
 
-        App.display();
+        window.display();
     }
 
-    menusic.stop();
+    menuMusic.stop();
     return 1;
 }
 
-void Station::toggleCheatsEnabled() {
+void GameState::toggleCheatsEnabled() {
     cheatsEnabled = !cheatsEnabled;
 }
 
-void Station::toggleSoundEnabled() {
+void GameState::toggleSoundEnabled() {
     if (!soundEnabled) {
         soundEnabled = true;
-        menusic.setVolume(100);
-        menusic.play();
+        menuMusic.setVolume(100);
+        menuMusic.play();
     } else {
         soundEnabled = false;
-        menusic.pause();
-        menusic.setVolume(0);
+        menuMusic.pause();
+        menuMusic.setVolume(0);
         blasts.clear();
     }
 }
 
-void Station::options(int source) {
+void GameState::options(int source) {
     ///0 - main, 1 - pause
     /*if(source==0)
     {*/
@@ -807,10 +818,10 @@ void Station::options(int source) {
     while (true) {
         sf::Event event;
         bool click = false;
-        while (App.pollEvent(event)) {
+        while (window.pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed:
-                    App.close();
+                    window.close();
                     break;
                 case sf::Event::MouseButtonPressed:
                     click = true;
@@ -825,8 +836,8 @@ void Station::options(int source) {
                     break;
             }
         }
-        App.clear();
-        App.draw(bg);
+        window.clear();
+        window.draw(bg);
         sf::String czits;
         if (cheatsEnabled)
             czits = "Cheats are ON";
@@ -839,9 +850,9 @@ void Station::options(int source) {
             saunds = "Sounds are OFF";
         a.setString(czits);
         b.setString(saunds);
-        App.draw(a);
-        App.draw(b);
-        App.draw(c);
+        window.draw(a);
+        window.draw(b);
+        window.draw(c);
         if (sf::Mouse::getPosition().x > lef && sf::Mouse::getPosition().x < righ &&
             sf::Mouse::getPosition().y > top1 && sf::Mouse::getPosition().y < bot1) {
             if (click) {
@@ -865,7 +876,7 @@ void Station::options(int source) {
             }
 
         }
-        App.display();
+        window.display();
     }
     /*}
     else
@@ -874,11 +885,11 @@ void Station::options(int source) {
     }*/
 }
 
-bool Station::mainmenu() {
+bool GameState::mainMenu() {
 
-    menusic.openFromFile("../sounds/mainmenu.wav");
-    menusic.setLoop(true);
-    menusic.play();
+    menuMusic.openFromFile("../sounds/main_menu.wav");
+    menuMusic.setLoop(true);
+    menuMusic.play();
     sf::Sprite men, strt, optns, ext;
     men.setTexture(this->mainMenuTexture);
     strt.setTexture(this->newGameTexture);
@@ -903,17 +914,17 @@ bool Station::mainmenu() {
     while (true) {
         sf::Event event;
         bool click = false;
-        while (App.pollEvent(event)) {
+        while (window.pollEvent(event)) {
             switch (event.type) {
                 case sf::Event::Closed:
-                    App.close();
+                    window.close();
                     break;
                 case sf::Event::MouseButtonPressed:
                     click = true;
                     break;
                 case sf::Event::KeyPressed:
                     if (event.key.code == sf::Keyboard::BackSpace || event.key.code == sf::Keyboard::Tab) {
-                        menusic.stop();
+                        menuMusic.stop();
                         return 0;
                     }
 
@@ -921,14 +932,14 @@ bool Station::mainmenu() {
                     break;
             }
         }
-        App.clear();
-        App.draw(men);
+        window.clear();
+        window.draw(men);
         if (sf::Mouse::getPosition().x > lef && sf::Mouse::getPosition().x < righ &&
             sf::Mouse::getPosition().y > top1 && sf::Mouse::getPosition().y < bot1) {
             if (click) {
                 goto startgame;
             }
-            App.draw(strt);
+            window.draw(strt);
         }
         if (sf::Mouse::getPosition().x > lef && sf::Mouse::getPosition().x < righ &&
             sf::Mouse::getPosition().y > top2 && sf::Mouse::getPosition().y < bot2) {
@@ -936,20 +947,20 @@ bool Station::mainmenu() {
                 options(0);
                 click = false;
             }
-            App.draw(optns);
+            window.draw(optns);
         }
         if (sf::Mouse::getPosition().x > lef && sf::Mouse::getPosition().x < righ &&
             sf::Mouse::getPosition().y > top3 && sf::Mouse::getPosition().y < bot3) {
             if (click) {
-                menusic.stop();
+                menuMusic.stop();
                 return false;
             }
-            App.draw(ext);
+            window.draw(ext);
         }
-        App.display();
+        window.display();
     }
     startgame:
-    menusic.stop();
+    menuMusic.stop();
     return true;
 }
 

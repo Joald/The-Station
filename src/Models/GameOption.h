@@ -12,8 +12,12 @@ class GameOption {
     OptionState state;
 public:
     GameOption(std::string name, OptionState state) : name(std::move(name)), state(state) {}
+
     void setState(OptionState state) {
         this->state = state;
+    }
+    OptionState getState() {
+        return state;
     }
 };
 

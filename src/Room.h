@@ -1,12 +1,14 @@
 #ifndef ROOM_H
 #define ROOM_H
 
-#include "The_Station.h"
+#include <SFML/Graphics.hpp>
+
+#include "FloorTile.h"
 
 #define n 16
 #define m 6
 
-class Station;
+class GameState;
 
 class enemy;
 
@@ -26,7 +28,7 @@ public:
     int type;
     bool dleft, dright, dtop, dbottom, isempty;
 
-    explicit Room(Station &game);
+    explicit Room(GameState &game);
     //void changeTo (const Room &ox, FloorTile floortil[n][m] );
 
 

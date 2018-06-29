@@ -15,10 +15,10 @@ public:
 };
 
 class ChangeMenu : public MenuAction {
-    Menu** currentMenu;
-    Menu* targetMenu;
+    MenuBase** currentMenu;
+    MenuBase* targetMenu;
 public:
-    ChangeMenu(const std::string& name, Menu** currentMenu, Menu* targetMenu) :
+    ChangeMenu(const std::string& name, MenuBase** currentMenu, MenuBase* targetMenu) :
         MenuAction(name), currentMenu(currentMenu), targetMenu(targetMenu) {}
 
     void doAction() override {

@@ -1,7 +1,7 @@
 #ifndef THE_STATION_EXPLOSION_H
 #define THE_STATION_EXPLOSION_H
 
-#include "The_Station.h"
+#include <SFML/Graphics/Sprite.hpp>
 
 class Explosion
 {

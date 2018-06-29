@@ -1,0 +1,10 @@
+#ifndef THE_STATION_DUMMYWINDOW_H
+#define THE_STATION_DUMMYWINDOW_H
+
+
+class DummyWindow {
+
+};
+
+
+#endif //THE_STATION_DUMMYWINDOW_H

@@ -1,6 +1,12 @@
 #pragma once
 
-#include "The_Station.h"
+#include <SFML/System.hpp>
+#include <SFML/Graphics.hpp>
+#include <vector>
+#include "Models/GameObject.h"
+#include "item.h"
+#include "Projectile.h"
+#include "FloorTile.h"
 
 
 #define n 16
@@ -8,13 +14,15 @@
 
 class FloorTile;
 
-class Station;
+class GameState;
 
 class Room;
 
 class item;
 
-class Character : public sf::Sprite {
+class Entity : public sf::Sprite, public GameObject {};
+
+class Character : public Entity {
 public:
     sf::Clock ifshot;
     bool red, invincible;
@@ -54,15 +62,15 @@ public:
 
     bool shoot(std::vector<Projectile> &proj, int mx, int my, bool ignore);
 
-    void rotate2mouse(Station &game);
+    void rotate2mouse(GameState &game);
 
-    virtual bool canWalkUp(FloorTile floortile[n][m], Station &game);
+    virtual bool canWalkUp(FloorTile floortile[n][m], GameState &game);
 
-    virtual bool canWalkDown(FloorTile floortile[n][m], Station &game);
+    virtual bool canWalkDown(FloorTile floortile[n][m], GameState &game);
 
-    virtual bool canWalkRight(FloorTile floortile[n][m], Station &game);
+    virtual bool canWalkRight(FloorTile floortile[n][m], GameState &game);
 
-    virtual bool canWalkLeft(FloorTile floortile[n][m], Station &game);
+    virtual bool canWalkLeft(FloorTile floortile[n][m], GameState &game);
 
     Character();
 
@@ -83,13 +91,13 @@ public:
     float ax, ay;
     sf::Clock destroyClock;
 
-    bool canWalkUp(FloorTile floortile[n][m], Station &game) override;
+    bool canWalkUp(FloorTile floortile[n][m], GameState &game) override;
 
-    bool canWalkDown(FloorTile floortile[n][m], Station &game) override;
+    bool canWalkDown(FloorTile floortile[n][m], GameState &game) override;
 
-    bool canWalkRight(FloorTile floortile[n][m], Station &game) override;
+    bool canWalkRight(FloorTile floortile[n][m], GameState &game) override;
 
-    bool canWalkLeft(FloorTile floortile[n][m], Station &game) override;
+    bool canWalkLeft(FloorTile floortile[n][m], GameState &game) override;
 
     bool canSee(FloorTile floortile[n][m], float x, float y);
     bool canSee(FloorTile floortile[n][m], sf::Vector2f v);

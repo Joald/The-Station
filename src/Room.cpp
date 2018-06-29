@@ -1,4 +1,6 @@
 #include "Room.h"
+#include "Character.h"
+#include "TileDrop.h"
 
 #define fixw 170
 #define fixh 291
@@ -6,9 +8,9 @@
 #define w 1920
 #define h 1080
 
-Room::Room(Station &game) {
+Room::Room(GameState &game) {
     this->chest_max = 15;
-    this->floort.loadFromFile("../img/floor_tile.png");
+    this->floort.loadFromFile("../img/FloorTile.png");
     ///this->dti.loadFromFile("doorup.png");
     ///this->dtopt.loadFromImage(this->dti);
     ///this->dbi.loadFromFile("doorbot.png");
@@ -17,11 +19,11 @@ Room::Room(Station &game) {
     ///this->drightt.loadFromImage(this->dri);
     ///this->dleftt.loadFromImage(this->dli);
     ///this->dbottomt.loadFromImage(this->dbi);
-    this->enemyt.loadFromFile("../img/enemy.png");
-    this->chestt.loadFromFile("../img/chest.png");
+    this->enemyt.loadFromFile("../img/Enemy.png");
+    this->chestt.loadFromFile("../img/Chest.png");
     this->sht.loadFromFile("../img/shot.png");
 
-    this->dropst.loadFromFile("../img/items_small.png");
+    this->dropst.loadFromFile("../img/ItemsTileDrops.png");
     this->dbottom = true;
     this->dtop = true;
     this->dleft = true;
@@ -125,13 +127,13 @@ void Room::spawnTiledrop(enemy &source) {
 /*
 void Room::changeTo (const Room& ox,FloorTile floortil[n][m])
 {
-    this->floort.loadFromFile("floor_tile.png");
-    this->doorTopTexture.loadFromFile("doorup.png");
-    this->doorBottomTexture.loadFromFile("doorbot.png");
-    this->doorLeftTexture.loadFromFile("doorleft.png");
-    this->doorRightTexture.loadFromFile("doorright.png");
-    this->enemyt.loadFromFile("enemy.png");
-    this->chestt.loadFromFile("chest.png");
+    this->floort.loadFromFile("FloorTile.png");
+    this->doorTopTexture.loadFromFile("DoorUp.png");
+    this->doorBottomTexture.loadFromFile("DoorBottom.png");
+    this->doorLeftTexture.loadFromFile("DoorLeft.png");
+    this->doorRightTexture.loadFromFile("DoorRight.png");
+    this->enemyt.loadFromFile("Enemy.png");
+    this->chestt.loadFromFile("Chest.png");
     this->sht.loadFromFile("shot.png");
     this->chestcount=x.chestcount;
     this->chest_max=x.chest_max;

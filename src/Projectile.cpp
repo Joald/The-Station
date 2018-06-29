@@ -1,7 +1,10 @@
+#include <cmath>
+#include "GameState.h"
 #include "Projectile.h"
+#include "Character.h"
+#define PI 3.141592
 
-double Projectile::rotatexy(float mx, float my)          ///taking mouse coords for arguments
-{
+double Projectile::rotatexy(float mx, float my) {         ///taking mouse coords for arguments
     float deltax, deltay, angle;                     ///double variables for calculation
 
     deltax = mx - this->x;                              ///delta n = objects position n - mouse pos n
@@ -34,7 +37,7 @@ Projectile::~Projectile()
     delete orig;
 }*/
 
-bool Projectile::canWalk(FloorTile floortile[n][m], Station &game) {
+bool Projectile::canWalk(FloorTile floortile[n][m], GameState &game) {
     int ox = this->x;
     int oy = this->y;
     for (int i = 0; i < n; i++) {

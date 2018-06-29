@@ -1,7 +1,9 @@
 #ifndef THE_STATION_PROJECTILE_H
 #define THE_STATION_PROJECTILE_H
 
-#include "The_Station.h"
+
+#include <SFML/Graphics/Sprite.hpp>
+#include "FloorTile.h"
 
 #define n 16
 #define m 6
@@ -10,7 +12,7 @@ class Character;
 
 class FloorTile;
 
-class Station;
+class GameState;
 
 class Projectile {
 public:
@@ -25,7 +27,7 @@ public:
 
     double rotatexy(float mx, float my);
 
-    bool canWalk(FloorTile floortile[n][m], Station &game);
+    bool canWalk(FloorTile floortile[n][m], GameState &game);
     //Projectile();
     //~Projectile();
 };
