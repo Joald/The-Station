@@ -6,6 +6,8 @@
 #include "Menu.h"
 #include "GameOption.h"
 
+class MenuBase;
+
 class MenuAction {
     std::string actionText;
 protected:

@@ -9,6 +9,8 @@
 
 class MenuBase : public GameObject {};
 
+class MenuAction;
+
 template<class... Option>
 class Menu : public MenuBase {
     std::tuple<Option...> options;

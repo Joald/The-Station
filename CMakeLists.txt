@@ -8,12 +8,18 @@ set(RESOURCE_MANAGERS # helper engine classes
     src/ResourceManagers/ResourcePool.h
     src/ResourceManagers/ImagePool.cpp
     src/ResourceManagers/ImagePool.h
-    src/ResourceManagers/EventManager.cpp
-    src/ResourceManagers/EventManager.h
-    src/ResourceManagers/EventContainer.cpp
-    src/ResourceManagers/EventContainer.h
+    src/Events/EventManager.cpp
+    src/Events/EventManager.h
+    src/Events/EventContainer.cpp
+    src/Events/EventContainer.h
     src/ResourceManagers/TexturePool.cpp
-    src/ResourceManagers/TexturePool.h)
+    src/ResourceManagers/TexturePool.h
+    src/Events/Observable.h
+    src/Events/Observer.h)
+
+set(LOGGING
+    src/Logging/Logger.cpp
+    src/Logging/Logger.h)
 
 set(RENDERING # classes that do actual graphics displaying
     src/Rendering/Renderer.cpp
@@ -31,35 +37,38 @@ set(MODELS # classes that represent objects in the game logic
     src/Models/GameOption.cpp
     src/Models/GameOption.h
     src/Models/GameObject.cpp
-    src/Models/GameObject.h)
+    src/Models/GameObject.h
+    src/Models/Player.cpp
+    src/Models/Player.h)
 
 set(SOURCE_FILES # all classes
     # old classes
-    src/Character.h
-    src/Explosion.h
-    src/item.h
-    src/Projectile.h
-    src/Section.h
-    src/GameState.h
-    src/FloorTile.h
-    src/TileDrop.h
-    src/Room.h
-    src/Character.cpp
-    src/Explosion.cpp
-    src/item.cpp
-    src/Projectile.cpp
-    src/Room.cpp
-    src/Section.cpp
-    src/GameState.cpp
-    src/FloorTile.cpp
-    src/TileDrop.cpp
-    src/main.cpp
+#    src/Character.h
+#    src/Explosion.h
+#    src/item.h
+#    src/Projectile.h
+#    src/Section.h
+#    src/GameState.h
+#    src/FloorTile.h
+#    src/TileDrop.h
+#    src/Room.h
+#    src/Character.cpp
+#    src/Explosion.cpp
+#    src/item.cpp
+#    src/Projectile.cpp
+#    src/Room.cpp
+#    src/Section.cpp
+#    src/GameState.cpp
+#    src/FloorTile.cpp
+#    src/TileDrop.cpp
+#    src/main.cpp
 
     # rework classes
     ${RESOURCE_MANAGERS}
     ${RENDERING}
     ${EXCEPTIONS}
     ${MODELS}
+    ${LOGGING}
     src/Globals.cpp
     src/Globals.h)
 

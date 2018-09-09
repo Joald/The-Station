@@ -1,5 +1,5 @@
-#ifndef THE_STATION_EVENTCONTAINER_H
-#define THE_STATION_EVENTCONTAINER_H
+#ifndef THE_STATION_EVENT_CONTAINER_H
+#define THE_STATION_EVENT_CONTAINER_H
 
 #include <map>
 #include <memory>
@@ -30,4 +30,4 @@ private:
 };
 
 
-#endif //THE_STATION_EVENTCONTAINER_H
+#endif //THE_STATION_EVENT_CONTAINER_H

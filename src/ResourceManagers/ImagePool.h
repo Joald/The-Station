@@ -5,13 +5,10 @@
 #include <SFML/Graphics.hpp>
 #include "ResourcePool.h"
 
-class ImagePool : ResourcePool<sf::Image> {
-    storage_t imageStorage;
+class ImagePool : public ResourcePool<sf::Image> {
     storage_t::iterator loadResource(const std::string& id) override;
-
-public:
-    ptr getResourceById(const std::string& id);
 };
 
+ImagePool& imagePool();
 
 #endif //THE_STATION_IMAGE_POOL_H

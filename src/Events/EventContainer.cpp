@@ -5,7 +5,7 @@ void EventContainer::registerEvent(GameObjectPtr& objectPtr, GameEvent event, Ev
 }
 
 void EventContainer::triggerEvent(GameEvent event) {
-    for (auto& i : events[event]) {
-        i.second(const_cast<GameObjectPtr&>(i.first));
+    for (auto&[object, callback] : events[event]) {
+        callback(const_cast<GameObjectPtr&>(object));
     }
 }

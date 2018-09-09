@@ -1,5 +1,5 @@
-#ifndef THE_STATION_EVENTMANAGER_H
-#define THE_STATION_EVENTMANAGER_H
+#ifndef THE_STATION_EVENT_MANAGER_H
+#define THE_STATION_EVENT_MANAGER_H
 
 #include <utility>
 #include <functional>
@@ -28,10 +28,10 @@ public:
      * @param caller - which object is listening
      * @param callback - function that performs the event handling
      */
-    static void registerSFMLEvent(GameObjectPtr caller, std::function<void(GameObjectPtr&, sf::Event&)> callback);
+    static void registerSFMLEvent(GameObjectPtr caller, std::function<void(GameObjectPtr, sf::Event&)> callback);
 
     static void triggerSFMLEvents(sf::RenderWindow& window);
 };
 
 
-#endif //THE_STATION_EVENTMANAGER_H
+#endif //THE_STATION_EVENT_MANAGER_H

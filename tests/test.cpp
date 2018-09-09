@@ -53,7 +53,7 @@ void globals_test() {
     assert_throws(absolutePath(FOLDER_NAMES), std::logic_error);
 
     //pathToResource
-    assert(pathToResource(IMAGES, "PLAYER") == current_install + "img/PLAYER.png");
+    assert(pathToResource(IMAGES, "Player") == current_install + "img/Player.png");
     assert_throws(pathToResource(INSTALL, FOLDER_NAMES), std::logic_error);
 
     std::cout << "Globals test passed!\n";
