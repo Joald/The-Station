@@ -5,6 +5,7 @@
 #include <type_traits>
 #include "GameOption.h"
 #include "GameObject.h"
+#include "MenuAction.h"
 
 class MenuBase : public GameObject {};
 
@@ -13,7 +14,7 @@ class Menu : public MenuBase {
     std::tuple<Option...> options;
 
     template<class... OptionCandidate>
-    inline static constexpr bool areOptions = (std::is_base_of_v<GameOption, OptionCandidate> && ...);
+    inline static constexpr bool areOptions = (std::is_base_of_v<MenuAction, OptionCandidate> && ...);
 
     static_assert(areOptions<Option...>);
 
