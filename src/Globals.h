@@ -9,6 +9,7 @@ namespace Globals {
 const std::string INSTALL = "INSTALL";
 const std::string IMAGES = "IMAGES";
 const std::string DATA = "DATA";
+const std::string SHADERS = "SHADERS";
 const std::string FOLDER_NAMES = "folder_names";
 
 /**

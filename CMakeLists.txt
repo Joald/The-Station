@@ -8,12 +8,16 @@ set(RESOURCE_MANAGERS # helper engine classes
     src/ResourceManagers/ResourcePool.h
     src/ResourceManagers/ImagePool.cpp
     src/ResourceManagers/ImagePool.h
+    src/ResourceManagers/ShaderPool.cpp
+    src/ResourceManagers/ShaderPool.h
+    src/ResourceManagers/TexturePool.cpp
+    src/ResourceManagers/TexturePool.h)
+
+set(EVENTS
     src/Events/EventManager.cpp
     src/Events/EventManager.h
     src/Events/EventContainer.cpp
     src/Events/EventContainer.h
-    src/ResourceManagers/TexturePool.cpp
-    src/ResourceManagers/TexturePool.h
     src/Events/Observable.h
     src/Events/Observer.h)
 
@@ -63,8 +67,9 @@ set(SOURCE_FILES # all classes
 #    src/TileDrop.cpp
 #    src/main.cpp
 
-    # rework classes
+    # reworked classes
     ${RESOURCE_MANAGERS}
+    ${EVENTS}
     ${RENDERING}
     ${EXCEPTIONS}
     ${MODELS}

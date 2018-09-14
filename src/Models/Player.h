@@ -7,8 +7,11 @@
 
 extern const char PLAYER_TEXTURE_NAME[];
 
-class Player : public GameObject, public Renderable<PLAYER_TEXTURE_NAME> {
-
+class Player : public GameObject, public Renderable<PLAYER_TEXTURE_NAME, true> {
+public:
+    Player() {
+        getShader()->setUniform("texture", sf::Shader::CurrentTexture);
+    }
 };
 
 

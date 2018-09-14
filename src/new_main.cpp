@@ -7,7 +7,7 @@ int main() {
     auto& window = renderer();
     window.create(sf::VideoMode(800, 600), "TEST");
     assert(window.isOpen());
-    window.add(player);
+    window.add({player, 1});
     EventManager::registerSFMLEvent(nullptr,
       [&] (std::shared_ptr<GameObject> renderer, sf::Event event) {
         if (event.type == sf::Event::Closed) {
