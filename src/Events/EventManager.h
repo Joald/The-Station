@@ -5,7 +5,6 @@
 #include <functional>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-
 #include "../Models/GameObject.h"
 #include "EventContainer.h"
 
@@ -13,7 +12,7 @@
 /**
  * Allows subtypes of GameObject to register for events and provide a
  * callback determining what to do. The callback should be a function taking
- * a reference to std::shared_ptr<Game_Object> and dynamic_pointer_cast it
+ * a reference to std::shared_ptr<GameObject> and dynamic_pointer_cast it
  * to the appropriate derived type.
  */
 class EventManager {
@@ -28,9 +27,9 @@ class EventManager {
     static std::map<sf::Keyboard::Key, CallbackSet<>> keyHolds;
 public:
     /**
-     * When an SFML event is polled in a window, all callbacks registered with
-     * this function are invoked.
-     * @param caller - which object is listening
+     * When an SFML event of the specified type is polled in a window,
+     * all callbacks registered with this function are invoked.
+     * @param eventType - type of event
      * @param callback - function that performs the event handling
      */
     static void registerSfmlEvent(sf::Event::EventType eventType, std::function<void(sf::Event)> callback);
@@ -44,6 +43,11 @@ public:
      */
     static void triggerSfmlEvents(sf::RenderWindow& window);
 
+
+    /**
+     * Register a callback to be called every frame if the specified key is pressed.
+     * The callbacks will be called after the event loop in @triggerSfmlEvents.
+     */
     static void registerKeyHold(sf::Keyboard::Key, std::function<void()>);
 };
 

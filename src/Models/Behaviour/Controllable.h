@@ -6,9 +6,11 @@
 #include "../../Rendering/Renderer.h"
 #include "../../Time/Time.h"
 
-
+/**
+ * Base class providing implementation of controllable entities.
+ */
 class Controllable : public virtual RenderableBase {
-    float speed;
+    float speed; /// In (scaled) pixels per second.
     bool controlled;
 
     void moveIfControlled(float x, float y) {

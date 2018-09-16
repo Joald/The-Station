@@ -6,6 +6,10 @@
 #include "../ResourceManagers/TexturePool.h"
 #include "../ResourceManagers/ShaderPool.h"
 
+
+/**
+ * Polymorphic base for all Renderables.
+ */
 class RenderableBase : public sf::Sprite {
 public:
     virtual const char* getName() const = 0;
@@ -13,7 +17,11 @@ public:
     virtual sf::Shader* getShader() const = 0;
 };
 
-
+/**
+ * Base class for anything that can be displayed on the screen.
+ * @tparam name - name of the texture
+ * @tparam hasShader - if a shader with name @name should be loaded and displayed.
+ */
 template<const char* name, bool hasShader>
 class Renderable : public virtual RenderableBase {
     std::shared_ptr <sf::Shader> shader;
