@@ -21,13 +21,17 @@ set(EVENTS
     src/Events/Observable.h
     src/Events/Observer.h)
 
+set(TIME
+    src/Time/Time.h
+    src/Time/Time.cpp)
+
 set(LOGGING
     src/Logging/Logger.cpp
     src/Logging/Logger.h)
 
 set(RENDERING # classes that do actual graphics displaying
     src/Rendering/Renderer.cpp
-    src/Rendering/Renderer.h)
+    src/Rendering/Renderer.h src/Rendering/Renderable.h)
 
 set(EXCEPTIONS # custom exceptions
     src/Exceptions/ResourceNotFoundError.cpp
@@ -43,7 +47,7 @@ set(MODELS # classes that represent objects in the game logic
     src/Models/GameObject.cpp
     src/Models/GameObject.h
     src/Models/Player.cpp
-    src/Models/Player.h)
+    src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h)
 
 set(SOURCE_FILES # all classes
     # old classes
@@ -74,6 +78,7 @@ set(SOURCE_FILES # all classes
     ${EXCEPTIONS}
     ${MODELS}
     ${LOGGING}
+    ${TIME}
     src/Globals.cpp
     src/Globals.h)
 
