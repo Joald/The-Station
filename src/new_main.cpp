@@ -2,6 +2,7 @@
 #include "Models/Player.h"
 #include "Events/EventManager.h"
 #include "Time/Time.h"
+#include "Rendering/CollisionDetector.h"
 
 int main() {
     auto player = std::make_shared<Player>();
@@ -20,7 +21,14 @@ int main() {
           if (event.key.code == sf::Keyboard::Escape) {
               window.close();
           }
-      });
+      }
+    );
+    collisionDetectors().emplace(
+      player->getName(),
+      std::make_shared<CollisionGraph>(
+        std::vector<CollisionGraph::Edge>(1, std::make_pair(player->getName(), "screenEdge"))
+      )
+    );
 
     player->setPosition(200, 200);
     while (window.isOpen()) {

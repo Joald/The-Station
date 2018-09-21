@@ -5,6 +5,7 @@
 #include <SFML/Graphics.hpp>
 #include "../ResourceManagers/TexturePool.h"
 #include "../ResourceManagers/ShaderPool.h"
+#include "CollisionShape.h"
 
 
 /**
@@ -37,6 +38,7 @@ protected:
         }
     }
 
+    virtual CollisionShape getCollisionShape() = 0;
 
 public:
     const char* getName() const override {
@@ -45,6 +47,11 @@ public:
 
     sf::Shader* getShader() const override {
         return hasShader ? shader.get() : nullptr;
+    }
+
+    template<const char* otherName, bool otherHasShader>
+    bool collidesWith(const Renderable<otherName, otherHasShader>& other) {
+        return this->getCollisionShape().collidesWith(other.getCollisionShape());
     }
 };
 

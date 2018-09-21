@@ -1,7 +1,7 @@
 #include <fstream>
 #include "ImagePool.h"
 #include "../Exceptions/ResourceNotFoundError.h"
-#include "../Globals.h"
+#include "../Globals/Globals.h"
 
 
 ImagePool::storage_t::iterator ImagePool::loadResource(const std::string& id) {

@@ -1,7 +1,7 @@
 #include <fstream>
 #include "ShaderPool.h"
 #include "../Exceptions/ResourceNotFoundError.h"
-#include "../Globals.h"
+#include "../Globals/Globals.h"
 
 
 ShaderPool::storage_t::iterator ShaderPool::loadResource(const std::string& id) {

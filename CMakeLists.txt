@@ -31,7 +31,7 @@ set(LOGGING
 
 set(RENDERING # classes that do actual graphics displaying
     src/Rendering/Renderer.cpp
-    src/Rendering/Renderer.h src/Rendering/Renderable.h)
+    src/Rendering/Renderer.h src/Rendering/Renderable.h src/Rendering/CollisionDetector.cpp src/Rendering/CollisionDetector.h src/Rendering/CollisionGraph.cpp src/Rendering/CollisionGraph.h src/Rendering/CollisionShape.cpp src/Rendering/CollisionShape.h)
 
 set(EXCEPTIONS # custom exceptions
     src/Exceptions/ResourceNotFoundError.cpp
@@ -48,6 +48,11 @@ set(MODELS # classes that represent objects in the game logic
     src/Models/GameObject.h
     src/Models/Player.cpp
     src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h)
+
+set(GLOBALS
+    src/Globals/Globals.cpp
+    src/Globals/Globals.h
+    src/Globals/Math.h)
 
 set(SOURCE_FILES # all classes
     # old classes
@@ -79,11 +84,10 @@ set(SOURCE_FILES # all classes
     ${MODELS}
     ${LOGGING}
     ${TIME}
-    src/Globals.cpp
-    src/Globals.h)
+    ${GLOBALS})
 
 
-set(MAIN_EXEC src/new_main.cpp) # files used only in game executable
+set(MAIN_EXEC src/new_main.cpp ) # files used only in game executable
 
 add_executable(The_Station ${SOURCE_FILES} ${MAIN_EXEC})
 

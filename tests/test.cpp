@@ -2,7 +2,7 @@
 #include <functional>
 #include <map>
 #include <iostream>
-#include "../src/Globals.h"
+#include "../src/Globals/Globals.h"
 
 #define assert_throws(n, e) do { try { n; assert(false); } catch (e& x) {} } while (false)
 
