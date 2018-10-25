@@ -23,7 +23,7 @@ public:
  * @tparam name - name of the texture
  * @tparam hasShader - if a shader with name @name should be loaded and displayed.
  */
-template<const char* name, bool hasShader>
+template<const char* name, bool hasShader = false>
 class Renderable : public virtual RenderableBase {
     std::shared_ptr <sf::Shader> shader;
 protected:
@@ -38,8 +38,6 @@ protected:
         }
     }
 
-    virtual CollisionShape getCollisionShape() = 0;
-
 public:
     const char* getName() const override {
         return name;
@@ -47,11 +45,6 @@ public:
 
     sf::Shader* getShader() const override {
         return hasShader ? shader.get() : nullptr;
-    }
-
-    template<const char* otherName, bool otherHasShader>
-    bool collidesWith(const Renderable<otherName, otherHasShader>& other) {
-        return this->getCollisionShape().collidesWith(other.getCollisionShape());
     }
 };
 

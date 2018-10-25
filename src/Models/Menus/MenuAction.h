@@ -4,7 +4,7 @@
 
 #include <string>
 #include "Menu.h"
-#include "GameOption.h"
+#include "../GameOption.h"
 
 class MenuBase;
 

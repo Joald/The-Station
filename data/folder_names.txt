@@ -1,4 +1,4 @@
-INSTALL /home/jacek.olczyk/The-Station/
+INSTALL /home/joald/gamedev/The-Station/
 IMAGES img/
 DATA data/
 SHADERS shaders/

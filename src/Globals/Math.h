@@ -10,9 +10,7 @@ const float PI_2 = 1.5707963267f;
 
 const float epsilon = 0.00001;
 
-bool areClose(float x, float y) {
-    return std::min(x, y) + epsilon > std::max(x, y);
-}
+bool areClose(float x, float y);
 
 const auto maxFloat = std::numeric_limits<float>::max();
 const auto minFloat = std::numeric_limits<float>::min();

@@ -5,7 +5,7 @@
 #include <SFML/System.hpp>
 #include "../Globals/Math.h"
 
-class Rectangle;
+class CollisionRectangle;
 
 /**
  * Base class for abstract shapes that describe collisions.
@@ -17,16 +17,16 @@ public:
 
     virtual bool collidesWith(const CollisionShape& other) const = 0;
 
-    virtual Rectangle getBoundingBox() const = 0;
+    virtual CollisionRectangle getBoundingBox() const = 0;
 
     bool boundingBoxesCollide(const CollisionShape& other) const;
 };
 
-class Rectangle : public CollisionShape {
+class CollisionRectangle : public CollisionShape {
     std::array<sf::Vector2f, 4> vertices;
     float rotation;
 public:
-    Rectangle(sf::Vector2f leftUpper, sf::Vector2f rightLower) : vertices(), rotation(0) {
+    CollisionRectangle(sf::Vector2f leftUpper, sf::Vector2f rightLower) : vertices(), rotation(0) {
         for (auto& i : vertices) {
             i = leftUpper;
         }
@@ -47,7 +47,7 @@ public:
         return false;
     }
 
-    Rectangle getBoundingBox() const override {
+    CollisionRectangle getBoundingBox() const override {
         if (isAxisAligned()) {
             return *this;
         }
@@ -59,7 +59,7 @@ public:
             rightLower.x = std::max(leftUpper.x, i.x);
             rightLower.y = std::max(leftUpper.y, i.y);
         }
-        return Rectangle(leftUpper, rightLower);
+        return CollisionRectangle(leftUpper, rightLower);
     }
 
     bool isAxisAligned() const {
@@ -71,7 +71,7 @@ public:
         return false;
     }
 
-    bool collidesWith(const Rectangle& other) const {
+    bool collidesWith(const CollisionRectangle& other) const {
         bool boxesCollide = boundingBoxesCollide(other);
         if ((isAxisAligned() and other.isAxisAligned()) or !boxesCollide) {
             return boxesCollide;
@@ -80,12 +80,19 @@ public:
     }
 };
 
-class Circle : public CollisionShape {
+class CollisionCircle : public CollisionShape {
+    sf::Vector2f middle;
     float radius;
 public:
+    explicit CollisionCircle(sf::Vector2f middle, float radius) : middle(middle), radius(radius) {}
+
+    void moveTo(sf::Vector2f newMiddle) {
+        middle = newMiddle;
+    }
+
     bool collidesWith(const CollisionShape& other) const override;
 
-    Rectangle getBoundingBox() const override;
+    CollisionRectangle getBoundingBox() const override;
 };
 
 #endif //THE_STATION_COLLISION_SHAPE_H

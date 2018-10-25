@@ -55,5 +55,6 @@ void debugLog(const T& t, Rest... rest) {
     debugLog(rest...);
 }
 
+void debugAssert(bool assertion, const std::string& msg = "");
 
 #endif //THE_STATION_LOGGER_H

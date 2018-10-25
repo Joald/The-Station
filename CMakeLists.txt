@@ -31,28 +31,28 @@ set(LOGGING
 
 set(RENDERING # classes that do actual graphics displaying
     src/Rendering/Renderer.cpp
-    src/Rendering/Renderer.h src/Rendering/Renderable.h src/Rendering/CollisionDetector.cpp src/Rendering/CollisionDetector.h src/Rendering/CollisionGraph.cpp src/Rendering/CollisionGraph.h src/Rendering/CollisionShape.cpp src/Rendering/CollisionShape.h)
+    src/Rendering/Renderer.h src/Rendering/Renderable.h src/Rendering/CollisionDetector.cpp src/Rendering/CollisionDetector.h src/Rendering/CollisionGraph.cpp src/Rendering/CollisionGraph.h src/Rendering/CollisionShape.cpp src/Rendering/CollisionShape.h src/Rendering/Collidable.cpp src/Rendering/Collidable.h)
 
 set(EXCEPTIONS # custom exceptions
     src/Exceptions/ResourceNotFoundError.cpp
     src/Exceptions/ResourceNotFoundError.h)
 
 set(MODELS # classes that represent objects in the game logic
-    src/Models/Menu.cpp
-    src/Models/Menu.h
-    src/Models/MenuAction.cpp
-    src/Models/MenuAction.h
+        src/Models/Menus/Menu.cpp
+        src/Models/Menus/Menu.h
+        src/Models/Menus/MenuAction.cpp
+        src/Models/Menus/MenuAction.h
     src/Models/GameOption.cpp
     src/Models/GameOption.h
     src/Models/GameObject.cpp
     src/Models/GameObject.h
     src/Models/Player.cpp
-    src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h)
+    src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h src/Models/Border.cpp src/Models/Border.h)
 
 set(GLOBALS
     src/Globals/Globals.cpp
     src/Globals/Globals.h
-    src/Globals/Math.h)
+    src/Globals/Math.h src/Globals/Math.cpp)
 
 set(SOURCE_FILES # all classes
     # old classes
@@ -87,7 +87,7 @@ set(SOURCE_FILES # all classes
     ${GLOBALS})
 
 
-set(MAIN_EXEC src/new_main.cpp ) # files used only in game executable
+set(MAIN_EXEC src/main.cpp) # files used only in game executable
 
 add_executable(The_Station ${SOURCE_FILES} ${MAIN_EXEC})
 

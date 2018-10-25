@@ -4,8 +4,8 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Audio.hpp>
 
-#include "Models/GameObject.h"
-#include "Events/EventManager.h"
+#include "../Models/GameObject.h"
+#include "../Events/EventManager.h"
 #include "Character.h"
 
 class Explosion;
