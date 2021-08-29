@@ -6,6 +6,8 @@
 
 namespace STEngine::Filesystem {
 
+std::filesystem::path basePath();
+
 /**
 * Scans the file passed as @fileName in the DATA directory.
 * If a line starts with @key, the rest of that line is returned,
@@ -25,7 +27,7 @@ std::string getExtension(const std::string &dataType);
 
 /**
 * Returns the name of the folder associated with the given data type.
-* @return folder name with a trailing forward slash ('/')
+* @return folder name
 */
 std::string getFolder(const std::string &dataType);
 
@@ -34,7 +36,7 @@ std::string getFolder(const std::string &dataType);
 * @param dataType
 * @return /absolute/path/to/folder/
 */
-std::string absolutePath(const std::string &dataType);
+std::filesystem::path absolutePath(const std::string &dataType);
 
 /**
 * Returns a path to a resource called @resourceName of type @dataType with appropriate extension.
@@ -42,7 +44,7 @@ std::string absolutePath(const std::string &dataType);
 * @param resourceName
 * @return /path/to/folder/then/resource.type
 */
-std::string pathToResource(const std::string &type, const std::string &resourceName);
+std::filesystem::path pathToResource(const std::string &type, const std::string &resourceName);
 
 /**
 * Ignores all lines starting with '#' in a given file.

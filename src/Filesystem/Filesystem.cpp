@@ -1,14 +1,23 @@
 #include <fstream>
+#include <filesystem>
+
 #include "Filesystem/Filesystem.h"
 #include "Globals/Globals.h"
 
+namespace fs = std::filesystem;
+
 namespace STEngine::Filesystem {
 
+fs::path basePath() {
+    return "..";
+}
+
 std::string scanData(const std::string &fileName, const std::string &key) {
-    std::ifstream f(Globals::concat({"../data/", fileName, ".txt"}));
+    auto path = (basePath() / "data" / fileName).replace_extension(".txt");
+    std::ifstream f(path);
     ignore_comments(f);
     if (!f) {
-        throw std::logic_error("Installation corrupted.");
+        throw std::logic_error("Installation corrupted. Could not read file at " + path.string());
     }
     std::string s;
     while (getline(f, s)) {
@@ -24,12 +33,12 @@ std::string getFolder(const std::string &dataType) {
     return scanData(Globals::FOLDER_NAMES, dataType);
 }
 
-std::string pathToResource(const std::string &type, const std::string &resourceName) {
-    return Globals::concat({absolutePath(type), resourceName, getExtension(type)});
+fs::path pathToResource(const std::string &type, const std::string &resourceName) {
+    return (absolutePath(type) / resourceName).replace_extension(getExtension(type));
 }
 
-std::string absolutePath(const std::string &dataType) {
-    return Globals::concat({getFolder(Globals::INSTALL), getFolder(dataType)});
+fs::path absolutePath(const std::string &dataType) {
+    return basePath() / getFolder(dataType);
 }
 
 std::string getExtension(const std::string &dataType) {
