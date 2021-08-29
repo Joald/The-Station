@@ -2,6 +2,8 @@
 #define THE_STATION_MATH_H
 
 #include <algorithm>
+#include <limits>
+
 #include <SFML/System.hpp>
 
 const float PI = 3.1415926535f;

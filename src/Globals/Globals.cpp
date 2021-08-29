@@ -1,4 +1,6 @@
 #include <fstream>
+#include <limits>
+
 #include "Globals.h"
 
 namespace {
