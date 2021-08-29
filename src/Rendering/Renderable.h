@@ -3,8 +3,8 @@
 
 
 #include <SFML/Graphics.hpp>
-#include "../ResourceManagers/TexturePool.h"
-#include "../ResourceManagers/ShaderPool.h"
+#include "ResourceManagers/TexturePool.h"
+#include "ResourceManagers/ShaderPool.h"
 #include "CollisionShape.h"
 
 

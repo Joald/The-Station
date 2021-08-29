@@ -3,7 +3,7 @@
 
 #include <array>
 #include <SFML/System.hpp>
-#include "../Globals/Math.h"
+#include "Globals/Math.h"
 
 class CollisionRectangle;
 

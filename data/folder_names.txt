@@ -1,4 +1,4 @@
-INSTALL /home/joald/gamedev/The-Station/
+INSTALL /home/joald/prog4fun/The-Station/
 IMAGES img/
 DATA data/
 SHADERS shaders/

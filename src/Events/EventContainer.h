@@ -4,7 +4,7 @@
 #include <map>
 #include <memory>
 #include <functional>
-#include "../Models/GameObject.h"
+#include "Models/GameObject.h"
 
 
 enum class GameEvent {

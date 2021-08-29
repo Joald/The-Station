@@ -4,7 +4,7 @@
 #include <string>
 #include <functional>
 #include "GameObject.h"
-#include "../Events/Observable.h"
+#include "Events/Observable.h"
 
 enum class OptionState {
     OFF = 0,

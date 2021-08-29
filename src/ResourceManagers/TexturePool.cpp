@@ -1,5 +1,5 @@
 #include "TexturePool.h"
-#include "../Logging/Logger.h"
+#include "Logging/Logger.h"
 #include "ImagePool.h"
 
 

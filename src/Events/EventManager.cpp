@@ -1,6 +1,6 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "EventManager.h"
-#include "../Rendering/Renderer.h"
+#include "Rendering/Renderer.h"
 
 EventContainer EventManager::events;
 sf::Event EventManager::sfmlEvent;

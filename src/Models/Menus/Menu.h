@@ -3,8 +3,8 @@
 
 #include <tuple>
 #include <type_traits>
-#include "../GameOption.h"
-#include "../GameObject.h"
+#include "Models/GameOption.h"
+#include "Models/GameObject.h"
 #include "MenuAction.h"
 
 class MenuBase : public GameObject {};

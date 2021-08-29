@@ -5,11 +5,11 @@
 #include <SFML/Graphics.hpp>
 #include <memory>
 #include <set>
-#include "../Models/GameObject.h"
-#include "../ResourceManagers/ResourcePool.h"
-#include "../ResourceManagers/TexturePool.h"
-#include "../Logging/Logger.h"
-#include "../ResourceManagers/ShaderPool.h"
+#include "Models/GameObject.h"
+#include "ResourceManagers/ResourcePool.h"
+#include "ResourceManagers/TexturePool.h"
+#include "Logging/Logger.h"
+#include "ResourceManagers/ShaderPool.h"
 #include "Renderable.h"
 
 class Renderer : public GameObject, public sf::RenderWindow {

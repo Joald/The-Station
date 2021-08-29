@@ -3,7 +3,7 @@
 #include <SFML/System.hpp>
 #include <SFML/Graphics.hpp>
 #include <vector>
-#include "../Models/GameObject.h"
+#include "Models/GameObject.h"
 #include "item.h"
 #include "Projectile.h"
 #include "FloorTile.h"

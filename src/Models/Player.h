@@ -3,9 +3,9 @@
 
 
 #include "GameObject.h"
-#include "../Rendering/Renderer.h"
+#include "Rendering/Renderer.h"
 #include "Behaviour/Controllable.h"
-#include "../Rendering/Collidable.h"
+#include "Rendering/Collidable.h"
 
 extern const char PLAYER_TEXTURE_NAME[];
 

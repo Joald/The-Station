@@ -2,7 +2,7 @@
 #define THE_STATION_BORDER_H
 
 
-#include "../Rendering/Renderable.h"
+#include "Rendering/Renderable.h"
 
 extern const char BORDER_TEXTURE_NAME[];
 

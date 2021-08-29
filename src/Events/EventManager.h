@@ -5,7 +5,7 @@
 #include <functional>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include "../Models/GameObject.h"
+#include "Models/GameObject.h"
 #include "EventContainer.h"
 
 

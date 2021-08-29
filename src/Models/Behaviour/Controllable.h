@@ -2,9 +2,9 @@
 #define THE_STATION_CONTROLLABLE_H
 
 
-#include "../../Events/EventManager.h"
-#include "../../Rendering/Renderer.h"
-#include "../../Time/Time.h"
+#include "Events/EventManager.h"
+#include "Rendering/Renderer.h"
+#include "Time/Time.h"
 
 /**
  * Base class providing implementation of controllable entities.

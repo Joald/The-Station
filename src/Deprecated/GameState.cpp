@@ -1,6 +1,6 @@
 #include <sstream>
 #include "GameState.h"
-#include "../ResourceManagers/ImagePool.h"
+#include "ResourceManagers/ImagePool.h"
 #include "Explosion.h"
 
 namespace {

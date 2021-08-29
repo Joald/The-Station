@@ -1,5 +1,5 @@
 #include "CollisionShape.h"
-#include "../Logging/Logger.h"
+#include "Logging/Logger.h"
 
 bool CollisionShape::boundingBoxesCollide(const CollisionShape &other) const {
     auto boundingBox = getBoundingBox();
