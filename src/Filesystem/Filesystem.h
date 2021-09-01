@@ -12,10 +12,10 @@ std::filesystem::path basePath();
 * Scans the file passed as @fileName in the DATA directory.
 * If a line starts with @key, the rest of that line is returned,
 * skipping one leading character.
-* Throws an instance of std::logic_error if the value is not found.
+* Throws an instance of std::logic_error if the file or value is not found.
 * @param fileName
 * @param key
-* @return
+* @return value at key
 */
 std::string scanData(const std::string &fileName, const std::string &key);
 

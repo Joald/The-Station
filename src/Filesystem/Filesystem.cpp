@@ -1,5 +1,6 @@
 #include <fstream>
 #include <filesystem>
+#include <unordered_map>
 
 #include "Filesystem/Filesystem.h"
 #include "Globals/Globals.h"
@@ -8,25 +9,61 @@ namespace fs = std::filesystem;
 
 namespace STEngine::Filesystem {
 
+namespace {
+
+const std::string fileNames[] = {
+        "extensions",
+        "folder_names",
+        "id_list",
+        "images",
+};
+
+using DataMap = std::unordered_map<std::string, std::string>;
+
+void scanFile(DataMap& map, std::ifstream& file) {
+    std::string line;
+    while (getline(file, line)) {
+        auto spacePos = line.find(' ');
+
+        map[line.substr(0, spacePos)] = spacePos == std::string::npos ? "" : line.substr(spacePos + 1);
+    }
+}
+
+auto initVars() {
+    std::unordered_map<std::string, DataMap> map;
+    for (auto fileName : fileNames) {
+        auto path = (basePath() / "data" / fileName).replace_extension(".txt");
+        std::ifstream file(path);
+        if (!file) {
+            throw std::logic_error("Installation corrupted. Could not read file at " + path.string());
+        }
+        ignore_comments(file);
+
+        auto& submap = map[std::move(fileName)];
+        scanFile(submap, file);
+    }
+    return map;
+}
+
+} // namespace
+
+
 fs::path basePath() {
     return "..";
 }
 
 std::string scanData(const std::string &fileName, const std::string &key) {
-    auto path = (basePath() / "data" / fileName).replace_extension(".txt");
-    std::ifstream f(path);
-    ignore_comments(f);
-    if (!f) {
-        throw std::logic_error("Installation corrupted. Could not read file at " + path.string());
-    }
-    std::string s;
-    while (getline(f, s)) {
-        if (s.substr(0, key.size()) == key) {
-            // if there is nothing but the key return empty string
-            return s.size() == key.size() ? "" : s.substr(key.size() + 1);
+    static auto map = initVars();
+    try {
+        const auto& submap = map.at(fileName);
+        try {
+            return submap.at(key);
+        } catch (std::out_of_range&) {
+            throw std::logic_error("Variable \"" + key + "\" not found in file \"" + fileName + "\".");
         }
+    } catch (std::out_of_range&) {
+        throw std::logic_error("Data file \"" + fileName + "\" not found.");
     }
-    throw std::logic_error("Requested installation-specific variable not found.");
 }
 
 std::string getFolder(const std::string &dataType) {
