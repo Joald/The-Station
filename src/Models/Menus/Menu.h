@@ -18,7 +18,7 @@ class Menu : public MenuBase {
     template<class... OptionCandidate>
     inline static constexpr bool areOptions = (std::is_base_of_v<MenuAction, OptionCandidate> && ...);
 
-    static_assert(areOptions<Option...>);
+    static_assert(areOptions<Option...>, "all provided options must derive from MenuAction!");
 
 public:
     explicit Menu(Option... options) : options(options...) {}
