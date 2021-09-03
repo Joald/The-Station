@@ -7,21 +7,26 @@
 #include "Behaviour/Controllable.h"
 #include "Rendering/Collidable.h"
 
-extern const char PLAYER_TEXTURE_NAME[];
+inline const std::string_view PLAYER_TEXTURE_NAME = "Player";
 
 class Player :
-  public GameObject,
-  public virtual Renderable<PLAYER_TEXTURE_NAME, true>,
-  public virtual Controllable,
-  public Collidable {
+        public GameObject,
+        public Renderable,
+        public Controllable,
+        public Collidable {
+
     sf::Vector2f getMiddle() const {
         return getPosition() + sf::Vector2f(getTexture()->getSize());
     }
+
 public:
-    Player(): Controllable(100) {
-        getShader()->setUniform("texture", sf::Shader::CurrentTexture);
+    Player() :
+            Renderable(PLAYER_TEXTURE_NAME, true),
+            Controllable(*this, 100) {
+        this->getShader().setUniform("texture", sf::Shader::CurrentTexture);
         debugAssert(getTexture()->getSize().x == getTexture()->getSize().y,
-                "X: " + std::to_string(getTexture()->getSize().x) + ", Y: " + std::to_string(getTexture()->getSize().y));
+                    "X: " + std::to_string(getTexture()->getSize().x) + ", Y: " +
+                    std::to_string(getTexture()->getSize().y));
     }
 
     CollisionShape& getCollisionShape() const override;

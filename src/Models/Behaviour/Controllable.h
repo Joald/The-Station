@@ -9,19 +9,20 @@
 /**
  * Base class providing implementation of controllable entities.
  */
-class Controllable : public virtual RenderableBase {
+class Controllable {
+    sf::Transformable& object;
     float speed; /// In (scaled) pixels per second.
     bool controlled;
 
     void moveIfControlled(float x, float y) {
         if (controlled) {
-            move(x, y);
+            object.move(x, y);
         }
     }
 
     void getRegistered();
 
-    float offset() {
+    [[nodiscard]] float offset() const {
         return speed * Time::deltaTime();
     }
 
@@ -34,19 +35,20 @@ protected:
         Controllable::controlled = !controlled;
     }
 
-    explicit Controllable(float speed, bool controlled = true) :
-      speed(speed),
-      controlled(controlled) {
+    explicit Controllable(sf::Transformable& object, float speed, bool controlled = true) :
+            object(object),
+            speed(speed),
+            controlled(controlled) {
         debugLog("Speed is ", speed);
         getRegistered();
     }
 
 public:
-    float getSpeed() const {
+    [[nodiscard]] float getSpeed() const {
         return speed;
     }
 
-    bool isControllable() const {
+    [[nodiscard]] bool isControllable() const {
         return controlled;
     }
 };

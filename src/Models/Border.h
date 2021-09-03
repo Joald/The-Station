@@ -6,8 +6,7 @@
 
 extern const char BORDER_TEXTURE_NAME[];
 
-template<const char* name, bool hasShader = false>
-class Border : public Renderable<name, hasShader> {
+class Border : public Renderable {
 
 };
 

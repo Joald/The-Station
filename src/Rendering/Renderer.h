@@ -13,7 +13,7 @@
 #include "Renderable.h"
 
 class Renderer : public GameObject, public sf::RenderWindow {
-    using RenderablePointer = std::pair<std::shared_ptr<RenderableBase>, int>;
+    using RenderablePointer = std::pair<std::shared_ptr<Renderable>, int>;
 
     struct RenderableComparator {
         bool operator()(const RenderablePointer& lhs, const RenderablePointer& rhs) const {
@@ -37,7 +37,7 @@ public:
     void render() {
         clear(sf::Color::White);
         for (auto&[renderable, priority] : renderables) {
-            draw(*renderable, renderable->getShader());
+            draw(*renderable, &renderable->getShader());
         }
         display();
     }
