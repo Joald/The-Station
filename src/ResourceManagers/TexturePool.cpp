@@ -3,7 +3,7 @@
 #include "ImagePool.h"
 
 
-TexturePool::storage_t::iterator TexturePool::loadResource(const std::string& id) {
+TexturePool::storage_t::iterator TexturePool::loadResource(std::string_view id) {
     auto[iterator, inserted] = storage.insert({id, std::make_shared<sf::Texture>()});
     if (inserted) {
         iterator->second->loadFromImage(*imagePool().getResourceById(id));

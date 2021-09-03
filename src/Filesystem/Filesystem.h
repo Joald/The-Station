@@ -17,26 +17,26 @@ std::filesystem::path basePath();
 * @param key
 * @return value at key
 */
-std::string scanData(const std::string &fileName, const std::string &key);
+std::string_view scanData(std::string_view fileName, std::string_view key);
 
 /**
 * Returns the default extension of the given data type.
 * @return extension with a leading dot ('.')
 */
-std::string getExtension(const std::string &dataType);
+std::string_view getExtension(std::string_view dataType);
 
 /**
 * Returns the name of the folder associated with the given data type.
 * @return folder name
 */
-std::string getFolder(const std::string &dataType);
+std::string_view getFolder(std::string_view dataType);
 
 /**
 * Returns the absolute path to the folder associated with the given data type.
 * @param dataType
 * @return /absolute/path/to/folder/
 */
-std::filesystem::path absolutePath(const std::string &dataType);
+std::filesystem::path absolutePath(std::string_view dataType);
 
 /**
 * Returns a path to a resource called @resourceName of type @dataType with appropriate extension.
@@ -44,7 +44,7 @@ std::filesystem::path absolutePath(const std::string &dataType);
 * @param resourceName
 * @return /path/to/folder/then/resource.type
 */
-std::filesystem::path pathToResource(const std::string &type, const std::string &resourceName);
+std::filesystem::path pathToResource(std::string_view type, std::string_view resourceName);
 
 /**
 * Ignores all lines starting with '#' in a given file.

@@ -14,8 +14,8 @@ class Logger {
 
     std::fstream fstream;
 public:
-    explicit Logger(const std::string& filename = "") :
-      filename(filename), fstream() {
+    explicit Logger(std::string_view fileName = "") :
+      filename(fileName), fstream() {
         if (!filename.empty()) {
             fstream.open(filename);
         }
@@ -55,6 +55,6 @@ void debugLog(const T& t, Rest... rest) {
     debugLog(rest...);
 }
 
-void debugAssert(bool assertion, const std::string& msg = "");
+void debugAssert(bool assertion, std::string_view msg = "");
 
 #endif //THE_STATION_LOGGER_H

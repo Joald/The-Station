@@ -3,14 +3,37 @@
 
 
 #include <string>
+#include <Logging/Logger.h>
+
+enum class FolderName {
+    Install,
+    Images,
+    Data,
+    Shaders,
+    FolderNames,
+    Extensions,
+};
+
+constexpr std::string_view resolveFolderName(FolderName name) {
+    switch (name) {
+        case FolderName::Install:
+            return "INSTALL";
+        case FolderName::Images:
+            return "IMAGES";
+        case FolderName::Data:
+            return "DATA";
+        case FolderName::Shaders:
+            return "SHADERS";
+        case FolderName::FolderNames:
+            return "folder_names";
+        case FolderName::Extensions:
+            return "extensions";
+    }
+    debugLog("Impossible path taken. Exiting...");
+    std::exit(1);
+}
 
 namespace Globals {
-
-const std::string INSTALL = "INSTALL";
-const std::string IMAGES = "IMAGES";
-const std::string DATA = "DATA";
-const std::string SHADERS = "SHADERS";
-const std::string FOLDER_NAMES = "folder_names";
 
 /**
  * Concatenates strings provided in the initializer list.

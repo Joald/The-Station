@@ -1,3 +1,4 @@
+#include <sstream>
 #include "Logger.h"
 
 namespace {
@@ -7,8 +8,10 @@ public:
 };
 }
 
-void debugAssert(bool assertion, const std::string& msg) {
+void debugAssert(bool assertion, std::string_view msg) {
     if (DEBUG and !assertion) {
-        throw AssertionException("Assertion failed: " + msg);
+        std::stringstream s;
+        s << "Assertion failed: " << msg;
+        throw AssertionException(s.str());
     }
 }

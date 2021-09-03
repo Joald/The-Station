@@ -8,13 +8,13 @@ template <class T>
 class ResourcePool {
 public:
     typedef std::shared_ptr<T> ptr;
-    typedef std::unordered_map<std::string, ptr> storage_t;
+    typedef std::unordered_map<std::string_view, ptr> storage_t;
 protected:
     storage_t storage;
-    virtual typename storage_t::iterator loadResource(const std::string& id) = 0;
+    virtual typename storage_t::iterator loadResource(std::string_view id) = 0;
 
 public:
-    ptr getResourceById(const std::string& id) {
+    ptr getResourceById(std::string_view id) {
         auto iter = storage.find(id);
         if (iter == storage.end()) {
             iter = loadResource(id);

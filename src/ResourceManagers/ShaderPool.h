@@ -6,7 +6,7 @@
 #include "ResourcePool.h"
 
 class ShaderPool : public ResourcePool<sf::Shader> {
-    storage_t::iterator loadResource(const std::string& id) override;
+    storage_t::iterator loadResource(std::string_view id) override;
 };
 
 ShaderPool& shaderPool();

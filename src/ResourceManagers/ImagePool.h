@@ -6,7 +6,7 @@
 #include "ResourcePool.h"
 
 class ImagePool : public ResourcePool<sf::Image> {
-    storage_t::iterator loadResource(const std::string& id) override;
+    storage_t::iterator loadResource(std::string_view id) override;
 };
 
 ImagePool& imagePool();
