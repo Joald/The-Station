@@ -38,43 +38,46 @@ set(EXCEPTIONS # custom exceptions
         src/Exceptions/ResourceNotFoundError.h)
 
 set(MODELS # classes that represent objects in the game logic
-        src/Models/Menus/Menu.cpp
-        src/Models/Menus/Menu.h
-        src/Models/Menus/MenuAction.cpp
-        src/Models/Menus/MenuAction.h
         src/Models/GameOption.cpp
         src/Models/GameOption.h
         src/Models/GameObject.cpp
         src/Models/GameObject.h
         src/Models/Player.cpp
-        src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h src/Models/Border.cpp src/Models/Border.h)
+        src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h src/Models/Border.cpp src/Models/Border.h src/Models/Menus/MenuManager.cpp src/Models/Menus/MenuManager.h)
 
 set(GLOBALS
         src/Globals/Globals.cpp
         src/Globals/Globals.h
         src/Globals/Math.h src/Globals/Math.cpp src/Filesystem/Filesystem.h src/Filesystem/Filesystem.cpp)
 
+set(DEPRECATED
+        src/Deprecated/Menu.cpp
+        src/Deprecated/Menu.h
+        src/Deprecated/MenuAction.cpp
+        src/Deprecated/MenuAction.h
+        # pre-rework files
+        src/Character.h
+        src/Explosion.h
+        src/item.h
+        src/Projectile.h
+        src/Section.h
+        src/GameState.h
+        src/FloorTile.h
+        src/TileDrop.h
+        src/Room.h
+        src/Character.cpp
+        src/Explosion.cpp
+        src/item.cpp
+        src/Projectile.cpp
+        src/Room.cpp
+        src/Section.cpp
+        src/GameState.cpp
+        src/FloorTile.cpp
+        src/TileDrop.cpp
+        src/main.cpp
+        )
 set(SOURCE_FILES # all classes
-        # old classes
-        #    src/Character.h
-        #    src/Explosion.h
-        #    src/item.h
-        #    src/Projectile.h
-        #    src/Section.h
-        #    src/GameState.h
-        #    src/FloorTile.h
-        #    src/TileDrop.h
-        #    src/Room.h
-        #    src/Character.cpp
-        #    src/Explosion.cpp
-        #    src/item.cpp
-        #    src/Projectile.cpp
-        #    src/Room.cpp
-        #    src/Section.cpp
-        #    src/GameState.cpp
-        #    src/FloorTile.cpp
-        #    src/TileDrop.cpp
-        #    src/main.cpp
+
 
         # reworked classes
         ${RESOURCE_MANAGERS}

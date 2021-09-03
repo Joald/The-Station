@@ -1,7 +1,7 @@
 #include <SFML/Audio.hpp>
 #include <cmath>
 #include <sstream>
-#include "Models/Menus/Menu.h"
+#include "Menu.h"
 #include "FloorTile.h"
 #include "Room.h"
 #include "GameState.h"
