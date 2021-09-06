@@ -48,7 +48,10 @@ set(MODELS # classes that represent objects in the game logic
 set(GLOBALS
         src/Globals/Globals.cpp
         src/Globals/Globals.h
-        src/Globals/Math.h src/Globals/Math.cpp src/Filesystem/Filesystem.h src/Filesystem/Filesystem.cpp)
+        src/Globals/Math.h
+        src/Globals/Math.cpp
+        src/Filesystem/Filesystem.h
+        src/Filesystem/Filesystem.cpp)
 
 set(DEPRECATED
         src/Deprecated/Menu.cpp
@@ -113,5 +116,6 @@ if (SFML_FOUND)
     target_link_libraries(The_Station ${SFML_LIBRARIES})
     target_link_libraries(Tester ${SFML_LIBRARIES})
 
-    #    target_compile_options(The_Station PUBLIC "-fsanitize=address")
+    target_compile_options(The_Station PUBLIC "-fsanitize=undefined" "-fsanitize=leak" "-fsanitize=address")
+    target_link_options(The_Station PUBLIC "-fsanitize=undefined" "-fsanitize=leak" "-fsanitize=address")
 endif ()
