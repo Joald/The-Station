@@ -9,44 +9,24 @@
 
 class CollisionGraph {
 public:
-    using Edge = std::pair<std::string, std::string>;
+    using Edge = std::pair<std::string_view, std::string_view>;
 private:
     using IDType = uint64_t;
 
-    std::vector<std::string> idToString;
-    std::map<std::string, IDType> stringToId;
+    std::vector<std::string_view> idToString;
+    std::map<std::string_view, IDType> stringToId;
     std::vector<std::vector<IDType>> graph;
 
-    IDType newID(const std::string& val) {
-        auto it = stringToId.find(val);
-        if (it != stringToId.end()) {
-            return it->second;
-        }
-        auto rv = stringToId[val] = idToString.size();
-        idToString.emplace_back(val);
-        return rv;
-    }
+    IDType newID(std::string_view val);
 
-    IDType edgeMax(const Edge& edge) {
-        return std::max(stringToId[edge.first], stringToId[edge.second]);
-    }
+    IDType edgeMax(const Edge& edge);
 
-    void insertDirectedEdge(IDType src, IDType dest) {
-        if (graph.size() <= src) {
-            graph.resize(src + 1);
-        }
-        graph[src].emplace_back(dest);
-    }
+    void insertDirectedEdge(IDType src, IDType dest);
 
 public:
-    explicit CollisionGraph(const std::vector<Edge>& edges) {
-        for (auto&[src, dest] : edges) {
-            auto srcID = newID(src);
-            auto destID = newID(dest);
-            insertDirectedEdge(srcID, destID);
-            insertDirectedEdge(destID, srcID); // TODO: allow directed graphs
-        }
-    }
+    explicit CollisionGraph(std::vector<Edge> edges);
+
+    bool canCollide(std::string_view id1, std::string_view id2);
 };
 
 
