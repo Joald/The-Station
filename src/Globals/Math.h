@@ -25,8 +25,7 @@ constexpr sf::Vector2f maxVector2f(maxFloat, maxFloat);
 
 // Utility functions
 
-template<typename I>
-constexpr I square(I i) {
+constexpr auto square(auto i) {
     return i * i;
 }
 
