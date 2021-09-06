@@ -31,7 +31,7 @@ set(LOGGING
 
 set(RENDERING # classes that do actual graphics displaying
         src/Rendering/Renderer.cpp
-        src/Rendering/Renderer.h src/Rendering/Renderable.h src/Rendering/CollisionDetector.cpp src/Rendering/CollisionDetector.h src/Rendering/CollisionGraph.cpp src/Rendering/CollisionGraph.h src/Rendering/CollisionShape.cpp src/Rendering/CollisionShape.h src/Rendering/Collidable.cpp src/Rendering/Collidable.h src/Rendering/CollisionRectangle.cpp src/Rendering/CollisionRectangle.h)
+        src/Rendering/Renderer.h src/Rendering/Renderable.h src/Rendering/CollisionDetector.cpp src/Rendering/CollisionDetector.h src/Rendering/CollisionGraph.cpp src/Rendering/CollisionGraph.h src/Rendering/CollisionShape.cpp src/Rendering/CollisionShape.h src/Rendering/Collidable.cpp src/Rendering/Collidable.h src/Rendering/CollisionRectangle.cpp src/Rendering/CollisionRectangle.h src/Rendering/CollisionCircle.cpp src/Rendering/CollisionCircle.h)
 
 set(EXCEPTIONS # custom exceptions
         src/Exceptions/ResourceNotFoundError.cpp

@@ -1,3 +1,4 @@
+#include <Rendering/CollisionCircle.h>
 #include "Player.h"
 
 STEngine::CollisionShape& Player::getCollisionShape() const {

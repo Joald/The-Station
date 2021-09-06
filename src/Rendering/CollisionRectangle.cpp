@@ -1,4 +1,5 @@
 #include "CollisionRectangle.h"
+#include "CollisionCircle.h"
 
 bool STEngine::CollisionRectangle::internalCollidesWith(const CollisionCircle& other) const {
     const auto origin = other.getOrigin();
