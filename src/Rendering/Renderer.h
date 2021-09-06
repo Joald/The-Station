@@ -24,9 +24,9 @@ class Renderer : public GameObject, public sf::RenderWindow {
     std::set<RenderablePointer, RenderableComparator> renderables;
 public:
     void add(RenderablePointer renderablePointer) {
-        auto [iterator, success] = renderables.insert(std::move(renderablePointer));
+        auto [iterator, success] = renderables.emplace(std::move(renderablePointer));
         if (success) {
-            debugLog("Added renderable \"", (*iterator).first->getName(), "\"!");
+            debugLog("Added renderable \"", iterator->first->getName(), "\"!");
         }
     }
 
