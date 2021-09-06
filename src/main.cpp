@@ -22,7 +22,7 @@ int main() {
           }
       }
     );
-    collisionDetectors().emplace(
+    STEngine::collisionDetectors().emplace(
       player->getName(),
       std::make_shared<CollisionGraph>(
         std::vector<CollisionGraph::Edge>(1, std::make_pair(std::string(player->getName()), "screenEdge"))

@@ -1,7 +1,7 @@
 #include "Player.h"
 
-CollisionShape& Player::getCollisionShape() const {
-    static CollisionCircle circle(getMiddle(), getTexture()->getSize().x);
+STEngine::CollisionShape& Player::getCollisionShape() const {
+    static STEngine::CollisionCircle circle(getMiddle(), static_cast<float>(getTexture()->getSize().x));
     circle.moveTo(getMiddle());
     return circle;
 }

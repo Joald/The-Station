@@ -13,7 +13,7 @@ class Player :
         public GameObject,
         public Renderable,
         public Controllable,
-        public Collidable {
+        public STEngine::Collidable {
 
     sf::Vector2f getMiddle() const {
         return getPosition() + sf::Vector2f(getTexture()->getSize());
@@ -29,7 +29,7 @@ public:
                     std::to_string(getTexture()->getSize().y));
     }
 
-    CollisionShape& getCollisionShape() const override;
+    STEngine::CollisionShape& getCollisionShape() const override;
 };
 
 

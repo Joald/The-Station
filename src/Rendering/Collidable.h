@@ -3,14 +3,18 @@
 
 
 #include "CollisionShape.h"
+#include "CollisionDetector.h"
+
+namespace STEngine {
 
 class Collidable {
-    virtual CollisionShape& getCollisionShape() const = 0;
+    [[nodiscard]] virtual CollisionShape& getCollisionShape() const = 0;
 
     bool collidesWith(const Collidable& other) {
         return getCollisionShape().collidesWith(other.getCollisionShape());
     }
 };
 
+} // STEngine
 
 #endif //THE_STATION_COLLIDABLE_H

@@ -2,7 +2,7 @@
 
 #include "CollisionDetector.h"
 
-
+namespace STEngine {
 
 namespace {
 DetectorMap initDetectors() {
@@ -13,8 +13,8 @@ DetectorMap initDetectors() {
 } // namespace
 
 CollisionDetector& collisionDetector(
-  const std::string& detectorName,
-  const std::shared_ptr<CollisionGraph>& graph) {
+        const std::string& detectorName,
+        const std::shared_ptr<CollisionGraph>& graph) {
     auto& detectors = collisionDetectors();
     auto it = detectors.find(detectorName);
     if (it == detectors.end()) {
@@ -27,3 +27,5 @@ DetectorMap& collisionDetectors() {
     static auto detectors = initDetectors();
     return detectors;
 }
+
+} // STEngine

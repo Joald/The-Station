@@ -7,12 +7,15 @@
 #include <memory>
 
 #include "CollisionGraph.h"
+#include "CollisionShape.h"
+
+namespace STEngine {
 
 class CollisionDetector {
     using GraphPtr = std::shared_ptr<CollisionGraph>;
     GraphPtr graph;
 public:
-    CollisionDetector(GraphPtr graph): graph(std::move(graph)) {}
+    explicit CollisionDetector(GraphPtr graph) : graph(std::move(graph)) {}
 };
 
 CollisionDetector& collisionDetector(const std::string& detectorName, std::shared_ptr<CollisionGraph> graph);
@@ -20,5 +23,7 @@ CollisionDetector& collisionDetector(const std::string& detectorName, std::share
 using DetectorMap = std::map<std::string, CollisionDetector>;
 
 DetectorMap& collisionDetectors();
+
+} // STEngine
 
 #endif //THE_STATION_COLLISION_DETECTOR_H
