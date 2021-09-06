@@ -43,7 +43,7 @@ set(MODELS # classes that represent objects in the game logic
         src/Models/GameObject.cpp
         src/Models/GameObject.h
         src/Models/Player.cpp
-        src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h src/Models/Border.cpp src/Models/Border.h src/Models/Menus/MenuManager.cpp src/Models/Menus/MenuManager.h)
+        src/Models/Player.h src/Models/Behaviour/Controllable.cpp src/Models/Behaviour/Controllable.h src/Models/ScreenEdge.cpp src/Models/ScreenEdge.h src/Models/Menus/MenuManager.cpp src/Models/Menus/MenuManager.h)
 
 set(GLOBALS
         src/Globals/Globals.cpp
