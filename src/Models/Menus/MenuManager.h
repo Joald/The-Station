@@ -3,7 +3,7 @@
 
 
 class MenuManager {
-// something with callback options and changing menuss
+// something with callback options and changing menus
 };
 
 
