@@ -27,7 +27,7 @@ protected:
     }
 
 public:
-    [[nodiscard]] std::string_view getName() const {
+    [[nodiscard]] std::string_view getTextureName() const {
         return name;
     }
 

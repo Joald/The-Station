@@ -24,13 +24,13 @@ int main() {
     );
 
     std::vector<CollisionGraph::Edge> edges = {
-            std::make_pair(std::string(player->getName()), "screenEdge"),
+            std::make_pair(player->getID(), "screenEdge"),
     };
 
     auto graph = std::make_shared<CollisionGraph>(std::move(edges));
 
     STEngine::collisionDetectors().emplace(
-            player->getName(),
+            player->getTextureName(),
             std::move(graph)
     );
 

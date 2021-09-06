@@ -26,7 +26,7 @@ public:
     void add(RenderablePointer renderablePointer) {
         auto [iterator, success] = renderables.emplace(std::move(renderablePointer));
         if (success) {
-            debugLog("Added renderable \"", iterator->first->getName(), "\"!");
+            debugLog("Added renderable \"", iterator->first->getTextureName(), "\"!");
         }
     }
 
