@@ -29,9 +29,8 @@ int main() {
 
     auto graph = std::make_shared<CollisionGraph>(std::move(edges));
 
-    STEngine::collisionDetectors().emplace(
-            player->getTextureName(),
-            std::move(graph)
+    STEngine::registerCollisionDetector(
+            std::make_shared<STEngine::CollisionDetector>(std::move(graph))
     );
 
     player->setPosition(200, 200);

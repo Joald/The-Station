@@ -16,13 +16,13 @@ class CollisionDetector {
     GraphPtr graph;
 public:
     explicit CollisionDetector(GraphPtr graph) : graph(std::move(graph)) {}
+
+    CollisionGraph& getGraph() { return *graph; }
 };
 
-CollisionDetector& collisionDetector(const std::string& detectorName, std::shared_ptr<CollisionGraph> graph);
+void registerCollisionDetector(std::shared_ptr<CollisionDetector> detector);
 
-using DetectorMap = std::map<std::string, CollisionDetector>;
-
-DetectorMap& collisionDetectors();
+CollisionDetector& collisionDetector();
 
 } // STEngine
 
