@@ -1,15 +1,25 @@
 #include "CollisionRectangle.h"
 #include "CollisionCircle.h"
+#include "CollisionNegativeRectangle.h"
+
+namespace stdr = std::ranges;
 
 bool STEngine::CollisionRectangle::internalCollidesWith(const CollisionCircle& other) const {
     const auto origin = other.getOrigin();
     auto radius = other.getRadius();
+    auto distances = std::array<float, 4>{};
+    std::transform(vertices.begin(), vertices.end(), distances.begin(), [=](const sf::Vector2f& vertex) {
+        return Math::distance(vertex, origin);
+    });
 
-    for (const auto& vertex: vertices) {
-        if (Math::distance(vertex, origin) < radius) {
-            return true;
-        }
+    if (stdr::any_of(distances, [=](float dist) { return dist < radius; })) {
+        return true;
     }
+
+    // TODO: check if heuristics improve speed
+    // TODO: add heuristic that returns false if all vertices are further away
+    //  from origin than longest side
+
     for (int i = 0; i < vertices.size(); ++i) {
         const auto& v1 = vertices[i];
         const auto& v2 = vertices[(i + 1) % vertices.size()];
@@ -53,4 +63,27 @@ const STEngine::CollisionRectangle::SideLengths& STEngine::CollisionRectangle::g
         sides = recomputeSideLengths();
     }
     return sides;
+}
+
+bool STEngine::CollisionRectangle::internalCollidesWith(const STEngine::CollisionRectangle& other) const {
+    bool boxesCollide = aABoundingBoxesCollide(other);
+    if ((isAxisAligned() and other.isAxisAligned()) or !boxesCollide) {
+        return boxesCollide;
+    }
+    // TODO: rotation?
+    return false;
+}
+
+bool STEngine::CollisionRectangle::isInside(const STEngine::CollisionRectangle& other) const {
+    const bool xAxisInside =
+            other.leftUpper().x < leftUpper().x
+            and rightLower().x < other.rightLower().x;
+    const bool yAxisInside =
+            other.leftUpper().y < leftUpper().y
+            and rightLower().y < other.rightLower().y;
+    return xAxisInside and yAxisInside;
+}
+
+bool STEngine::CollisionRectangle::internalCollidesWith(const CollisionNegativeRectangle& other) const {
+    return other.collidesWith(*this);
 }

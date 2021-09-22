@@ -5,6 +5,7 @@
 
 namespace STEngine {
 
+// Rectangle is filled
 class CollisionRectangle : public CollisionShape {
     using Vertices = std::array<sf::Vector2f, 4>;
     using SideLengths = std::array<float, 4>;
@@ -15,8 +16,7 @@ class CollisionRectangle : public CollisionShape {
 public:
     CollisionRectangle(sf::Vector2f leftUpper, sf::Vector2f rightLower) : vertices(
             {leftUpper, {rightLower.x, leftUpper.y}, rightLower, {leftUpper.x, rightLower.y}}
-    ), sides(recomputeSideLengths()),
-                                                                          rotation(0) {}
+    ), sides(recomputeSideLengths()), rotation(0) {}
 
     [[nodiscard]] const sf::Vector2f& leftUpper() const {
         return vertices[0];
@@ -38,6 +38,7 @@ public:
 
     bool collidesWith(const CollisionShape& other) const override;
 
+    bool isInside(const CollisionRectangle& other) const;
 
 private:
     [[nodiscard]] SideLengths recomputeSideLengths() const {
@@ -50,16 +51,11 @@ private:
     }
 
 protected:
-    [[nodiscard]] bool internalCollidesWith(const CollisionRectangle& other) const override {
-        bool boxesCollide = aABoundingBoxesCollide(other);
-        if ((isAxisAligned() and other.isAxisAligned()) or !boxesCollide) {
-            return boxesCollide;
-        }
-        // TODO: rotation?
-        return false;
-    }
+    [[nodiscard]] bool internalCollidesWith(const CollisionRectangle& other) const override;
 
     bool internalCollidesWith(const CollisionCircle& other) const override;
+
+    bool internalCollidesWith(const CollisionNegativeRectangle& other) const override;
 };
 
 } // namespace

@@ -8,7 +8,7 @@
 namespace STEngine {
 
 class CollisionRectangle;
-
+class CollisionNegativeRectangle;
 class CollisionCircle;
 
 /**
@@ -19,9 +19,10 @@ protected:
     friend class CollisionRectangle;
     friend class CollisionCircle;
     sf::Vector2f origin;
-    [[nodiscard]] virtual bool internalCollidesWith(const CollisionRectangle& other) const = 0;
 
+    [[nodiscard]] virtual bool internalCollidesWith(const CollisionRectangle& other) const = 0;
     [[nodiscard]] virtual bool internalCollidesWith(const CollisionCircle& other) const = 0;
+    [[nodiscard]] virtual bool internalCollidesWith(const CollisionNegativeRectangle& other) const = 0;
 
 public:
     [[nodiscard]] virtual CollisionRectangle getAABoundingBox() const = 0;

@@ -8,7 +8,7 @@
 namespace STEngine {
 
 class Collidable {
-    [[nodiscard]] virtual CollisionShape& getCollisionShape() const = 0;
+    [[nodiscard]] virtual const CollisionShape& getCollisionShape() const = 0;
 
     bool collidesWith(const Collidable& other) {
         return getCollisionShape().collidesWith(other.getCollisionShape());

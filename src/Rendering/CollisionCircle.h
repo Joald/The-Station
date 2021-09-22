@@ -34,6 +34,8 @@ protected:
 
 protected:
     [[nodiscard]] bool internalCollidesWith(const CollisionRectangle& other) const override;
+
+    bool internalCollidesWith(const CollisionNegativeRectangle& other) const override;
 };
 
 }

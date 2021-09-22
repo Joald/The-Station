@@ -1,5 +1,5 @@
 #include "CollisionCircle.h"
-
+#include "CollisionNegativeRectangle.h"
 
 STEngine::CollisionRectangle STEngine::CollisionCircle::getAABoundingBox() const {
     return {origin - radius, origin + radius};
@@ -16,5 +16,9 @@ bool STEngine::CollisionCircle::internalCollidesWith(const CollisionCircle& othe
 }
 
 bool STEngine::CollisionCircle::collidesWith(const CollisionShape& other) const {
-    return other.collidesWith(*this);
+    return other.internalCollidesWith(*this);
+}
+
+bool STEngine::CollisionCircle::internalCollidesWith(const STEngine::CollisionNegativeRectangle& other) const {
+    return collidesWith(other);
 }

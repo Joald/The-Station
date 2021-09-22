@@ -5,11 +5,14 @@
 using STEngine::CollisionShape;
 
 bool CollisionShape::aABoundingBoxesCollide(const CollisionShape& other) const {
-    auto boundingBox = getAABoundingBox();
-    auto otherBoundingBox = other.getAABoundingBox();
-    return !(boundingBox.rightLower().x < otherBoundingBox.leftUpper().x or
-             boundingBox.rightLower().y < otherBoundingBox.leftUpper().y or
-             boundingBox.leftUpper().x > otherBoundingBox.rightLower().x or
-             boundingBox.leftUpper().y > otherBoundingBox.rightLower().y);
+    const auto boundingBox = getAABoundingBox();
+    const auto otherBoundingBox = other.getAABoundingBox();
+    const bool xAxisNoOverlap =
+            boundingBox.rightLower().x < otherBoundingBox.leftUpper().x
+            or boundingBox.leftUpper().x > otherBoundingBox.rightLower().x;
+    const bool yAxisNoOverlap =
+            boundingBox.rightLower().y < otherBoundingBox.leftUpper().y or
+            boundingBox.leftUpper().y > otherBoundingBox.rightLower().y;
+    return !(xAxisNoOverlap or yAxisNoOverlap);
 }
 
