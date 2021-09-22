@@ -6,54 +6,53 @@
 #include <ostream>
 #include <iostream>
 #include <fstream>
-
-const bool DEBUG = true;
+#include <source_location>
+#include <chrono>
+#include <iomanip>
+#include <filesystem>
 
 class Logger {
+    const inline static bool DEBUG = true;
     const std::string filename;
 
     std::fstream fstream;
+    std::ostream* stream;
+
+    class LoggerHelper {
+        Logger& logger;
+    public:
+        explicit LoggerHelper(Logger& logger) : logger(logger) {}
+
+        ~LoggerHelper() {
+            *logger.stream << "\n";
+        }
+
+        template <class T>
+        LoggerHelper& operator<<(T&& t) {
+            *logger.stream << t;
+            return *this;
+        }
+
+    };
+
+
 public:
     explicit Logger(std::string_view fileName = "") :
-      filename(fileName), fstream() {
+            filename(fileName), fstream() {
         if (!filename.empty()) {
             fstream.open(filename);
+            stream = &fstream;
+        } else {
+            stream = &std::cerr;
         }
     }
 
-    template<class T>
-    void log(const T& t) {
-        if (DEBUG) {
-            if (filename.empty()) {
-                std::cerr << t;
-            } else {
-                fstream << t;
-            }
-        }
-    }
+    LoggerHelper operator()(std::source_location loc = std::source_location::current());
 
-    void endLine() {
-        log("\n");
-    }
+    friend void debugAssert(bool assertion, std::string_view msg);
 };
 
-template<class... Args>
-Logger& logger(Args... args) {
-    static Logger logger(args...);
-    return logger;
-}
-
-template<class T>
-void debugLog(const T& t) {
-    logger().log(t);
-    logger().endLine();
-}
-
-template<class T, class... Rest>
-void debugLog(const T& t, Rest... rest) {
-    logger().log(t);
-    debugLog(rest...);
-}
+inline static Logger logger;
 
 void debugAssert(bool assertion, std::string_view msg = "");
 

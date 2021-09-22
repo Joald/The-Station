@@ -31,7 +31,7 @@ std::string generateRandom(int len = 32) {
 
 GameObject::GameObject(std::string id) : ID(std::move(id)) {
     if (!ID.empty() and ids.contains(ID)) {
-        debugLog("Manually-set id ", ID, " duplicated, overwriting.");
+        logger() << "Manually-set id " << ID << " duplicated, overwriting.";
     }
 
     while (ID.empty() or ids.contains(ID)) {

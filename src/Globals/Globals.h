@@ -29,7 +29,7 @@ constexpr std::string_view resolveFolderName(FolderName name) {
         case FolderName::Extensions:
             return "extensions";
     }
-    debugLog("Impossible path taken. Exiting...");
+    logger() << "Impossible path taken. Exiting...";
     std::exit(1);
 }
 
