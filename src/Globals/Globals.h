@@ -15,18 +15,19 @@ enum class FolderName {
 };
 
 constexpr std::string_view resolveFolderName(FolderName name) {
+    using enum FolderName;
     switch (name) {
-        case FolderName::Install:
+        case Install:
             return "INSTALL";
-        case FolderName::Images:
+        case Images:
             return "IMAGES";
-        case FolderName::Data:
+        case Data:
             return "DATA";
-        case FolderName::Shaders:
+        case Shaders:
             return "SHADERS";
-        case FolderName::FolderNames:
+        case FolderNames:
             return "folder_names";
-        case FolderName::Extensions:
+        case Extensions:
             return "extensions";
     }
     logger(FATAL) << "Impossible path taken. Exiting...";
