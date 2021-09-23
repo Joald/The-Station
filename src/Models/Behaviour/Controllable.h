@@ -39,7 +39,6 @@ protected:
             object(object),
             speed(speed),
             controlled(controlled) {
-        logger() << "Speed is " << speed;
         getRegistered();
     }
 

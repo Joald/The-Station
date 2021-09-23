@@ -8,6 +8,8 @@ public:
 };
 }
 
+using Logging::Logger;
+
 void debugAssert(bool assertion, std::string_view msg) {
     if (Logger::DEBUG and !assertion) {
         std::stringstream s;
@@ -16,14 +18,14 @@ void debugAssert(bool assertion, std::string_view msg) {
     }
 }
 
-Logger::LoggerHelper Logger::operator()(std::source_location loc) {
-    if (DEBUG) {
+Logger::LoggerHelper Logger::operator()(LogLevel logLevel, std::source_location loc) {
+    if (DEBUG and logLevel < level) {
         auto now = std::chrono::system_clock::now();
         auto now_t = std::chrono::system_clock::to_time_t(now);
         auto& str = *stream;
 
         str << std::put_time(std::localtime(&now_t), "[%F %T]") << "[";
-        // TODO: if log level == "?"; print function_name
+        // TODO: if log logLevel == "?"; print function_name
         str << std::filesystem::path{loc.file_name()}.filename().string() << ":" << loc.line() << "] ";
     }
     return LoggerHelper(*this);

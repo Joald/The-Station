@@ -11,7 +11,7 @@ int main() {
     window.add({player, 1});
     EventManager::registerSfmlEvent(
             sf::Event::Closed, [&](sf::Event event) {
-                logger() << "Closed!";
+                logger(INFO) << "Closed!";
                 window.close();
             }
     );
