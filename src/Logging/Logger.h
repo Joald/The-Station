@@ -44,7 +44,7 @@ class Logger {
 
         template<class T>
         LoggerHelper& operator<<(T&& t) {
-            *logger.stream << t;
+            *logger.stream << std::forward<T>(t);
             return *this;
         }
 
