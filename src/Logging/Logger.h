@@ -10,6 +10,7 @@
 void debugAssert(bool assertion, std::string_view msg = "");
 
 namespace Logging {
+
 enum class LogLevel {
     OFF,
     FATAL,
@@ -22,6 +23,17 @@ enum class LogLevel {
 class Logger {
     const inline static bool DEBUG = true;
     class LoggerImpl;
+    std::unique_ptr<LoggerImpl> pimpl;
+
+    [[nodiscard]] std::ostream& getStream() const;
+
+public:
+    Logger() noexcept;
+    ~Logger();
+    explicit Logger(std::string_view fileName, bool append);
+
+    friend void ::debugAssert(bool assertion, std::string_view msg);
+
     class LoggerHelper {
         const Logger& logger;
     public:
@@ -35,26 +47,19 @@ class Logger {
             return *this;
         }
     };
-    std::unique_ptr<LoggerImpl> pimpl;
 
-    [[nodiscard]] std::ostream& getStream() const;
-
-public:
-    Logger() noexcept;
-    ~Logger();
-    explicit Logger(std::string_view fileName, bool append);
-
-    LoggerHelper operator()(
-            LogLevel logLevel = LogLevel::DEBUG,
-            std::source_location loc = std::source_location::current()
-    ) const;
-    friend void ::debugAssert(bool assertion, std::string_view msg);
+    LoggerHelper log(
+            LogLevel logLevel,
+            std::source_location loc);
 };
 
 } // Logging
 
-inline static const Logging::Logger logger;
-
 using enum Logging::LogLevel;
+
+Logging::Logger::LoggerHelper logger(
+        Logging::LogLevel logLevel = DEBUG,
+        std::source_location loc = std::source_location::current());
+
 
 #endif //THE_STATION_LOGGER_H
