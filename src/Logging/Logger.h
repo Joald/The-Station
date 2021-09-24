@@ -3,14 +3,9 @@
 
 
 #include <string>
-#include <ostream>
-#include <iostream>
-#include <fstream>
+#include <iosfwd>
 #include <source_location>
-#include <chrono>
-#include <iomanip>
-#include <filesystem>
-#include <optional>
+#include <memory>
 
 void debugAssert(bool assertion, std::string_view msg = "");
 
@@ -24,51 +19,35 @@ enum class LogLevel {
     DEBUG,
 };
 
-
 class Logger {
     const inline static bool DEBUG = true;
-
-    const std::string_view filename;
-    std::optional<std::ofstream> ofstream;
-    std::ostream* stream;
-    LogLevel level = LogLevel::DEBUG;
-
+    class LoggerImpl;
     class LoggerHelper {
         const Logger& logger;
     public:
         constexpr explicit LoggerHelper(const Logger& logger) : logger(logger) {}
 
-        ~LoggerHelper() {
-            *logger.stream << "\n";
-        }
+        ~LoggerHelper();
 
         template<class T>
-        LoggerHelper& operator<<(T&& t) {
-            *logger.stream << std::forward<T>(t);
+        const Logger::LoggerHelper& operator<<(T&& t) const {
+            logger.getStream() << std::forward<T>(t);
             return *this;
         }
-
     };
+    std::unique_ptr<LoggerImpl> pimpl;
+
+    [[nodiscard]] std::ostream& getStream() const;
 
 public:
-    constexpr Logger() noexcept: stream(&std::cerr) {}
-
-    explicit Logger(std::string_view fileName, bool append) :
-            filename(fileName),
-            ofstream(std::ofstream{fileName.data(), [&]{
-                auto mode = std::ios_base::out;
-                if (append) {
-                    mode |= std::ios_base::ate;
-                }
-                return mode;
-            }()}),
-            stream(&ofstream.value()) {}
+    Logger() noexcept;
+    ~Logger();
+    explicit Logger(std::string_view fileName, bool append);
 
     LoggerHelper operator()(
             LogLevel logLevel = LogLevel::DEBUG,
             std::source_location loc = std::source_location::current()
     ) const;
-
     friend void ::debugAssert(bool assertion, std::string_view msg);
 };
 
