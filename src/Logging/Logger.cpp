@@ -20,8 +20,9 @@ void debugAssert(bool assertion, std::string_view msg) {
 
 Logger::LoggerHelper Logger::operator()(LogLevel logLevel, std::source_location loc) {
     if (DEBUG and logLevel < level) {
-        auto now = std::chrono::system_clock::now();
-        auto now_t = std::chrono::system_clock::to_time_t(now);
+        using std::chrono::system_clock;
+        auto now = system_clock::now();
+        auto now_t = system_clock::to_time_t(now);
         auto& str = *stream;
 
         str << std::put_time(std::localtime(&now_t), "[%F %T]") << "[";
