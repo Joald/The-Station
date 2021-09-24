@@ -5,6 +5,8 @@
 #include <string>
 #include <Logging/Logger.h>
 
+namespace Globals {
+
 enum class FolderName {
     Install,
     Images,
@@ -14,7 +16,7 @@ enum class FolderName {
     Extensions,
 };
 
-constexpr std::string_view resolveFolderName(FolderName name) {
+constexpr std::string_view resolveFolderName(FolderName name){
     using enum FolderName;
     switch (name) {
         case Install:
@@ -33,8 +35,6 @@ constexpr std::string_view resolveFolderName(FolderName name) {
     logger(FATAL) << "Impossible path taken. Exiting...";
     std::exit(1);
 }
-
-namespace Globals {
 
 /**
  * Concatenates strings provided in the initializer list.

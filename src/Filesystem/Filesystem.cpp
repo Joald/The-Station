@@ -7,6 +7,8 @@
 
 namespace fs = std::filesystem;
 
+using Globals::FolderName;
+
 namespace STEngine::Filesystem {
 
 namespace {
@@ -71,7 +73,7 @@ std::string_view scanData(std::string_view fileName, std::string_view key) {
 }
 
 std::string_view getFolder(std::string_view dataType) {
-    return scanData(resolveFolderName(FolderName::FolderNames), dataType);
+    return scanData(Globals::resolveFolderName(FolderName::FolderNames), dataType);
 }
 
 fs::path pathToResource(std::string_view type, std::string_view resourceName) {
@@ -83,7 +85,7 @@ fs::path absolutePath(std::string_view dataType) {
 }
 
 std::string_view getExtension(std::string_view dataType) {
-    return scanData(resolveFolderName(FolderName::Extensions), dataType);
+    return scanData(Globals::resolveFolderName(FolderName::Extensions), dataType);
 }
 
 
