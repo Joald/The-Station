@@ -18,7 +18,7 @@ void debugAssert(bool assertion, std::string_view msg) {
     }
 }
 
-Logger::LoggerHelper Logger::operator()(LogLevel logLevel, std::source_location loc) {
+Logger::LoggerHelper Logger::operator()(LogLevel logLevel, std::source_location loc) const {
     if (DEBUG and logLevel < level) {
         using std::chrono::system_clock;
         auto now = system_clock::now();

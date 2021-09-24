@@ -34,9 +34,9 @@ class Logger {
     LogLevel level = LogLevel::DEBUG;
 
     class LoggerHelper {
-        Logger& logger;
+        const Logger& logger;
     public:
-        explicit LoggerHelper(Logger& logger) : logger(logger) {}
+        constexpr explicit LoggerHelper(const Logger& logger) : logger(logger) {}
 
         ~LoggerHelper() {
             *logger.stream << "\n";
@@ -51,21 +51,30 @@ class Logger {
     };
 
 public:
-    Logger() noexcept: stream(&std::cerr) {}
+    constexpr Logger() noexcept: stream(&std::cerr) {}
 
-    explicit Logger(std::string_view fileName) :
+    explicit Logger(std::string_view fileName, bool append) :
             filename(fileName),
-            ofstream(std::ofstream{fileName.data()}),
+            ofstream(std::ofstream{fileName.data(), [&]{
+                auto mode = std::ios_base::out;
+                if (append) {
+                    mode |= std::ios_base::ate;
+                }
+                return mode;
+            }()}),
             stream(&ofstream.value()) {}
 
-    LoggerHelper operator()(LogLevel logLevel = LogLevel::DEBUG, std::source_location loc = std::source_location::current());
+    LoggerHelper operator()(
+            LogLevel logLevel = LogLevel::DEBUG,
+            std::source_location loc = std::source_location::current()
+    ) const;
 
     friend void ::debugAssert(bool assertion, std::string_view msg);
 };
 
 } // Logging
 
-inline static Logging::Logger logger;
+inline static const Logging::Logger logger;
 
 using enum Logging::LogLevel;
 
