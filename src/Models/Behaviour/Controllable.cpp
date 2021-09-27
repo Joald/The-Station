@@ -21,14 +21,6 @@ void Controllable::getUnregistered() {
     }
 }
 
-std::string_view Controllable::generateID(std::string_view key) {
-    if (!idCache.contains(key)) {
-        using namespace std::string_literals;
-        idCache[key] = getID().data() + "_"s + key.data();
-    }
-    return idCache[key];
-}
-
 Controllable::~Controllable() {
     getUnregistered();
 }

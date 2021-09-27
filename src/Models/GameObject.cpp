@@ -22,9 +22,9 @@ std::string generateRandom(int len = 32) {
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             "abcdefghijklmnopqrstuvwxyz";
     thread_local auto rng = random_generator<>();
-    auto dist = std::uniform_int_distribution{{}, std::strlen(chars) - 1};
+    thread_local auto dist = std::uniform_int_distribution{{}, std::strlen(chars) - 1};
     auto result = std::string(len, '\0');
-    std::generate_n(begin(result), len, [&]() { return chars[dist(rng)]; });
+    std::generate_n(begin(result), len, [&] { return chars[dist(rng)]; });
     return result;
 }
 } // namespace
@@ -38,4 +38,12 @@ GameObject::GameObject(std::string id) : ID(std::move(id)) {
         ID = generateRandom();
     }
     ids.emplace(ID);
+}
+
+std::string_view GameObject::generateID(std::string_view key) {
+    if (!idCache.contains(key)) {
+        using namespace std::string_literals;
+        idCache[key] = getID().data() + "_"s + key.data();
+    }
+    return idCache[key];
 }

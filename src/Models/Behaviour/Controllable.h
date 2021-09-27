@@ -14,15 +14,11 @@ class Controllable : virtual GameObject {
     float speed; /// In (scaled) pixels per second.
     bool controlled;
 
-    std::map<std::string_view, std::string> idCache;
-
     void moveIfControlled(float x, float y) {
         if (controlled) {
             object.move(x, y);
         }
     }
-
-    std::string_view generateID(std::string_view key);
 
     void getRegistered();
     void getUnregistered();
