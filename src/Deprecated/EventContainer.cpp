@@ -1,4 +1,4 @@
-#include "EventContainer.h"
+#include "Deprecated/EventContainer.h"
 
 void EventContainer::registerEvent(GameObjectPtr& objectPtr, GameEvent event, EventCallback callback) {
     events[event].emplace(objectPtr, callback);

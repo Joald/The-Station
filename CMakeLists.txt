@@ -16,8 +16,6 @@ set(RESOURCE_MANAGERS # helper engine classes
 set(EVENTS
         src/Events/EventManager.cpp
         src/Events/EventManager.h
-        src/Events/EventContainer.cpp
-        src/Events/EventContainer.h
         src/Events/Observable.h
         src/Events/Observer.h)
 
@@ -58,6 +56,8 @@ set(DEPRECATED
         src/Deprecated/Menu.h
         src/Deprecated/MenuAction.cpp
         src/Deprecated/MenuAction.h
+        src/Deprecated/EventContainer.cpp
+        src/Deprecated/EventContainer.h
         # pre-rework files
         src/Character.h
         src/Explosion.h

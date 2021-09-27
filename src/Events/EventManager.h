@@ -5,8 +5,8 @@
 #include <functional>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <map>
 #include "Models/GameObject.h"
-#include "EventContainer.h"
 
 
 /**
@@ -18,13 +18,11 @@
 class EventManager {
     template <class... Args>
     using CallbackSet = std::vector<std::function<void(Args...)>>;
-    using GameObjectPtr = EventContainer::GameObjectPtr;
     using SfmlEventCallbackSet =
       std::map<sf::Event::EventType, CallbackSet<sf::Event>>;
-    static SfmlEventCallbackSet sfmlEventCallbacks;
-    static EventContainer events;
-    static sf::Event sfmlEvent;
-    static std::map<sf::Keyboard::Key, CallbackSet<>> keyHolds;
+    inline static SfmlEventCallbackSet sfmlEventCallbacks;
+    inline static sf::Event sfmlEvent;
+    inline static std::map<sf::Keyboard::Key, CallbackSet<>> keyHolds;
 public:
     /**
      * When an SFML event of the specified type is polled in a window,
