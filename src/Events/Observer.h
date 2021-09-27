@@ -11,10 +11,10 @@ class Observer {
 
 template<class T>
 class ConcreteObserver : public Observer<T> {
-    typedef std::function<void(T&)> observeCallback;
-    observeCallback callback;
+    using ObserveCallback = std::function<void(T&)>;
+    ObserveCallback callback;
 
-    explicit ConcreteObserver(observeCallback callback) : callback(callback) {}
+    explicit ConcreteObserver(ObserveCallback callback) : callback(callback) {}
 
     void onTrigger(T& t) { callback(t); }
 };
