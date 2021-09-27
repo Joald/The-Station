@@ -10,7 +10,7 @@
 inline const std::string_view PLAYER_TEXTURE_NAME = "Player";
 
 class Player :
-        public GameObject,
+        public virtual GameObject,
         public Renderable,
         public Controllable,
         public STEngine::Collidable {

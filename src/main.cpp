@@ -9,14 +9,18 @@ int main() {
     window.create(sf::VideoMode(800, 600), "TEST");
     debugAssert(window.isOpen(), "Could not open window.");
     window.add({player, 1});
-    EventManager::registerSfmlEvent(
-            sf::Event::Closed, [&](sf::Event event) {
+    eventManager().registerSfmlEvent(
+            "SFML_Closed_printing",
+            sf::Event::Closed,
+            [&](sf::Event event) {
                 logger(INFO) << "Closed!";
                 window.close();
             }
     );
-    EventManager::registerSfmlEvent(
-            sf::Event::KeyPressed, [&](sf::Event event) {
+    eventManager().registerSfmlEvent(
+            "Escape_to_Quit",
+            sf::Event::KeyPressed,
+            [&](sf::Event event) {
                 if (event.key.code == sf::Keyboard::Escape) {
                     window.close();
                 }
@@ -36,7 +40,7 @@ int main() {
     player->setPosition(200, 200);
     while (window.isOpen()) {
         Time::update();
-        EventManager::triggerSfmlEvents(window);
+        eventManager().triggerSfmlEvents(window);
         window.render();
     }
 

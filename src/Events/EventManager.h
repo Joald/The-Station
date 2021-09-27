@@ -1,13 +1,12 @@
 #ifndef THE_STATION_EVENT_MANAGER_H
 #define THE_STATION_EVENT_MANAGER_H
 
-#include <utility>
+#include <string_view>
 #include <functional>
 #include <SFML/Window/Event.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-#include <map>
+#include <any>
 #include "Models/GameObject.h"
-
 
 /**
  * Allows subtypes of GameObject to register for events and provide a
@@ -16,13 +15,6 @@
  * to the appropriate derived type.
  */
 class EventManager {
-    template <class... Args>
-    using CallbackSet = std::vector<std::function<void(Args...)>>;
-    using SfmlEventCallbackSet =
-      std::map<sf::Event::EventType, CallbackSet<sf::Event>>;
-    inline static SfmlEventCallbackSet sfmlEventCallbacks;
-    inline static sf::Event sfmlEvent;
-    inline static std::map<sf::Keyboard::Key, CallbackSet<>> keyHolds;
 public:
     /**
      * When an SFML event of the specified type is polled in a window,
@@ -30,7 +22,8 @@ public:
      * @param eventType - type of event
      * @param callback - function that performs the event handling
      */
-    static void registerSfmlEvent(sf::Event::EventType eventType, std::function<void(sf::Event)> callback);
+    virtual void registerSfmlEvent(std::string_view id, sf::Event::EventType eventType,
+                                  std::function<void(sf::Event)> callback) = 0;
 
     /**
      * Runs the event loop for the given window and triggers all callbacks
@@ -39,15 +32,32 @@ public:
      * of them using registered callbacks.
      * @param window
      */
-    static void triggerSfmlEvents(sf::RenderWindow& window);
+    virtual void triggerSfmlEvents(sf::RenderWindow& window) = 0;
 
 
     /**
      * Register a callback to be called every frame if the specified key is pressed.
      * The callbacks will be called after the event loop in @triggerSfmlEvents.
      */
-    static void registerKeyHold(sf::Keyboard::Key, std::function<void()>);
+    virtual void registerKeyHold(std::string_view id, sf::Keyboard::Key key,
+                                std::function<void()> callback) = 0;
+
+
+    /**
+     * Override the callback for an event registered using the ID.
+     * @param id
+     * @param callback must be of the same type as the original callback
+     */
+    virtual void changeEvent(std::string_view id, std::any callback) = 0;
+
+    /**
+     * Unregister an event. Expensive operation, O(n) where n is the number
+     * of events triggered at the same time.
+     * @param id
+     */
+    virtual void unregisterEvent(std::string_view id) = 0;
 };
 
+EventManager& eventManager();
 
 #endif //THE_STATION_EVENT_MANAGER_H

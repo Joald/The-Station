@@ -9,10 +9,12 @@
 /**
  * Base class providing implementation of controllable entities.
  */
-class Controllable {
+class Controllable : virtual GameObject {
     sf::Transformable& object;
     float speed; /// In (scaled) pixels per second.
     bool controlled;
+
+    std::map<std::string_view, std::string> idCache;
 
     void moveIfControlled(float x, float y) {
         if (controlled) {
@@ -20,7 +22,10 @@ class Controllable {
         }
     }
 
+    std::string_view generateID(std::string_view key);
+
     void getRegistered();
+    void getUnregistered();
 
     [[nodiscard]] float offset() const {
         return speed * Time::deltaTime();
@@ -43,6 +48,8 @@ protected:
     }
 
 public:
+    virtual ~Controllable();
+
     [[nodiscard]] float getSpeed() const {
         return speed;
     }
