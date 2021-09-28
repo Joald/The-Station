@@ -4,10 +4,8 @@
 #include "Rendering/Renderer.h"
 
 struct EventBase;
-//struct KeyHoldEvent;
 
 class EventManagerImpl : public EventManager {
-//    using Event = std::variant<SFMLEvent, KeyHoldEvent>;
     // TODO: custom allocator for this
     using EventSet = std::set<std::shared_ptr<EventBase>>;
     EventSet events;
