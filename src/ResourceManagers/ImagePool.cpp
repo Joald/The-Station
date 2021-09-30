@@ -8,10 +8,12 @@
 ImagePool::storage_t::iterator ImagePool::loadResource(std::string_view id) {
     using namespace Globals;
 
-    auto it = storage.emplace(id, std::make_shared<sf::Image>()).first;
+    auto it = getStorage().emplace(id, std::make_shared<sf::Image>()).first;
     auto filePath = STEngine::Filesystem::pathToResource(resolveFolderName(FolderName::Images), id);
     if (!it->second->loadFromFile(filePath)) {
-        throw ResourceNotFoundError(concat({"Image ", filePath, " could not be loaded."}));
+        std::ostringstream stream;
+        stream << "Image " << filePath.string() << " could not be loaded.";
+        throw ResourceNotFoundError(stream.str());
     }
     return it;
 }

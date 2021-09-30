@@ -9,12 +9,12 @@ namespace STEngine {
 class CollisionNegativeRectangle : public CollisionShape {
     CollisionRectangle rectangle;
 public:
-    explicit CollisionNegativeRectangle(CollisionRectangle rectangle) : rectangle(std::move(rectangle)) {}
+    explicit CollisionNegativeRectangle(CollisionRectangle rectangle) : rectangle(
+            std::move(rectangle)) {}
 
 private:
     bool internalCollidesWith(const CollisionRectangle& other) const override;
 
-protected:
     bool internalCollidesWith(const CollisionCircle& other) const override;
 
     bool internalCollidesWith(const CollisionNegativeRectangle& other) const override;
@@ -26,6 +26,6 @@ public:
 
 };
 
-} // STEngine
+}  // namespace STEngine
 
 #endif //THE_STATION_COLLISIONNEGATIVERECTANGLE_H

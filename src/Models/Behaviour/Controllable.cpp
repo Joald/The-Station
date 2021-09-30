@@ -21,6 +21,6 @@ void Controllable::getUnregistered() {
     }
 }
 
-Controllable::~Controllable() {
+Controllable::~Controllable() noexcept {
     getUnregistered();
 }

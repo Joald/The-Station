@@ -2,6 +2,7 @@
 #include "Events/EventManager.h"
 #include "Time/Time.h"
 #include "Rendering/CollisionDetector.h"
+#include "Logging/Logger.h"
 
 int main() {
     auto player = std::make_shared<Player>();
@@ -12,7 +13,7 @@ int main() {
     eventManager().registerSfmlEvent(
             "SFML_Closed_printing",
             sf::Event::Closed,
-            [&](sf::Event event) {
+            [&](sf::Event) {
                 logger(INFO) << "Closed!";
                 window.close();
             }

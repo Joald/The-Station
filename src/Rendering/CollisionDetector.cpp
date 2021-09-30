@@ -1,6 +1,6 @@
-#include <map>
-
 #include "CollisionDetector.h"
+
+#include <utility>
 
 namespace STEngine {
 
@@ -8,16 +8,21 @@ namespace {
 
 struct DetectorHolder {
     std::shared_ptr<CollisionDetector> detectorPtr;
-} holder;
+};
+
+auto& holder() {
+    static DetectorHolder holder;
+    return holder;
+}
 
 } // namespace
 
 CollisionDetector& collisionDetector() {
-    return *holder.detectorPtr;
+    return *holder().detectorPtr;
 }
 
 void registerCollisionDetector(std::shared_ptr<CollisionDetector> detector) {
-    holder.detectorPtr = detector;
+    holder().detectorPtr = std::move(detector);
 }
 
-} // STEngine
+}  // namespace STEngine

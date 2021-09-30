@@ -2,6 +2,7 @@
 #include <variant>
 #include "EventManager.h"
 #include "Rendering/Renderer.h"
+#include "Logging/Logger.h"
 
 struct EventBase;
 
@@ -14,6 +15,16 @@ class EventManagerImpl : public EventManager {
     std::map<sf::Keyboard::Key, IteratorVector> eventsByKeyHeld;
     std::map<std::string_view, EventSet::iterator> eventsByID;
 public:
+    EventManagerImpl() = default;
+
+    EventManagerImpl(const EventManagerImpl&) = default;
+
+    EventManagerImpl(EventManagerImpl&&) noexcept = default;
+
+    EventManagerImpl& operator=(const EventManagerImpl&) = default;
+
+    EventManagerImpl& operator=(EventManagerImpl&&) noexcept = default;
+
     ~EventManagerImpl() noexcept = default;
 
     void registerSfmlEvent(std::string_view id, sf::Event::EventType eventType,
@@ -75,7 +86,8 @@ void EventManagerImpl::registerSfmlEvent(std::string_view id, sf::Event::EventTy
 
 void EventManagerImpl::registerKeyHold(std::string_view id, sf::Keyboard::Key key,
                                        std::function<void()> callback) {
-    auto[it, inserted] = events.emplace(std::make_shared<KeyHoldEvent>(id, std::move(callback), key));
+    auto[it, inserted] = events.emplace(
+            std::make_shared<KeyHoldEvent>(id, std::move(callback), key));
     eventsByID[id] = it;
     eventsByKeyHeld[key].emplace_back(it);
 }
@@ -85,10 +97,10 @@ void EventManagerImpl::unregisterEvent(std::string_view id) {
 
     // remove from ID map
     eventsByID.erase(id);
-    auto& event = *it;
+    const auto& event = *it;
 
     // remove from event-type-specific map
-    auto& eventVector = [&] () -> IteratorVector& {
+    auto& eventVector = [&]() -> IteratorVector& {
         switch (event->eventType) {
             case EventBase::EventType::SFML_EVENT: {
                 auto sfmlEvent = std::static_pointer_cast<SFMLEvent>(event);
@@ -113,14 +125,14 @@ void EventManagerImpl::triggerSfmlEvents(sf::RenderWindow& window) {
     while (window.pollEvent(sfmlEvent)) {
         auto it = eventsBySFMLType.find(sfmlEvent.type);
         if (it != eventsBySFMLType.end()) {
-            for (const auto& registration: it->second) {
+            for (const auto& registration : it->second) {
                 std::static_pointer_cast<SFMLEvent>(*registration)->callback(sfmlEvent);
             }
         }
     }
-    for (auto&[key, registrations]: eventsByKeyHeld) {
+    for (const auto&[key, registrations] : eventsByKeyHeld) {
         if (sf::Keyboard::isKeyPressed(key)) {
-            for (auto& registration: registrations) {
+            for (const auto& registration : registrations) {
                 std::static_pointer_cast<KeyHoldEvent>(*registration)->callback();
             }
         }
@@ -129,20 +141,23 @@ void EventManagerImpl::triggerSfmlEvents(sf::RenderWindow& window) {
 
 void EventManagerImpl::changeEvent(std::string_view id, std::any callback) {
     auto it = eventsByID.find(id);
-    if (it != eventsByID.end()) {
-        auto& ptr = *it->second;
-        switch (ptr->eventType) {
-            case EventBase::EventType::SFML_EVENT: {
-                auto cast_ptr = std::static_pointer_cast<SFMLEvent>(ptr);
-                cast_ptr->callback = std::any_cast<decltype(cast_ptr->callback)>(callback);
-                break;
-            }
-            case EventBase::EventType::KEY_HOLD_EVENT: {
-                auto cast_ptr = std::static_pointer_cast<KeyHoldEvent>(ptr);
-                cast_ptr->callback = std::any_cast<decltype(cast_ptr->callback)>(callback);
-                break;
-            }
-        }
+    if (!(it != eventsByID.end())) {
+        return;
+    }
+    const auto& ptr = *it->second;
+
+    const auto replaceCallbackInCastPtr = [&](auto castPtr) {
+        auto& storedCallback = castPtr->callback;
+        storedCallback = std::any_cast<decltype(storedCallback)>(callback);
+    };
+
+    switch (ptr->eventType) {
+        case EventBase::EventType::SFML_EVENT:
+            replaceCallbackInCastPtr(std::static_pointer_cast<SFMLEvent>(ptr));
+            break;
+        case EventBase::EventType::KEY_HOLD_EVENT:
+            replaceCallbackInCastPtr(std::static_pointer_cast<KeyHoldEvent>(ptr));
+            break;
     }
 }
 

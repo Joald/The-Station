@@ -21,8 +21,6 @@ public:
     std::ostream* stream;
     LogLevel level = LogLevel::DEBUG;
 
-    friend class Logger;
-
     LoggerImpl() : stream(&std::cerr) {}
 
     explicit LoggerImpl(std::string_view fileName, bool append) :
@@ -50,12 +48,12 @@ Logger::Logger(std::string_view fileName, bool append)
     log(INFO, std::source_location::current()) << "Logging to " << fileName << "...";
 }
 
-Logger::~Logger() = default;
+Logger::~Logger() noexcept = default;
 
 Logger::LoggerHelper::~LoggerHelper() {
     logger.getStream() << "\n";
 }
-} // Logger
+}  // namespace Logging
 
 using Logging::Logger;
 

@@ -17,15 +17,15 @@ class GameOption : public Observable<bool> {
 public:
     GameOption(std::string name, OptionState state) : name(std::move(name)), state(state) {}
 
-    void setState(OptionState state) {
-        this->state = state;
+    void setState(OptionState newState) {
+        state = newState;
     }
 
     void toggleState() {
         state = *this ? OptionState::OFF : OptionState::ON;
     }
 
-    OptionState getState() const {
+    [[nodiscard]] OptionState getState() const {
         return state;
     }
 
@@ -33,7 +33,7 @@ public:
         return state == OptionState::ON;
     }
 
-    std::string_view getName() const {
+    [[nodiscard]] std::string_view getName() const {
         return name;
     }
 };

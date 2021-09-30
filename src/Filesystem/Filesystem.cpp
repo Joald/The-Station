@@ -13,7 +13,7 @@ namespace STEngine::Filesystem {
 
 namespace {
 
-const std::string_view fileNames[] = {
+const std::array<std::string_view, 4> fileNames = {
         "extensions",
         "folder_names",
         "id_list",
@@ -95,4 +95,4 @@ void ignore_comments(std::ifstream &f) {
     }
 }
 
-} // STEngine::Filesystem
+}  // namespace STEngine::Filesystem

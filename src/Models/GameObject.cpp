@@ -2,42 +2,56 @@
 #include <random>
 #include <functional>
 #include <cstring>
+#include <algorithm>
+
 #include "GameObject.h"
 
 namespace {
-template <typename T = std::mt19937>
+template<typename T = std::mt19937>
 auto random_generator() -> T {
     auto constexpr seed_bytes = sizeof(typename T::result_type) * T::state_size;
     auto constexpr seed_len = seed_bytes / sizeof(std::seed_seq::result_type);
     auto seed = std::array<std::seed_seq::result_type, seed_len>();
-    auto dev = std::random_device();
-    std::generate_n(begin(seed), seed_len, std::ref(dev));
+    const auto papaj10 = 2137u;
+    std::generate_n(begin(seed), seed_len, [=, counter = papaj10] () mutable {
+        const auto papaj8 = 02137u;
+        const auto papaj16 = 0x2137u;
+        return std::exchange(counter, (counter + papaj16) * papaj8);
+    });
     auto seed_seq = std::seed_seq(begin(seed), end(seed));
     return T{seed_seq};
 }
 
-std::string generateRandom(int len = 32) {
-    static constexpr auto chars =
+const int defaultRandomStringLength = 32;
+
+std::string generateRandom(int len = defaultRandomStringLength) {
+    static constexpr std::string_view chars =
             "0123456789"
             "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
             "abcdefghijklmnopqrstuvwxyz";
     thread_local auto rng = random_generator<>();
-    thread_local auto dist = std::uniform_int_distribution{{}, std::strlen(chars) - 1};
+    thread_local auto dist = std::uniform_int_distribution{{}, chars.size() - 1};
     auto result = std::string(len, '\0');
     std::generate_n(begin(result), len, [&] { return chars[dist(rng)]; });
     return result;
 }
+
+auto& registeredIDs() {
+    static std::unordered_set<std::string> idSet;
+    return idSet;
+}
+
 } // namespace
 
 GameObject::GameObject(std::string id) : ID(std::move(id)) {
-    if (!ID.empty() and ids.contains(ID)) {
+    if (!ID.empty() and registeredIDs().contains(ID)) {
         logger(WARNING) << "Manually-set id " << ID << " duplicated, overwriting.";
     }
 
-    while (ID.empty() or ids.contains(ID)) {
+    while (ID.empty() or registeredIDs().contains(ID)) {
         ID = generateRandom();
     }
-    ids.emplace(ID);
+    registeredIDs().emplace(ID);
 }
 
 std::string_view GameObject::generateID(std::string_view key) {

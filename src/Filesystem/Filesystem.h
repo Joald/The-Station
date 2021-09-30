@@ -52,6 +52,6 @@ std::filesystem::path pathToResource(std::string_view type, std::string_view res
 */
 void ignore_comments(std::ifstream &f);
 
-} // STEngine::Filesystem
+}  // namespace STEngine::Filesystem
 
 #endif //THE_STATION_FILESYSTEM_H

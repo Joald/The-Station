@@ -22,8 +22,8 @@ void CollisionGraph::insertDirectedEdge(CollisionGraph::IDType src, CollisionGra
     graph[src].emplace_back(dest);
 }
 
-CollisionGraph::CollisionGraph(std::vector<Edge> edges) {
-    for (auto& [src, dest] : std::move(edges)) {
+CollisionGraph::CollisionGraph(const std::vector<Edge>& edges) {
+    for (const auto& [src, dest] : edges) {
         auto srcID = newID(src);
         auto destID = newID(dest);
         insertDirectedEdge(srcID, destID);

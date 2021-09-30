@@ -32,12 +32,11 @@ public:
 protected:
     [[nodiscard]] bool internalCollidesWith(const CollisionCircle& other) const override;
 
-protected:
     [[nodiscard]] bool internalCollidesWith(const CollisionRectangle& other) const override;
 
-    bool internalCollidesWith(const CollisionNegativeRectangle& other) const override;
+    [[nodiscard]] bool internalCollidesWith(const CollisionNegativeRectangle& other) const override;
 };
 
-}
+}  // namespace STEngine
 
 #endif //THE_STATION_COLLISIONCIRCLE_H

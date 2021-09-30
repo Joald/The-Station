@@ -18,7 +18,6 @@ class CollisionShape {
 protected:
     friend class CollisionRectangle;
     friend class CollisionCircle;
-    sf::Vector2f origin;
 
     [[nodiscard]] virtual bool internalCollidesWith(const CollisionRectangle& other) const = 0;
     [[nodiscard]] virtual bool internalCollidesWith(const CollisionCircle& other) const = 0;
@@ -30,6 +29,6 @@ public:
     [[nodiscard]] bool aABoundingBoxesCollide(const CollisionShape& other) const;
 };
 
-} // STEngine
+}  // namespace STEngine
 
 #endif //THE_STATION_COLLISION_SHAPE_H

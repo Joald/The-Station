@@ -1,0 +1,25 @@
+# hand-picked list of clang-tidy checks based on https://clang.llvm.org/extra/clang-tidy/checks/list.html
+
+# prefixing a check name/pattern with '-' disables it.
+Checks: '-*, bugprone-*, cert-*, cppcoreguidelines-*, google-*, hicpp-exception-baseclass, hicpp-signed-bitwise, misc-*, modernize-*, performance-*, readability-*, -cppcoreguidelines-init-variables, -cppcoreguidelines-avoid-non-const-global-variables, -google-build-using-namespace, -google-default-arguments, -google-objc-*, -google-readability-todo, -misc-non-private-member-variables-in-classes, -modernize-return-braced-init-list, -modernize-use-trailing-return-type, -readability-uppercase-literal-suffix'
+
+# Following checks have been explicitly disabled, but feel free to re-enable them.
+# disabled cppcoreguidelines-init-variables because of poor fix quality, consider re-enabling
+# disabled cppcoreguidelines-avoid-non-const-global-variables because of false positives on private static member variables
+# disabled google-build-using-namespace to allow for using namespace std::string_literals and similar others.
+# disabled google-default-arguments because the reasoning assumes readers might not be familiar with C++ overload mechanism
+# disabled misc-non-private-member-variables-in-classes as perfect OOP-adherence is not the point here
+# disabled modernize-return-braced-init-list as it hurts readability
+# disabled modernize-use-trailing-return-type as it hurts readability
+# disabled readability-uppercase-literal-suffix as the readability gain is highly subjective
+
+# cppcoreguidelines-pro-type-union-access should be disabled if we *need* to *use* a union. Don't create new unions.
+
+CheckOptions:
+  - key: bugprone-argument-comment.StrictMode
+    value: 1
+  - key: bugprone-misplaced-widening-cast.CheckImplicitCasts
+    value: 1
+  - key: modernize-use-transparent-functors.SafeMode
+    value: 1
+FormatStyle: 'file'

@@ -1,5 +1,4 @@
 #include "CollisionShape.h"
-#include "Logging/Logger.h"
 #include "CollisionRectangle.h"
 
 using STEngine::CollisionShape;

@@ -8,7 +8,6 @@
 #include "Models/GameObject.h"
 #include "ResourceManagers/ResourcePool.h"
 #include "ResourceManagers/TexturePool.h"
-#include "Logging/Logger.h"
 #include "ResourceManagers/ShaderPool.h"
 #include "Renderable.h"
 
@@ -23,24 +22,13 @@ class Renderer : public GameObject, public sf::RenderWindow {
 
     std::set<RenderablePointer, RenderableComparator> renderables;
 public:
-    void add(RenderablePointer renderablePointer) {
-        auto [iterator, success] = renderables.emplace(std::move(renderablePointer));
-        if (success) {
-            logger(INFO) << "Added renderable \"" << iterator->first->getTextureName() << "\"!";
-        }
-    }
+    void add(RenderablePointer renderablePointer);
 
     void remove(const RenderablePointer& renderablePointer) {
         renderables.erase(renderablePointer);
     }
 
-    void render() {
-        clear(sf::Color::White);
-        for (auto&[renderable, priority] : renderables) {
-            draw(*renderable, &renderable->getShader());
-        }
-        display();
-    }
+    void render();
 };
 
 

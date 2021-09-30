@@ -58,6 +58,6 @@ protected:
     bool internalCollidesWith(const CollisionNegativeRectangle& other) const override;
 };
 
-} // namespace
+}  // namespace STEngine
 
 #endif //THE_STATION_COLLISIONRECTANGLE_H

@@ -4,7 +4,7 @@
 
 
 TexturePool::storage_t::iterator TexturePool::loadResource(std::string_view id) {
-    auto[iterator, inserted] = storage.insert({id, std::make_shared<sf::Texture>()});
+    auto[iterator, inserted] = getStorage().insert({id, std::make_shared<sf::Texture>()});
     if (inserted) {
         iterator->second->loadFromImage(*imagePool().getResourceById(id));
         logger(INFO) << "New texture " << id << " loaded from image!";

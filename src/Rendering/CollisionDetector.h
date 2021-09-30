@@ -24,6 +24,6 @@ void registerCollisionDetector(std::shared_ptr<CollisionDetector> detector);
 
 CollisionDetector& collisionDetector();
 
-} // STEngine
+}  // namespace STEngine
 
 #endif //THE_STATION_COLLISION_DETECTOR_H

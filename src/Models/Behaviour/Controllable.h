@@ -21,6 +21,7 @@ class Controllable : virtual GameObject {
     }
 
     void getRegistered();
+
     void getUnregistered();
 
     [[nodiscard]] float offset() const {
@@ -44,7 +45,16 @@ protected:
     }
 
 public:
-    virtual ~Controllable();
+    ~Controllable() noexcept override;
+
+    Controllable(const Controllable&) = delete;
+
+    Controllable(Controllable&&) = delete;
+
+    Controllable& operator=(const Controllable&) = delete;
+
+    Controllable& operator=(Controllable&&) = delete;
+
 
     [[nodiscard]] float getSpeed() const {
         return speed;

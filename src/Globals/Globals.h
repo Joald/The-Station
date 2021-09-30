@@ -41,9 +41,9 @@ constexpr std::string_view resolveFolderName(FolderName name){
  * Faster than using std::string::operator+.
  * @return concatenation of strings in list
  */
-std::string concat(std::initializer_list<std::string> list);
+std::string concat(std::initializer_list<std::string_view> list);
 
-} // Globals
+}  // namespace Globals
 
 
 #endif //THE_STATION_GLOBALS_H

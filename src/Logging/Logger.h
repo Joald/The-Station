@@ -29,7 +29,12 @@ class Logger {
 
 public:
     Logger() noexcept;
-    ~Logger();
+    ~Logger() noexcept;
+    Logger(const Logger&) = delete;
+    Logger(Logger&&) noexcept = default;
+    Logger& operator=(const Logger&) = delete;
+    Logger& operator=(Logger&&) noexcept = default;
+
     explicit Logger(std::string_view fileName, bool append);
 
     friend void ::debugAssert(bool assertion, std::string_view msg);
@@ -40,6 +45,10 @@ public:
         constexpr explicit LoggerHelper(const Logger& logger) : logger(logger) {}
 
         ~LoggerHelper();
+        LoggerHelper(const LoggerHelper&) = delete;
+        LoggerHelper(LoggerHelper&&) = delete;
+        LoggerHelper& operator=(const LoggerHelper&) = delete;
+        LoggerHelper& operator=(LoggerHelper&&) = delete;
 
         template<class T>
         const Logger::LoggerHelper& operator<<(T&& t) const {
@@ -53,7 +62,7 @@ public:
             std::source_location loc);
 };
 
-} // Logging
+}  // namespace Logging
 
 using enum Logging::LogLevel;
 

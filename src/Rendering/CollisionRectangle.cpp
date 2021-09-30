@@ -39,7 +39,8 @@ STEngine::CollisionRectangle STEngine::CollisionRectangle::getAABoundingBox() co
         return *this;
     }
 
-    sf::Vector2f leftUpper(Math::minVector2f), rightLower(Math::maxVector2f);
+    sf::Vector2f leftUpper = Math::minVector2f;
+    sf::Vector2f rightLower = Math::maxVector2f;
     for (auto i: vertices) {
         leftUpper.x = std::min(leftUpper.x, i.x);
         leftUpper.y = std::min(leftUpper.y, i.y);

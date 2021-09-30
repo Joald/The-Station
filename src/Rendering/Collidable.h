@@ -15,6 +15,6 @@ class Collidable {
     }
 };
 
-} // STEngine
+}  // namespace STEngine
 
 #endif //THE_STATION_COLLIDABLE_H

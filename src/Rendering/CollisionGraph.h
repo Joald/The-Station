@@ -10,6 +10,10 @@
 class CollisionGraph {
 public:
     using Edge = std::pair<std::string_view, std::string_view>;
+
+    explicit CollisionGraph(const std::vector<Edge>& edges);
+    bool canCollide(std::string_view id1, std::string_view id2);
+
 private:
     using IDType = uint64_t;
 
@@ -22,11 +26,6 @@ private:
     IDType edgeMax(const Edge& edge);
 
     void insertDirectedEdge(IDType src, IDType dest);
-
-public:
-    explicit CollisionGraph(std::vector<Edge> edges);
-
-    bool canCollide(std::string_view id1, std::string_view id2);
 };
 
 

@@ -7,7 +7,11 @@
 class ScreenEdge : public STEngine::Collidable {
     STEngine::CollisionNegativeRectangle collision;
 public:
-    explicit ScreenEdge() : collision(STEngine::CollisionNegativeRectangle{STEngine::CollisionRectangle{{0.f, 0.f}, {1920.f, 1080.f}}}) {}
+    explicit ScreenEdge() : collision(STEngine::CollisionNegativeRectangle{
+            STEngine::CollisionRectangle{
+                    {0.f,    0.f},
+                    {1920.f, 1080.f}}}) {}
+
     [[nodiscard]] const STEngine::CollisionShape& getCollisionShape() const override;
 };
 

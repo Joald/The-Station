@@ -7,10 +7,14 @@
 template <class T>
 class ResourcePool {
 public:
-    typedef std::shared_ptr<T> ptr;
-    typedef std::unordered_map<std::string_view, ptr> storage_t;
+    using ptr = std::shared_ptr<T>;
+    using storage_t = std::unordered_map<std::string_view, ptr>;
 protected:
-    storage_t storage;
+
+    storage_t& getStorage() {
+        return storage;
+    }
+
     virtual typename storage_t::iterator loadResource(std::string_view id) = 0;
 
 public:
@@ -22,6 +26,8 @@ public:
         return iter->second;
     }
 
+private:
+    storage_t storage;
 };
 
 
