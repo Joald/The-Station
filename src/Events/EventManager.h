@@ -15,7 +15,19 @@
  * to the appropriate derived type.
  */
 class EventManager {
+protected:
+    constexpr EventManager() noexcept = default;
 public:
+    virtual ~EventManager() noexcept = default;
+
+    EventManager(EventManager&&) = delete;
+
+    EventManager(const EventManager&) = delete;
+
+    EventManager& operator=(EventManager&&) = delete;
+
+    EventManager& operator=(const EventManager&) = delete;
+
     /**
      * When an SFML event of the specified type is polled in a window,
      * all callbacks registered with this function are invoked.
@@ -23,7 +35,7 @@ public:
      * @param callback - function that performs the event handling
      */
     virtual void registerSfmlEvent(std::string_view id, sf::Event::EventType eventType,
-                                  std::function<void(sf::Event)> callback) = 0;
+                                   std::function<void(sf::Event)> callback) = 0;
 
     /**
      * Runs the event loop for the given window and triggers all callbacks
@@ -40,7 +52,7 @@ public:
      * The callbacks will be called after the event loop in @triggerSfmlEvents.
      */
     virtual void registerKeyHold(std::string_view id, sf::Keyboard::Key key,
-                                std::function<void()> callback) = 0;
+                                 std::function<void()> callback) = 0;
 
 
     /**

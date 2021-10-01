@@ -14,7 +14,11 @@ class GameObject {
 protected:
     explicit GameObject(std::string id = "");
 public:
-    virtual ~GameObject() = default;
+    virtual ~GameObject() noexcept = default;
+    GameObject(GameObject&&) = delete;
+    GameObject(const GameObject&) = delete;
+    GameObject& operator=(GameObject&&) = delete;
+    GameObject& operator=(const GameObject&) = delete;
 
     std::string_view getID() { return ID; }
 

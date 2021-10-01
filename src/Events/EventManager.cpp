@@ -15,18 +15,6 @@ class EventManagerImpl : public EventManager {
     std::map<sf::Keyboard::Key, IteratorVector> eventsByKeyHeld;
     std::map<std::string_view, EventSet::iterator> eventsByID;
 public:
-    EventManagerImpl() = default;
-
-    EventManagerImpl(const EventManagerImpl&) = default;
-
-    EventManagerImpl(EventManagerImpl&&) noexcept = default;
-
-    EventManagerImpl& operator=(const EventManagerImpl&) = default;
-
-    EventManagerImpl& operator=(EventManagerImpl&&) noexcept = default;
-
-    ~EventManagerImpl() noexcept = default;
-
     void registerSfmlEvent(std::string_view id, sf::Event::EventType eventType,
                            std::function<void(sf::Event)> callback) override;
 

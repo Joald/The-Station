@@ -17,13 +17,8 @@ class Renderable : public sf::Sprite {
     std::string_view name;
     std::shared_ptr<sf::Shader> shader;
     ResourcePool<sf::Texture>::ptr texture;
+
 protected:
-
-    sf::Texture& getTextureRef() { return *texture; }
-
-    // getTexture is already in base
-    const sf::Texture& getTextureRef() const { return *texture; }
-
     explicit Renderable(std::string_view name, bool loadShader = false) :
             name(name),
             shader(loadShader ? shaderPool().getResourceById(name) : nullptr),

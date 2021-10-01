@@ -4,13 +4,16 @@
 
 namespace stdr = std::ranges;
 
-bool STEngine::CollisionRectangle::internalCollidesWith(const CollisionCircle& other) const {
+namespace STEngine {
+
+bool CollisionRectangle::internalCollidesWith(const CollisionCircle& other) const {
     const auto origin = other.getOrigin();
-    auto radius = other.getRadius();
+    const auto radius = other.getRadius();
     auto distances = std::array<float, 4>{};
-    std::transform(vertices.begin(), vertices.end(), distances.begin(), [=](const sf::Vector2f& vertex) {
-        return Math::distance(vertex, origin);
-    });
+    std::transform(vertices.begin(), vertices.end(), distances.begin(),
+                   [=](const sf::Vector2f& vertex) {
+                       return Math::distance(vertex, origin);
+                   });
 
     if (stdr::any_of(distances, [=](float dist) { return dist < radius; })) {
         return true;
@@ -20,7 +23,7 @@ bool STEngine::CollisionRectangle::internalCollidesWith(const CollisionCircle& o
     // TODO: add heuristic that returns false if all vertices are further away
     //  from origin than longest side
 
-    for (int i = 0; i < vertices.size(); ++i) {
+    for (std::size_t i = 0 ; i < vertices.size() ; ++i) {
         const auto& v1 = vertices[i];
         const auto& v2 = vertices[(i + 1) % vertices.size()];
         if (Math::distanceFromLineSegment(origin, v1, v2) < radius) {
@@ -30,18 +33,18 @@ bool STEngine::CollisionRectangle::internalCollidesWith(const CollisionCircle& o
     return false;
 }
 
-bool STEngine::CollisionRectangle::collidesWith(const CollisionShape& other) const {
+bool CollisionRectangle::collidesWith(const CollisionShape& other) const {
     return other.internalCollidesWith(*this);
 }
 
-STEngine::CollisionRectangle STEngine::CollisionRectangle::getAABoundingBox() const {
+CollisionRectangle CollisionRectangle::getAABoundingBox() const {
     if (isAxisAligned()) {
         return *this;
     }
 
     sf::Vector2f leftUpper = Math::minVector2f;
     sf::Vector2f rightLower = Math::maxVector2f;
-    for (auto i: vertices) {
+    for (auto i : vertices) {
         leftUpper.x = std::min(leftUpper.x, i.x);
         leftUpper.y = std::min(leftUpper.y, i.y);
         rightLower.x = std::max(leftUpper.x, i.x);
@@ -50,8 +53,8 @@ STEngine::CollisionRectangle STEngine::CollisionRectangle::getAABoundingBox() co
     return {leftUpper, rightLower};
 }
 
-bool STEngine::CollisionRectangle::isAxisAligned() const {
-    for (int i = 0; i < 4; ++i) {
+bool CollisionRectangle::isAxisAligned() const {
+    for (int i = 0 ; i < 4 ; ++i) {
         if (Math::areClose(rotation, Math::PI_2 * static_cast<float>(i))) {
             return true;
         }
@@ -59,14 +62,15 @@ bool STEngine::CollisionRectangle::isAxisAligned() const {
     return false;
 }
 
-const STEngine::CollisionRectangle::SideLengths& STEngine::CollisionRectangle::getSideLengths() const {
+const CollisionRectangle::SideLengths& CollisionRectangle::getSideLengths() const {
     if (recomputeNeeded) {
         sides = recomputeSideLengths();
     }
     return sides;
 }
 
-bool STEngine::CollisionRectangle::internalCollidesWith(const STEngine::CollisionRectangle& other) const {
+bool CollisionRectangle::internalCollidesWith(
+        const CollisionRectangle& other) const {
     bool boxesCollide = aABoundingBoxesCollide(other);
     if ((isAxisAligned() and other.isAxisAligned()) or !boxesCollide) {
         return boxesCollide;
@@ -75,7 +79,7 @@ bool STEngine::CollisionRectangle::internalCollidesWith(const STEngine::Collisio
     return false;
 }
 
-bool STEngine::CollisionRectangle::isInside(const STEngine::CollisionRectangle& other) const {
+bool CollisionRectangle::isInside(const CollisionRectangle& other) const {
     const bool xAxisInside =
             other.leftUpper().x < leftUpper().x
             and rightLower().x < other.rightLower().x;
@@ -85,6 +89,9 @@ bool STEngine::CollisionRectangle::isInside(const STEngine::CollisionRectangle& 
     return xAxisInside and yAxisInside;
 }
 
-bool STEngine::CollisionRectangle::internalCollidesWith(const CollisionNegativeRectangle& other) const {
+bool CollisionRectangle::internalCollidesWith(
+        const CollisionNegativeRectangle& other) const {
     return other.collidesWith(*this);
 }
+
+}  // namespace STEngine

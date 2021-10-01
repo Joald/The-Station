@@ -4,7 +4,7 @@
 #include <memory>
 #include <unordered_map>
 
-template <class T>
+template<class T>
 class ResourcePool {
 public:
     using ptr = std::shared_ptr<T>;
@@ -18,6 +18,18 @@ protected:
     virtual typename storage_t::iterator loadResource(std::string_view id) = 0;
 
 public:
+    virtual ~ResourcePool() noexcept = default;
+
+    constexpr ResourcePool() noexcept = default;
+
+    ResourcePool(ResourcePool&&) = delete;
+
+    ResourcePool(const ResourcePool&) = delete;
+
+    ResourcePool& operator=(ResourcePool&&) = delete;
+
+    ResourcePool& operator=(const ResourcePool&) = delete;
+
     ptr getResourceById(std::string_view id) {
         auto iter = storage.find(id);
         if (iter == storage.end()) {

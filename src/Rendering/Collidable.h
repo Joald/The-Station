@@ -8,9 +8,22 @@
 namespace STEngine {
 
 class Collidable {
+public:
+    Collidable() = default;
+
+    virtual ~Collidable() noexcept = default;
+
+    Collidable(Collidable&&) = delete;
+
+    Collidable(const Collidable&) = delete;
+
+    Collidable& operator=(Collidable&&) = delete;
+
+    Collidable& operator=(const Collidable&) = delete;
+
     [[nodiscard]] virtual const CollisionShape& getCollisionShape() const = 0;
 
-    bool collidesWith(const Collidable& other) {
+    [[nodiscard]] bool collidesWith(const Collidable& other) const {
         return getCollisionShape().collidesWith(other.getCollisionShape());
     }
 };

@@ -14,9 +14,20 @@ class CollisionRectangle : public CollisionShape {
     float rotation;
     bool recomputeNeeded = false;
 public:
-    CollisionRectangle(sf::Vector2f leftUpper, sf::Vector2f rightLower) : vertices(
+    CollisionRectangle(sf::Vector2f leftUpper, sf::Vector2f rightLower) : sides(
+            recomputeSideLengths()), vertices(
             {leftUpper, {rightLower.x, leftUpper.y}, rightLower, {leftUpper.x, rightLower.y}}
-    ), sides(recomputeSideLengths()), rotation(0) {}
+    ), rotation(0) {}
+
+    ~CollisionRectangle() noexcept override = default;
+
+    CollisionRectangle(CollisionRectangle&&) noexcept = default;
+
+    CollisionRectangle(const CollisionRectangle&) noexcept = default;
+
+    CollisionRectangle& operator=(CollisionRectangle&&) noexcept = default;
+
+    CollisionRectangle& operator=(const CollisionRectangle&) noexcept = default;
 
     [[nodiscard]] const sf::Vector2f& leftUpper() const {
         return vertices[0];

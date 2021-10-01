@@ -22,22 +22,29 @@ enum class LogLevel {
 
 class Logger {
     const inline static bool DEBUG = true;
+
     class LoggerImpl;
+
     std::unique_ptr<LoggerImpl> pimpl;
 
     [[nodiscard]] std::ostream& getStream() const;
 
 public:
     Logger() noexcept;
+
     ~Logger() noexcept;
+
     Logger(const Logger&) = delete;
+
     Logger(Logger&&) noexcept = default;
+
     Logger& operator=(const Logger&) = delete;
+
     Logger& operator=(Logger&&) noexcept = default;
 
     explicit Logger(std::string_view fileName, bool append);
 
-    friend void ::debugAssert(bool assertion, std::string_view msg);
+    friend void::debugAssert(bool assertion, std::string_view msg);
 
     class LoggerHelper {
         const Logger& logger;
@@ -45,9 +52,13 @@ public:
         constexpr explicit LoggerHelper(const Logger& logger) : logger(logger) {}
 
         ~LoggerHelper();
+
         LoggerHelper(const LoggerHelper&) = delete;
+
         LoggerHelper(LoggerHelper&&) = delete;
+
         LoggerHelper& operator=(const LoggerHelper&) = delete;
+
         LoggerHelper& operator=(LoggerHelper&&) = delete;
 
         template<class T>

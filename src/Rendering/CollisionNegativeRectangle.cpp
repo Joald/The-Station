@@ -1,16 +1,19 @@
 #include "CollisionNegativeRectangle.h"
 #include "CollisionCircle.h"
 
-bool STEngine::CollisionNegativeRectangle::internalCollidesWith(const STEngine::CollisionRectangle& other) const {
+bool STEngine::CollisionNegativeRectangle::internalCollidesWith(
+        const STEngine::CollisionRectangle& other) const {
     return !other.isInside(rectangle);
 }
 
-bool STEngine::CollisionNegativeRectangle::internalCollidesWith(const CollisionCircle& other) const {
+bool STEngine::CollisionNegativeRectangle::internalCollidesWith(
+        const CollisionCircle& other) const {
     const CollisionRectangle circleBound = other.getAABoundingBox();
     return !circleBound.isInside(rectangle);
 }
 
-bool STEngine::CollisionNegativeRectangle::collidesWith(const STEngine::CollisionShape& other) const {
+bool STEngine::CollisionNegativeRectangle::collidesWith(
+        const STEngine::CollisionShape& other) const {
     return other.collidesWith(*this);
 }
 
@@ -20,7 +23,7 @@ STEngine::CollisionRectangle STEngine::CollisionNegativeRectangle::getAABounding
 }
 
 bool STEngine::CollisionNegativeRectangle::internalCollidesWith(
-        const STEngine::CollisionNegativeRectangle& other
+        const STEngine::CollisionNegativeRectangle&  /*other*/
 ) const {
     return true;
 }

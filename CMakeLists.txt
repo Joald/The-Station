@@ -116,6 +116,6 @@ if (SFML_FOUND)
     target_link_libraries(The_Station ${SFML_LIBRARIES})
     target_link_libraries(Tester ${SFML_LIBRARIES})
 
-    target_compile_options(The_Station PUBLIC "-fsanitize=undefined" "-fsanitize=leak" "-fsanitize=address")
+    target_compile_options(The_Station PUBLIC "-fsanitize=undefined" "-fsanitize=leak" "-fsanitize=address" "-Wall" "-Wextra" "-Wduplicated-cond" "-Wduplicated-branches" "-Wlogical-op" "-Wnull-dereference" "-Wold-style-cast" "-Wuseless-cast" "-Wdouble-promotion" "-Wformat=2")
     target_link_options(The_Station PUBLIC "-fsanitize=undefined" "-fsanitize=leak" "-fsanitize=address")
 endif ()
